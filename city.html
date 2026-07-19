@@ -1042,6 +1042,7 @@ function openBuilding(b){
       <div class="row"><button class="act b-go" id="btnGo">📋 Zkopírovat prompt</button>
         <button class="act b-save" id="btnSave">📒 Uložit do fejblovny</button>
         <button class="act b-close" id="btnClose">✕ Zpět do města</button></div></div>`;
+  liveFable(b,panel.querySelector('.fable'));
   document.getElementById('btnGo').onclick=()=>copyText(buildPrompt(b));
   document.getElementById('btnSave').onclick=()=>saveToFejblovna(b);
   document.getElementById('btnClose').onclick=closeModal;
@@ -1087,7 +1088,7 @@ function openStats(){
 }
 
 //////////////////// FEJBLOVNA ////////////////////
-function saveToFejblovna(b){const stamp=new Date().toISOString().slice(0,16).replace('T',' ');save.fejblovna.unshift({t:stamp,id:b.id,name:b.name,kind:b.kind,problem:b.problem,next:b.next,prompt:buildPrompt(b)});save.fejblovna=save.fejblovna.slice(0,200);persist();updateFejBtn();toast('📒 Uloženo do fejblovny ('+save.fejblovna.length+').');banner('+ FEJBLOVNA');}
+function saveToFejblovna(b){fejDisk(b).then(ok=>{if(ok)toast('📒 Uloženo i do fejblovny na disku');});const stamp=new Date().toISOString().slice(0,16).replace('T',' ');save.fejblovna.unshift({t:stamp,id:b.id,name:b.name,kind:b.kind,problem:b.problem,next:b.next,prompt:buildPrompt(b)});save.fejblovna=save.fejblovna.slice(0,200);persist();updateFejBtn();toast('📒 Uloženo do fejblovny ('+save.fejblovna.length+').');banner('+ FEJBLOVNA');}
 function updateFejBtn(){document.getElementById('fejbtn').textContent='📒 Fejblovna ('+save.fejblovna.length+')';}
 document.getElementById('fejbtn').onclick=openFejblovna;
 function openFejblovna(){modalOn=true;tabOn=true;modal.classList.add('on');panel.className='panel mem';
@@ -1103,10 +1104,46 @@ function exportFej(){let md='# Fejblovna — FD CITY\n\n';save.fejblovna.forEach
 // E = koblihy úplatek
 addEventListener('keydown',e=>{if(e.key.toLowerCase()==='e'&&checkKoblihy()&&!modalOn&&running){const cost=150*WANTED.stars;if(save.cash<cost){toast('🍩 „Nejdřív zaplať, kámo." ₭'+cost);return;}addCash(-cost);WANTED.stars--;WANTED.heat=WANTED.stars>0?HEAT_STAR[WANTED.stars]:0;if(WANTED.stars===0){WANTED.cops=[];WANTED.heli=null;}syncStars();toast('🍩 Podmázl jsi to za ₭'+cost+'. −1★');banner('−1★ 🍩');}});
 
+//////////////////// ŽIVÝ FABLE + MISE (M6) ////////////////////
+const LOCAL=['127.0.0.1','localhost'].includes(location.hostname);
+const FDAPI='http://127.0.0.1:8777';
+let CITY_MISSIONS=[];
+async function loadMissions(){
+  if(!LOCAL)return;
+  try{CITY_MISSIONS=await (await fetch(FDAPI+'/api/citymissions',{cache:'no-store'})).json();
+    if(CITY_MISSIONS.length){setObjective('📋 MISE: '+CITY_MISSIONS[0].t+' → jeď do budovy a splň (+₭'+CITY_MISSIONS[0].odm+')');}
+  }catch(e){}
+}
+async function liveFable(b,el){
+  if(!LOCAL||!el)return;
+  el.innerHTML='<span class="who">🟣 FABLE (živě) — přemýšlí…</span><span style="color:#8ea">…</span>';
+  try{
+    const u=FDAPI+'/api/fable?bid='+encodeURIComponent(b.id)+'&name='+encodeURIComponent(b.name)
+      +'&what='+encodeURIComponent(b.what||'')+'&problem='+encodeURIComponent(b.problem||'');
+    const r=await fetch(u,{cache:'no-store'});const d=await r.json();
+    if(!d||!d.problem)throw 0;
+    b._live=d;
+    el.innerHTML='<span class="who">🟣 FABLE '+(d.zdroj==='live'?'(živě · dnes)':'(dnešní brief)')+'</span>'+
+      '<b>Problém:</b> '+esc2(d.problem)+'<br><b>Jak dál:</b> '+esc2(d.next)+
+      (d.tip?'<br><b>Tip:</b> '+esc2(d.tip):'');
+  }catch(e){
+    el.innerHTML='<span class="who">🟣 FABLE (low) — brief</span><b>Problém:</b> '+esc2(b.problem)+'<br><b>Jak dál:</b> '+esc2(b.next);
+  }
+}
+function esc2(t){return String(t==null?'':t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+async function fejDisk(b){
+  if(!LOCAL)return false;
+  try{const d=b._live||{};
+    const r=await fetch(FDAPI+'/api/fejblovna',{method:'POST',body:JSON.stringify({
+      id:b.id,kind:b.kind,zdroj:d.zdroj||'static',
+      problem:d.problem||b.problem,next:d.next||b.next,tip:d.tip||'',prompt:buildPrompt(b)})});
+    const j=await r.json();return !!j.ok;
+  }catch(e){return false;}
+}
 //////////////////// START ////////////////////
 document.getElementById('startbtn').onclick=()=>{
   save.settings.policeOff=!document.getElementById('policeChk').checked;persist();
-  document.getElementById('title').style.display='none';running=true;
+  document.getElementById('title').style.display='none';running=true;loadMissions();
   initAudio();if(actx&&actx.state==='suspended')actx.resume();
 };
 syncHUD();defaultObjective();updateFejBtn();syncStars();updateClock();

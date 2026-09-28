@@ -1,0 +1,35 @@
+# Cloudová záloha hlídače poptávek (repo fd-nabidky-cloud) smí pushovat jen do větví claude/*.
+# Tahle Action z takové větve převezme POUZE zašifrované nabídky n/*.html do main (GitHub Pages) a větev smaže.
+name: cloud-publish
+on:
+  push:
+    branches: ['claude/**']
+permissions:
+  contents: write
+concurrency:
+  group: cloud-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Převzít n/*.html do main
+        run: |
+          set -e
+          BR="${GITHUB_REF#refs/heads/}"
+          git config user.name "fd-cloud-bot"
+          git config user.email "frantisekdron@gmail.com"
+          git fetch -q --depth 1 origin "$BR"
+          git diff --name-only --diff-filter=AM HEAD FETCH_HEAD -- 'n/*.html' > /tmp/files || true
+          cat /tmp/files
+          if [ -s /tmp/files ]; then
+            xargs -a /tmp/files git checkout FETCH_HEAD --
+            git add n/
+            git commit -qm "nabídka z cloudu ($BR)"
+            for i in 1 2 3 4 5; do git push -q origin HEAD:main && break; sleep 5; git pull -q --rebase origin main; done
+          fi
+          git push -q origin --delete "$BR" || true

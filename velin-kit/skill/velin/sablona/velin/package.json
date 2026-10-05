@@ -1,0 +1,6 @@
+{
+  "name": "fd-velin",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" }
+}

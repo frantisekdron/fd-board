@@ -3,17 +3,19 @@
 // Co dělá: každou minutu se podívá do složky „FD Kolega". Když tam najde
 //   • soubor „KOLEGA spusť" (nebo cokoli s RUN_NOW v názvu) – hlas chce čerstvý běh hned,
 //   • nový soubor „KOLEGA pokyn – …" (pokud AUTO_POKYN = true),
-// zavolá API rutiny „Velín spoušť – Dispečer na vyžádání", která probudí Dispečera
-// v session CLAUDE VOICE CONTROL. Spouštěcí soubory pak vyhodí do koše (žádná smyčka),
+// zavolá API rutiny „Velín spínač" (František ji založí v claude.ai s API triggerem a konektorem
+// Claude_Code_Remote). Spínač jen přepošle povel rutině „Velín spoušť – Dispečer na vyžádání",
+// která probudí Dispečera v session CLAUDE VOICE CONTROL. Spouštěcí soubory pak vyhodí do koše (žádná smyčka),
 // pokyny nechá Dispečerovi (ten je po doručení přejmenuje a vyhodí sám).
 // Stav posledního spuštění zapisuje do Google Docu „Velín – spoušť" (stejné ID, přepisuje obsah),
 // aby si ho hlas mohl přečíst.
 //
 // Nastavení (jednou, ~5 min) – viz VELIN.md, část Fáze 1.
-// Token rutiny NIKDY nedávej do kódu: Nastavení projektu (⚙) → Vlastnosti skriptu → ROUTINE_TOKEN.
+// Token rutiny NIKDY nedávej do kódu: Nastavení projektu (⚙) → Vlastnosti skriptu →
+//   ROUTINE_ID    = trig_… rutiny „Velín spínač" (je v URL, kterou ukáže okno s tokenem)
+//   ROUTINE_TOKEN = sk-ant-oat01-… token té rutiny
 
 const SLOZKA = "1NpVVdaZs2ylWy4NbkNfg6aKwL_Ic-czm"; // FD Kolega
-const RUTINA = "trig_01S8EN4VNjmEGNA6nSbUVqyE";     // Velín spoušť – Dispečer na vyžádání
 const AUTO_POKYN = true;   // nový „KOLEGA pokyn" = spustit Dispečera hned (false = jen hodinový běh)
 const PAUZA_MIN = 2;       // min. rozestup dvou spuštění; co přijde mezitím, počká na další minutu
 const STAV_DOC = "Velín – spoušť";
@@ -62,9 +64,10 @@ function hlidej() {
 }
 
 function spust(text) {
-  const token = PropertiesService.getScriptProperties().getProperty("ROUTINE_TOKEN");
-  if (!token) return { ok: false, chyba: "chybí ROUTINE_TOKEN ve Vlastnostech skriptu" };
-  const res = UrlFetchApp.fetch(`https://api.anthropic.com/v1/claude_code/routines/${RUTINA}/fire`, {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty("ROUTINE_TOKEN"), rutina = props.getProperty("ROUTINE_ID");
+  if (!token || !rutina) return { ok: false, chyba: "chybí ROUTINE_ID nebo ROUTINE_TOKEN ve Vlastnostech skriptu" };
+  const res = UrlFetchApp.fetch(`https://api.anthropic.com/v1/claude_code/routines/${rutina}/fire`, {
     method: "post",
     contentType: "application/json",
     headers: { Authorization: "Bearer " + token, "anthropic-version": "2023-06-01" },

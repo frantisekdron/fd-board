@@ -7,7 +7,7 @@ Dashboard Velín: kód v soukromém repu `fd-kolega`, složka `velin/` – návo
 
 **Jak to funguje**
 1. Hlas (projekt „Kolega") položí do složky FD Kolega soubor **„KOLEGA spusť"** (nebo obyčejný „KOLEGA pokyn – …").
-2. **Google Apps Script** (zdarma, běží u Googlu, ne na kreditech Claude) se každou minutu podívá do složky. Když soubor najde, zavolá API rutiny **„Velín spoušť – Dispečer na vyžádání"** (`trig_01S8EN4VNjmEGNA6nSbUVqyE`).
+2. **Google Apps Script** (zdarma, běží u Googlu, ne na kreditech Claude) se každou minutu podívá do složky. Když soubor najde, zavolá API rutiny „Velín spínač" (založíš ji sám v claude.ai), která přepošle povel rutině **„Velín spoušť – Dispečer na vyžádání"** (`trig_01S8EN4VNjmEGNA6nSbUVqyE`).
 3. Rutina probudí **stejnou** session CLAUDE VOICE CONTROL, ve které běží hodinový Dispečer → nikdy nepoběží dva Dispečeři naráz (zprávy se řadí za sebe). Dispečer doručí pokyny, obnoví „Kolega – přehled", pushne a **vždy** pošle notifikaci.
 4. Apps Script spouštěcí soubor vyhodí do koše (žádná smyčka) a do dokumentu **„Velín – spoušť"** zapíše, kdy Dispečera spustil (hlas si to může přečíst).
 
@@ -15,12 +15,11 @@ Latence: do ~1 min se Dispečer spustí, za 3–5 min je nový přehled. Kredity
 Pojistky: min. 2 min mezi spuštěními (co přijde mezitím, počká, neztratí se); limit API 30 spuštění/h na rutinu – při překročení Apps Script počká a zapíše chybu do „Velín – spoušť".
 `AUTO_POKYN = true`: i každý nový „KOLEGA pokyn" se doručí hned, ne až v další hodinu. Lze vypnout (false).
 
-**Co potřebuju od Františka (asi 10 min, jednou)**
-1. **Token rutiny:** claude.ai/code/routines → otevři „Velín spoušť – Dispečer na vyžádání" → *Add another trigger* → **API** → *Generate token* → zkopíruj (ukáže se jen jednou). Token nikomu neposílej, ani mně.
-2. **Apps Script:** script.google.com → Nový projekt „Velín spoušť" → vlož obsah `kolega/velin-spoust.gs` → ⚙ Nastavení projektu → *Vlastnosti skriptu* → přidej `ROUTINE_TOKEN` = token z kroku 1 → v editoru vyber funkci **nastav** → ▶ Spustit → povol přístup (Drive, Dokumenty, externí požadavky). Volitelně vyber **test** → ▶ (spustí Dispečera hned, přijde notifikace).
-3. **Hlas:** v projektu „Kolega" nahraď instrukce novým `kolega/projekt-instrukce.md` (přibyla věta „nakopni Dispečera").
-
-Kdyby rutina v UI neměla volbu API (vznikla z Claude Code, ne z formuláře), řekni – záloha: rutinu založíš ve formuláři claude.ai s konektorem Claude_Code_Remote; její malý běh jen pošle zprávu „spusť" do session Dispečera.
+**Co potřebuju od Františka (asi 15 min, jednou)**
+Rutiny založené z Claude Code se v claude.ai nezobrazují (nejde k nim token), proto přibyl mezičlánek „Velín spínač", který založíš sám – návod a prompt v `kolega/velin-spinac.md`.
+1. **Spínač:** claude.ai/code/routines → nová rutina „Velín spínač" podle `velin-spinac.md` (konektor Claude_Code_Remote, model Haiku, API trigger) → *Generate token*. Token nikomu neposílej, ani mně.
+2. **Apps Script:** script.google.com → Nový projekt „Velín spoušť" → vlož `kolega/velin-spoust.gs` → ⚙ Vlastnosti skriptu: `ROUTINE_ID` (trig_… spínače) a `ROUTINE_TOKEN` → funkce **nastav** → ▶ Spustit → povol přístup. Funkce **test** spustí Dispečera hned.
+3. **Hlas:** v projektu „Kolega" nahraď instrukce novým `kolega/projekt-instrukce.md`.
 
 ## Celkový návrh
 

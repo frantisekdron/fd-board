@@ -2,161 +2,393 @@
 <html lang="cs"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0e12">
+<meta name="theme-color" content="#07090c">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kolega">
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="../icon.png">
 <link rel="icon" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>FD Kolega</title>
 <style>
-:root{--bg:#0a0e12;--panel:#121921;--line:#1f2a35;--fg:#e6edf3;--dim:#7d8b99;--acc:#35e0d0;--warn:#ffb454;--err:#ff6b6b}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,sans-serif;min-height:100dvh;display:flex;flex-direction:column}
-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
-header b{letter-spacing:.08em}
-#state{font-size:13px;color:var(--dim)}
-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:16px}
-#orb{width:min(62vw,260px);aspect-ratio:1;border-radius:50%;border:3px solid var(--acc);background:radial-gradient(circle,#35e0d022,transparent 70%);color:var(--acc);font-size:20px;font-weight:600;cursor:pointer;transition:transform .12s;-webkit-tap-highlight-color:transparent}
-#orb.live{animation:pulse 2.2s infinite}
-#orb.speaking{transform:scale(1.06);background:radial-gradient(circle,#35e0d055,transparent 70%)}
-#orb.muted{border-color:var(--warn);color:var(--warn)}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #35e0d044}50%{box-shadow:0 0 0 22px #35e0d000}}
-.row{display:flex;gap:10px}
-button.s{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px}
-#log{width:100%;max-width:640px;max-height:38dvh;overflow:auto;font-size:14px}
-#log div{padding:6px 10px;border-left:2px solid var(--line);margin:4px 0}
-#log .me{border-color:var(--dim);color:var(--dim)}
-#log .ai{border-color:var(--acc)}
-#log .tool{border-color:var(--warn);color:var(--warn);font-size:12px}
-#log .err{border-color:var(--err);color:var(--err)}
-dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:14px;width:min(92vw,420px)}
-dialog input{width:100%;padding:10px;margin:6px 0 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;font-size:15px}
+:root{
+  --bg:#07090c;--bg2:#0d1116;--card:#11161ccc;--line:#1c2530;--fg:#eef3f7;--dim:#8293a3;--mute:#56636f;
+  --acc:#35e0d0;--acc2:#7c6cff;--wait:#ffb547;--run:#35e0d0;--ok:#6ee787;--err:#ff6b7a;
+  --r:18px;--safe-b:env(safe-area-inset-bottom);
+}
+:root[data-theme="light"]{--bg:#f4f6f8;--bg2:#fff;--card:#ffffffd9;--line:#e3e8ee;--fg:#0b1218;--dim:#5b6874;--mute:#94a0ab}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 Inter,system-ui,-apple-system,sans-serif}
+body{min-height:100dvh;background:
+  radial-gradient(900px 500px at 85% -10%,#35e0d014,transparent 60%),
+  radial-gradient(700px 500px at -10% 110%,#7c6cff12,transparent 60%),var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px calc(150px + var(--safe-b))}
+header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-weight:700;color:#041014}
+header h1{font-size:18px;margin:0;letter-spacing:.02em}
+header .sub{font-size:12px;color:var(--dim)}
+header .sp{flex:1}
+.icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);background:var(--bg2)}
+.icon svg{width:18px;height:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;backdrop-filter:blur(12px);text-align:left}
+.stat b{display:block;font-size:24px;font-weight:700}
+.stat span{font-size:12px;color:var(--dim)}
+.stat.on{outline:2px solid var(--acc)}
+.stat.w b{color:var(--wait)} .stat.r b{color:var(--run)} .stat.d b{color:var(--ok)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.seg{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{padding:7px 12px;border-radius:9px;font-size:13px;color:var(--dim)}
+.seg button.on{background:var(--line);color:var(--fg)}
+.search{flex:1;min-width:160px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:9px 12px;color:var(--fg);font:inherit}
+.btn{padding:9px 14px;border-radius:12px;background:linear-gradient(135deg,var(--acc),#2bc4b6);color:#041014;font-weight:600}
+.btn.ghost{background:var(--bg2);border:1px solid var(--line);color:var(--fg);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 12px;backdrop-filter:blur(12px);animation:in .35s ease both;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--c,var(--mute))}
+.card.wait{--c:var(--wait)} .card.run{--c:var(--run)} .card.done{--c:var(--ok)} .card.err{--c:var(--err)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.top{display:flex;gap:8px;align-items:flex-start}
+.top h3{margin:0;font-size:15px;font-weight:600;flex:1;line-height:1.3}
+.chip{font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.chip.st{color:var(--c);border-color:color-mix(in srgb,var(--c) 40%,transparent)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:5px;vertical-align:1px}
+.card.run .dot{animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.sum{color:var(--dim);font-size:13.5px;margin:8px 0}
+.need{font-size:13px;background:color-mix(in srgb,var(--wait) 10%,transparent);border:1px solid color-mix(in srgb,var(--wait) 30%,transparent);color:var(--fg);padding:8px 10px;border-radius:12px;margin:8px 0}
+.meta{font-size:11.5px;color:var(--mute);display:flex;gap:10px;flex-wrap:wrap}
+.acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.acts button,.acts a{font-size:12.5px;padding:7px 10px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);color:var(--fg);text-decoration:none}
+.acts .pri{border-color:color-mix(in srgb,var(--acc) 50%,transparent);color:var(--acc)}
+.empty{color:var(--dim);text-align:center;padding:40px 0}
+.queue{margin:18px 0 0;font-size:13px;color:var(--dim)}
+.queue div{display:flex;gap:8px;align-items:center;padding:8px 12px;border:1px dashed var(--line);border-radius:12px;margin-top:6px}
+.queue div span{flex:1}
+/* hlasový dok */
+.dock{position:fixed;left:50%;bottom:calc(16px + var(--safe-b));transform:translateX(-50%);width:min(560px,calc(100vw - 24px));background:color-mix(in srgb,var(--bg2) 88%,transparent);border:1px solid var(--line);border-radius:26px;padding:10px 10px 10px 18px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(18px);box-shadow:0 20px 60px #0007;z-index:5}
+.dock .txt{flex:1;min-width:0;font-size:14px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .txt b{color:var(--fg);font-weight:500}
+.orb{position:relative;width:64px;height:64px;flex:none;border-radius:50%}
+.orb canvas{position:absolute;inset:-28px;width:120px;height:120px;pointer-events:none}
+.orb .core{position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b6fff8,var(--acc) 40%,var(--acc2));box-shadow:0 0 24px #35e0d066;display:grid;place-items:center;transition:transform .15s}
+.orb .core svg{width:22px;height:22px;color:#041014}
+.orb.live .core{animation:breathe 2.4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.06)}}
+/* modal */
+.sheet{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;justify-content:center;z-index:9;backdrop-filter:blur(4px)}
+.sheet.open{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.panel{width:min(560px,100%);background:var(--bg2);border:1px solid var(--line);border-radius:24px 24px 0 0;padding:18px 16px calc(18px + var(--safe-b));animation:up .25s ease}
+@media(min-width:700px){.sheet{align-items:center}.panel{border-radius:24px}}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.panel h2{margin:0 0 4px;font-size:17px}
+.panel p{margin:0 0 12px;color:var(--dim);font-size:13px}
+.panel label{display:block;font-size:12px;color:var(--dim);margin:10px 0 4px}
+.panel input,.panel textarea,.panel select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:var(--fg);font:inherit}
+.panel textarea{min-height:110px;resize:vertical}
+.panel .row{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+.mic{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--acc);margin-top:6px}
+.toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--line);padding:10px 16px;border-radius:14px;font-size:14px;z-index:20;display:none}
+.toast.show{display:block;animation:up .2s}
 </style>
 </head><body>
-<header><b>FD KOLEGA</b><span id="state">odpojeno</span></header>
-<main>
-  <button id="orb">Klepni a mluv</button>
-  <div class="row">
-    <button class="s" id="mute">Ztlumit mikrofon</button>
-    <button class="s" id="cfg">Nastavení</button>
+<div class="wrap">
+  <header>
+    <div class="logo">K</div>
+    <div><h1>FD Kolega</h1><div class="sub" id="age">načítám…</div></div>
+    <div class="sp"></div>
+    <button class="icon" id="refresh" title="Obnovit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></button>
+    <button class="icon" id="speakAll" title="Přečíst, co čeká"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4zM16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg></button>
+    <button class="icon" id="settings" title="Nastavení"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </header>
+
+  <div class="stats" id="stats"></div>
+  <div class="bar">
+    <div class="seg" id="where">
+      <button data-v="all" class="on">Vše</button><button data-v="cloud">☁ Cloud</button><button data-v="mac">💻 Mac</button>
+    </div>
+    <input class="search" id="q" placeholder="Hledat session…">
+    <button class="btn" id="newBtn">+ Nová session</button>
   </div>
-  <div id="log"></div>
-</main>
-<dialog id="dlg"><form method="dialog">
-  <h3>Nastavení</h3>
-  <label>Adresa backendu (Cloudflare Worker)<input id="url" placeholder="https://fd-kolega.xxx.workers.dev"></label>
-  <label>Heslo (APP_TOKEN)<input id="tok" type="password"></label>
-  <div class="row"><button class="s" value="ok">Uložit</button></div>
-</form></dialog>
+  <div class="grid" id="grid"></div>
+  <div class="queue" id="queue"></div>
+</div>
+
+<div class="dock">
+  <button class="orb" id="orb" aria-label="Mluvit"><canvas id="viz" width="240" height="240"></canvas><span class="core"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></button>
+  <div class="txt" id="dockTxt"><b>Klepni a mluv.</b> „Pošli do FD STUDIO, ať…" · „Nová session…" · „Co čeká?"</div>
+</div>
+
+<div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const $ = (id) => document.getElementById(id);
+const REPO = "frantisekdron/fd-kolega";
+const $ = (s) => document.querySelector(s);
 const store = {
-  get: (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } },
-  set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
+  get(k){ try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch {} },
 };
-let pc, dc, mic, wakeLock, watchTimer, muted = false;
+let data = { sessions: [], updated_at: null }, queue = { commands: [] }, filt = { where: "all", state: "all", q: "" };
 
-function log(cls, text) {
-  const d = document.createElement("div"); d.className = cls; d.textContent = text;
-  $("log").prepend(d);
-}
-function setState(t) { $("state").textContent = t; }
-
-async function api(path, body) {
-  const r = await fetch(store.get("url").replace(/\/$/, "") + path, {
-    method: body ? "POST" : "GET",
-    headers: { authorization: "Bearer " + store.get("tok"), "content-type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
+/* ---------- GitHub most ---------- */
+const dec = (b) => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+const enc = (s) => { let bin = ""; for (const x of new TextEncoder().encode(s)) bin += String.fromCharCode(x); return btoa(bin); };
+async function gh(path, opt = {}) {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    ...opt, cache: "no-store",
+    headers: { authorization: "Bearer " + store.get("ghtok"), accept: "application/vnd.github+json", ...(opt.headers || {}) },
   });
-  const d = await r.json();
-  if (!r.ok) throw new Error(d.error || r.status);
-  return d;
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(r.status === 401 ? "Neplatný GitHub token" : "GitHub " + r.status);
+  return r.json();
 }
-
-async function connect() {
-  if (!store.get("url") || !store.get("tok")) return $("dlg").showModal();
-  setState("připojuji…");
-  const { token, model } = await api("/api/voice-token");
-  pc = new RTCPeerConnection();
-  const audio = new Audio(); audio.autoplay = true;
-  pc.ontrack = (e) => (audio.srcObject = e.streams[0]);
-  mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
-  pc.addTrack(mic.getTracks()[0]);
-  dc = pc.createDataChannel("oai-events");
-  dc.onmessage = (e) => onEvent(JSON.parse(e.data));
-  dc.onopen = () => { setState("poslouchám"); $("orb").classList.add("live"); $("orb").textContent = "Poslouchám"; startWatch(); };
-  const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
-  const r = await fetch("https://api.openai.com/v1/realtime/calls?model=" + encodeURIComponent(model), {
-    method: "POST", body: offer.sdp,
-    headers: { authorization: "Bearer " + token, "content-type": "application/sdp" },
-  });
-  if (!r.ok) throw new Error("Realtime " + r.status);
-  await pc.setRemoteDescription({ type: "answer", sdp: await r.text() });
-  pc.onconnectionstatechange = () => { if (["failed", "disconnected"].includes(pc.connectionState)) disconnect("spojení spadlo"); };
-  try { wakeLock = await navigator.wakeLock?.request("screen"); } catch {}
+async function readJson(path) { const d = await gh(path); return d ? { json: JSON.parse(dec(d.content)), sha: d.sha } : { json: null, sha: null }; }
+async function load() {
+  if (!store.get("ghtok")) return setup();
+  try {
+    const [p, c] = await Promise.all([readJson("most/prehled.json"), readJson("most/prikazy.json")]);
+    data = p.json || data; if (!Array.isArray(data.sessions)) data.sessions = []; queue = c.json || {}; if (!Array.isArray(queue.commands)) queue.commands = [];
+    render();
+  } catch (e) { toast(e.message); if (/token/.test(e.message)) setup(); }
 }
-
-function disconnect(reason) {
-  clearInterval(watchTimer);
-  try { dc?.close(); pc?.close(); } catch {}
-  mic?.getTracks().forEach((t) => t.stop());
-  wakeLock?.release?.(); pc = dc = null;
-  $("orb").className = ""; $("orb").textContent = "Klepni a mluv";
-  setState(reason || "odpojeno");
-}
-
-function send(ev) { if (dc?.readyState === "open") dc.send(JSON.stringify(ev)); }
-
-async function onEvent(ev) {
-  switch (ev.type) {
-    case "conversation.item.input_audio_transcription.completed":
-      if (ev.transcript?.trim()) log("me", ev.transcript.trim()); break;
-    case "response.output_audio_transcript.done":
-      log("ai", ev.transcript); break;
-    case "output_audio_buffer.started": $("orb").classList.add("speaking"); break;
-    case "output_audio_buffer.stopped": $("orb").classList.remove("speaking"); break;
-    case "response.function_call_arguments.done": {
-      log("tool", "⚙ " + ev.name);
-      let output;
-      try { output = (await api("/api/tool", { name: ev.name, args: JSON.parse(ev.arguments || "{}") })).result; }
-      catch (e) { output = { error: String(e.message || e) }; log("err", ev.name + ": " + output.error); }
-      send({ type: "conversation.item.create", item: { type: "function_call_output", call_id: ev.call_id, output: JSON.stringify(output) } });
-      send({ type: "response.create" });
-      break;
-    }
-    case "error": log("err", ev.error?.message || "chyba"); break;
+async function pushCommand(cmd) {
+  for (let i = 0; i < 3; i++) {
+    const { json, sha } = await readJson("most/prikazy.json");
+    const q = json || {}; if (!Array.isArray(q.commands)) q.commands = [];
+    q.commands.push({ ...cmd, at: new Date().toISOString(), od: "dashboard" });
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/most/prikazy.json`, {
+      method: "PUT",
+      headers: { authorization: "Bearer " + store.get("ghtok"), accept: "application/vnd.github+json" },
+      body: JSON.stringify({ message: "kolega: pokyn", content: enc(JSON.stringify(q, null, 1)), sha: sha || undefined }),
+    });
+    if (r.ok) { queue = q; render(); return; }
+    if (r.status !== 409 && r.status !== 422) throw new Error("Zápis selhal " + r.status);
   }
+  throw new Error("Zápis selhal (kolize)");
+}
+async function dropCommand(i) {
+  const { json, sha } = await readJson("most/prikazy.json");
+  const want = queue.commands[i];
+  if (!json || !Array.isArray(json.commands) || !want) return load();
+  const j = json.commands.findIndex((c) => c.at === want.at && c.text === want.text && c.session === want.session);
+  if (j < 0) return load();
+  json.commands.splice(j, 1);
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/most/prikazy.json`, {
+    method: "PUT", headers: { authorization: "Bearer " + store.get("ghtok"), accept: "application/vnd.github+json" },
+    body: JSON.stringify({ message: "kolega: zrušen pokyn", content: enc(JSON.stringify(json, null, 1)), sha }),
+  });
+  if (!r.ok) throw new Error("Zápis selhal " + r.status);
+  queue = json; render();
 }
 
-// Hlídání: když něco doběhne, kolega to během hovoru sám oznámí (na zamčený telefon chodí ntfy).
-let since = Date.now();
-function startWatch() {
-  watchTimer = setInterval(async () => {
-    try {
-      const { items, now } = await api("/api/feed?since=" + since);
-      since = now;
-      for (const n of items) {
-        send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text",
-          text: `[Upozornění systému, ne Františkova slova] Doběhla session „${n.title}": ${n.text}. Krátce to Františkovi oznam.` }] } });
-        send({ type: "response.create" });
+/* ---------- render ---------- */
+const ST = {
+  blocked: ["wait", "Čeká na tebe"], review_ready: ["wait", "K revizi"], working: ["run", "Běží"],
+  completed: ["done", "Hotovo"], failed: ["err", "Chyba"],
+};
+const st = (s) => ST[s.stav] || ["", s.stav || "?"];
+const ago = (iso) => { if (!iso) return ""; const m = Math.round((Date.now() - Date.parse(iso)) / 60000); return m < 1 ? "teď" : m < 60 ? `před ${m} min` : m < 1440 ? `před ${Math.round(m / 60)} h` : `před ${Math.round(m / 1440)} d`; };
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function render() {
+  $("#age").textContent = data.updated_at ? `Dispečer aktualizoval ${ago(data.updated_at)} · běží každou hodinu` : "Zatím bez dat";
+  const S = data.sessions || [];
+  const cnt = (f) => S.filter(f).length;
+  const tiles = [
+    ["all", "", S.length, "Session"],
+    ["wait", "w", cnt((s) => st(s)[0] === "wait"), "Čeká na tebe"],
+    ["run", "r", cnt((s) => st(s)[0] === "run"), "Běží"],
+    ["done", "d", cnt((s) => st(s)[0] === "done"), "Hotovo"],
+  ];
+  $("#stats").innerHTML = tiles.map(([k, c, n, l]) => `<button class="stat ${c} ${filt.state === k ? "on" : ""}" data-k="${k}"><b>${n}</b><span>${l}</span></button>`).join("");
+  $("#stats").querySelectorAll(".stat").forEach((b) => (b.onclick = () => { filt.state = b.dataset.k; render(); }));
+
+  const rows = S.filter((s) =>
+    (filt.where === "all" || s.typ === filt.where) &&
+    (filt.state === "all" || st(s)[0] === filt.state) &&
+    (!filt.q || ((s.title || "") + " " + (s.shrnuti || "")).toLowerCase().includes(filt.q))
+  ).sort((a, b) => (st(a)[0] === "wait" ? -1 : 0) - (st(b)[0] === "wait" ? -1 : 0));
+
+  $("#grid").innerHTML = rows.length ? rows.map((s) => {
+    const [cls, label] = st(s);
+    const pending = queue.commands.filter((c) => c.session === s.id).length;
+    return `<article class="card ${cls}">
+      <div class="top"><h3>${esc(s.title)}</h3><span class="chip">${s.typ === "mac" ? "💻 Mac" : "☁ Cloud"}</span></div>
+      <div style="margin-top:6px"><span class="chip st"><span class="dot"></span>${esc(label)}</span></div>
+      ${s.shrnuti ? `<div class="sum">${esc(s.shrnuti)}</div>` : ""}
+      ${s.ceka ? `<div class="need">👉 ${esc(s.ceka)}</div>` : ""}
+      <div class="meta"><span>${ago(s.updated)}</span>${s.typ === "mac" ? `<span>${s.online ? "Mac online" : "Mac offline – pokyn dorazí po zapnutí"}</span>` : ""}${pending ? `<span style="color:var(--acc)">⏳ ${pending} pokyn ve frontě</span>` : ""}</div>
+      <div class="acts">
+        <button class="pri" data-msg="${esc(s.id)}">Poslat pokyn</button>
+        ${s.typ === "mac" ? `<button data-move="${esc(s.id)}">☁ Přenést do cloudu</button>` : ""}
+        <button data-say="${esc(s.id)}">🔊</button>
+        <a href="https://claude.ai/code/${encodeURIComponent(s.id || "")}" target="_blank" rel="noopener">Otevřít ↗</a>
+      </div></article>`;
+  }).join("") : `<div class="empty">Nic tu není.</div>`;
+  $("#grid").querySelectorAll("[data-msg]").forEach((b) => (b.onclick = () => msgSheet(byId(b.dataset.msg))));
+  $("#grid").querySelectorAll("[data-move]").forEach((b) => (b.onclick = () => moveSheet(byId(b.dataset.move))));
+  $("#grid").querySelectorAll("[data-say]").forEach((b) => (b.onclick = () => { const s = byId(b.dataset.say); say(`${s.title}. ${st(s)[1]}. ${s.shrnuti || ""} ${s.ceka || ""}`); }));
+
+  $("#queue").innerHTML = queue.commands.length ? `Fronta pro Dispečera (doručí při dalším běhu):` + queue.commands.map((c, i) =>
+    `<div><span>${c.typ === "nova" ? "➕ " + esc(c.nazev) : c.typ === "presun" ? "☁ přenést " + esc(nameOf(c.session)) : "→ " + esc(nameOf(c.session))}: ${esc((c.text || "").slice(0, 90))}</span><button data-drop="${i}">✕</button></div>`).join("") : "";
+  $("#queue").querySelectorAll("[data-drop]").forEach((b) => (b.onclick = () => dropCommand(+b.dataset.drop).catch((e) => toast(e.message))));
+}
+const byId = (id) => (data.sessions || []).find((s) => s.id === id);
+const nameOf = (id) => byId(id)?.title || id;
+
+/* ---------- sheets ---------- */
+function sheet(html, onSubmit) {
+  $("#panel").innerHTML = html;
+  $("#sheet").classList.add("open");
+  $("#panel").querySelector("[data-close]").onclick = close;
+  $("#panel").querySelector("[data-ok]").onclick = async () => { try { await onSubmit(); close(); } catch (e) { toast(e.message); } };
+  $("#panel").querySelectorAll("[data-dict]").forEach((b) => (b.onclick = () => dictateInto($("#panel").querySelector(b.dataset.dict))));
+}
+function close() { $("#sheet").classList.remove("open"); }
+$("#sheet").onclick = (e) => { if (e.target.id === "sheet") close(); };
+const btns = (ok) => `<div class="row"><button class="btn ghost" data-close>Zrušit</button><button class="btn" data-ok>${ok}</button></div>`;
+const micBtn = (sel) => `<button class="mic" data-dict="${sel}">🎙 Nadiktovat</button>`;
+
+function msgSheet(s, text = "") {
+  sheet(`<h2>Pokyn → ${esc(s.title)}</h2><p>${s.typ === "mac" && !s.online ? "Mac je offline, pokyn dorazí po zapnutí." : "Dispečer ho doručí při dalším běhu."}</p>
+    <textarea id="t" placeholder="Co má session udělat…">${esc(text)}</textarea>${micBtn("#t")}${btns("Odeslat")}`,
+    async () => { const t = $("#t").value.trim(); if (!t) throw new Error("Prázdný pokyn"); await pushCommand({ typ: "zprava", session: s.id, text: t }); toast("Zařazeno ✓"); });
+}
+function moveSheet(s) {
+  sheet(`<h2>Přenést „${esc(s.title)}" do cloudu</h2><p>Dispečer založí novou cloudovou session, předá jí kontext z konverzace a případné repo. Soubory, které jsou jen na Macu, se nepřenesou.</p>
+    <label>Doplňující pokyn (nepovinné)</label><textarea id="t" placeholder="Např. pokračuj od kroku 3…"></textarea>${micBtn("#t")}${btns("Přenést")}`,
+    async () => { await pushCommand({ typ: "presun", session: s.id, text: $("#t").value.trim() }); toast("Přesun zařazen ✓"); });
+}
+function newSheet(text = "") {
+  sheet(`<h2>Nová cloudová session</h2><p>Poběží v cloudu – Mac nemusí být zapnutý.</p>
+    <label>Název</label><input id="n" placeholder="Např. Oprava webu">
+    <label>Repo (nepovinné)</label><input id="r" placeholder="frantisekdron/fd-board">
+    <label>Zadání</label><textarea id="t">${esc(text)}</textarea>${micBtn("#t")}${btns("Založit")}`,
+    async () => {
+      const t = $("#t").value.trim(); if (!t) throw new Error("Chybí zadání");
+      await pushCommand({ typ: "nova", nazev: $("#n").value.trim() || t.slice(0, 40), repo: $("#r").value.trim(), text: t });
+      toast("Session zařazena ✓");
+    });
+}
+function setup() {
+  sheet(`<h2>Připojení</h2><p>Jednorázově vlož GitHub token s přístupem k repu fd-kolega (Contents: Read and write). Uloží se jen v tomto zařízení.</p>
+    <label>GitHub token</label><input id="tok" type="password" value="${esc(store.get("ghtok"))}" placeholder="github_pat_…">
+    <label>Vzhled</label><select id="th"><option value="">Podle systému</option><option value="dark">Tmavý</option><option value="light">Světlý</option></select>${btns("Uložit")}`,
+    async () => { store.set("ghtok", $("#tok").value.trim()); store.set("theme", $("#th").value); applyTheme(); await load(); });
+  $("#th").value = store.get("theme");
+}
+function applyTheme() {
+  const t = store.get("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  document.documentElement.dataset.theme = t;
+}
+
+/* ---------- hlas: diktování + vizualizace ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec, audioCtx, analyser, micStream, raf, level = 0;
+function say(t) { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "cs-CZ"; speechSynthesis.speak(u); } catch {} }
+
+async function startViz() {
+  try {
+    const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
+    if (!rec) { ms.getTracks().forEach((t) => t.stop()); return; }
+    micStream = ms;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser(); analyser.fftSize = 256;
+    audioCtx.createMediaStreamSource(micStream).connect(analyser);
+  } catch {}
+}
+function stopViz() { micStream?.getTracks().forEach((t) => t.stop()); micStream = null; audioCtx?.close().catch(() => {}); audioCtx = null; analyser = null; }
+function draw() {
+  const c = $("#viz"), g = c.getContext("2d"), W = c.width, cx = W / 2;
+  const buf = new Uint8Array(128);
+  let t = 0;
+  (function frame() {
+    t += 0.016;
+    g.clearRect(0, 0, W, W);
+    if (analyser) { analyser.getByteFrequencyData(buf); level += ((buf.slice(2, 40).reduce((a, b) => a + b, 0) / 38 / 255) - level) * 0.3; }
+    else level *= 0.92;
+    const live = $("#orb").classList.contains("live");
+    if (live || level > 0.01) {
+      for (let ring = 0; ring < 3; ring++) {
+        g.beginPath();
+        const base = 46 + ring * 7, amp = 6 + level * 46 * (1 - ring * 0.25);
+        for (let i = 0; i <= 120; i++) {
+          const a = (i / 120) * Math.PI * 2;
+          const f = analyser ? buf[(i * 3 + ring * 9) % 64] / 255 : 0.2;
+          const r = base + Math.sin(a * (3 + ring) + t * (2 + ring)) * amp * 0.35 + f * amp;
+          const x = cx + Math.cos(a) * r, y = cx + Math.sin(a) * r;
+          i ? g.lineTo(x, y) : g.moveTo(x, y);
+        }
+        const grad = g.createLinearGradient(0, 0, W, W);
+        grad.addColorStop(0, `rgba(53,224,208,${0.75 - ring * 0.2})`); grad.addColorStop(1, `rgba(124,108,255,${0.75 - ring * 0.2})`);
+        g.strokeStyle = grad; g.lineWidth = 2.4 - ring * 0.5; g.shadowBlur = 14; g.shadowColor = "#35e0d0";
+        g.stroke();
       }
-    } catch {}
-  }, 30000);
+    }
+    raf = requestAnimationFrame(frame);
+  })();
 }
+draw();
 
-$("orb").onclick = async () => {
-  if (pc) return disconnect();
-  try { await connect(); }
-  catch (e) { log("err", String(e.message || e)); disconnect("chyba"); }
-};
-$("mute").onclick = () => {
-  if (!mic) return;
-  muted = !muted; mic.getTracks()[0].enabled = !muted;
-  $("orb").classList.toggle("muted", muted);
-  $("mute").textContent = muted ? "Zapnout mikrofon" : "Ztlumit mikrofon";
-};
-$("cfg").onclick = () => { $("url").value = store.get("url"); $("tok").value = store.get("tok"); $("dlg").showModal(); };
-$("dlg").onclose = () => { store.set("url", $("url").value.trim()); store.set("tok", $("tok").value.trim()); };
+function listen(onFinal) {
+  if (!SR) { toast("Diktování v tomhle prohlížeči nejde – použij Safari nebo Chrome"); return; }
+  if (rec) { rec.stop(); return; }
+  rec = new SR(); rec.lang = "cs-CZ"; rec.interimResults = true; rec.continuous = false;
+  let finalText = "";
+  rec.onstart = () => { $("#orb").classList.add("live"); if (!/iP(hone|ad|od)/.test(navigator.userAgent)) startViz(); };
+  rec.onresult = (e) => {
+    let s = ""; for (const r of e.results) { s += r[0].transcript; if (r.isFinal) finalText = s; }
+    $("#dockTxt").innerHTML = `<b>${esc(s)}</b>`;
+  };
+  rec.onerror = (e) => toast("Mikrofon: " + e.error);
+  rec.onend = () => { $("#orb").classList.remove("live"); stopViz(); rec = null; if (finalText.trim()) onFinal(finalText.trim()); };
+  rec.start();
+}
+function dictateInto(el) { listen((t) => { el.value = (el.value ? el.value + " " : "") + t; }); }
+
+// Hlasové příkazy: rozpozná cíl session podle názvu
+const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+function route(t) {
+  const n = norm(t);
+  if (/^(co ceka|co se deje|prehled|stav)/.test(n)) return readOut();
+  if (/^(nova|zaloz)/.test(n)) return newSheet(t.replace(/^\S+\s+(session\s+)?/i, ""));
+  let best = null, score = 0;
+  for (const s of data.sessions) {
+    const words = norm(s.title).split(/\W+/).filter((w) => w.length > 2);
+    const hit = words.filter((w) => n.includes(w)).length / (words.length || 1);
+    if (hit > score) { score = hit; best = s; }
+  }
+  if (best && score >= 0.5) {
+    const cut = norm(best.title).split(/\W+/).filter((w) => w.length > 2).pop();
+    const i = n.lastIndexOf(cut);
+    const text = i >= 0 ? t.slice(i + cut.length).replace(/^[\s,.:–-]*(at|ze|a)?\s*/i, "") : t;
+    return msgSheet(best, text);
+  }
+  newSheet(t);
+}
+function readOut() {
+  const w = data.sessions.filter((s) => st(s)[0] === "wait");
+  say(w.length ? `Na tebe čeká ${w.length}. ` + w.map((s) => `${s.title}: ${s.ceka || s.shrnuti}`).join(". ") : "Nic na tebe nečeká.");
+}
+$("#orb").onclick = () => listen(route);
+$("#speakAll").onclick = readOut;
+
+/* ---------- ovládání ---------- */
+function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("show"), 2600); }
+$("#where").onclick = (e) => { const v = e.target.dataset.v; if (!v) return; filt.where = v; $("#where").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.v === v)); render(); };
+$("#q").oninput = (e) => { filt.q = e.target.value.toLowerCase(); render(); };
+$("#newBtn").onclick = () => newSheet();
+$("#settings").onclick = setup;
+$("#refresh").onclick = () => { load(); toast("Obnoveno"); };
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+setInterval(load, 120000);
+applyTheme(); load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 </script>
 </body></html>

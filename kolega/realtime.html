@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="cs"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="../icon.png">
+<title>FD Kolega</title>
+<style>
+:root{--bg:#0a0e12;--panel:#121921;--line:#1f2a35;--fg:#e6edf3;--dim:#7d8b99;--acc:#35e0d0;--warn:#ffb454;--err:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,sans-serif;min-height:100dvh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+header b{letter-spacing:.08em}
+#state{font-size:13px;color:var(--dim)}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:16px}
+#orb{width:min(62vw,260px);aspect-ratio:1;border-radius:50%;border:3px solid var(--acc);background:radial-gradient(circle,#35e0d022,transparent 70%);color:var(--acc);font-size:20px;font-weight:600;cursor:pointer;transition:transform .12s;-webkit-tap-highlight-color:transparent}
+#orb.live{animation:pulse 2.2s infinite}
+#orb.speaking{transform:scale(1.06);background:radial-gradient(circle,#35e0d055,transparent 70%)}
+#orb.muted{border-color:var(--warn);color:var(--warn)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #35e0d044}50%{box-shadow:0 0 0 22px #35e0d000}}
+.row{display:flex;gap:10px}
+button.s{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px}
+#log{width:100%;max-width:640px;max-height:38dvh;overflow:auto;font-size:14px}
+#log div{padding:6px 10px;border-left:2px solid var(--line);margin:4px 0}
+#log .me{border-color:var(--dim);color:var(--dim)}
+#log .ai{border-color:var(--acc)}
+#log .tool{border-color:var(--warn);color:var(--warn);font-size:12px}
+#log .err{border-color:var(--err);color:var(--err)}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:14px;width:min(92vw,420px)}
+dialog input{width:100%;padding:10px;margin:6px 0 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;font-size:15px}
+</style>
+</head><body>
+<header><b>FD KOLEGA</b><span id="state">odpojeno</span></header>
+<main>
+  <button id="orb">Klepni a mluv</button>
+  <div class="row">
+    <button class="s" id="mute">Ztlumit mikrofon</button>
+    <button class="s" id="cfg">Nastavení</button>
+  </div>
+  <div id="log"></div>
+</main>
+<dialog id="dlg"><form method="dialog">
+  <h3>Nastavení</h3>
+  <label>Adresa backendu (Cloudflare Worker)<input id="url" placeholder="https://fd-kolega.xxx.workers.dev"></label>
+  <label>Heslo (APP_TOKEN)<input id="tok" type="password"></label>
+  <div class="row"><button class="s" value="ok">Uložit</button></div>
+</form></dialog>
+<script>
+const $ = (id) => document.getElementById(id);
+const store = {
+  get: (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
+};
+let pc, dc, mic, wakeLock, watchTimer, muted = false;
+
+function log(cls, text) {
+  const d = document.createElement("div"); d.className = cls; d.textContent = text;
+  $("log").prepend(d);
+}
+function setState(t) { $("state").textContent = t; }
+
+async function api(path, body) {
+  const r = await fetch(store.get("url").replace(/\/$/, "") + path, {
+    method: body ? "POST" : "GET",
+    headers: { authorization: "Bearer " + store.get("tok"), "content-type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || r.status);
+  return d;
+}
+
+async function connect() {
+  if (!store.get("url") || !store.get("tok")) return $("dlg").showModal();
+  setState("připojuji…");
+  const { token, model } = await api("/api/voice-token");
+  pc = new RTCPeerConnection();
+  const audio = new Audio(); audio.autoplay = true;
+  pc.ontrack = (e) => (audio.srcObject = e.streams[0]);
+  mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+  pc.addTrack(mic.getTracks()[0]);
+  dc = pc.createDataChannel("oai-events");
+  dc.onmessage = (e) => onEvent(JSON.parse(e.data));
+  dc.onopen = () => { setState("poslouchám"); $("orb").classList.add("live"); $("orb").textContent = "Poslouchám"; startWatch(); };
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  const r = await fetch("https://api.openai.com/v1/realtime/calls?model=" + encodeURIComponent(model), {
+    method: "POST", body: offer.sdp,
+    headers: { authorization: "Bearer " + token, "content-type": "application/sdp" },
+  });
+  if (!r.ok) throw new Error("Realtime " + r.status);
+  await pc.setRemoteDescription({ type: "answer", sdp: await r.text() });
+  pc.onconnectionstatechange = () => { if (["failed", "disconnected"].includes(pc.connectionState)) disconnect("spojení spadlo"); };
+  try { wakeLock = await navigator.wakeLock?.request("screen"); } catch {}
+}
+
+function disconnect(reason) {
+  clearInterval(watchTimer);
+  try { dc?.close(); pc?.close(); } catch {}
+  mic?.getTracks().forEach((t) => t.stop());
+  wakeLock?.release?.(); pc = dc = null;
+  $("orb").className = ""; $("orb").textContent = "Klepni a mluv";
+  setState(reason || "odpojeno");
+}
+
+function send(ev) { if (dc?.readyState === "open") dc.send(JSON.stringify(ev)); }
+
+async function onEvent(ev) {
+  switch (ev.type) {
+    case "conversation.item.input_audio_transcription.completed":
+      if (ev.transcript?.trim()) log("me", ev.transcript.trim()); break;
+    case "response.output_audio_transcript.done":
+      log("ai", ev.transcript); break;
+    case "output_audio_buffer.started": $("orb").classList.add("speaking"); break;
+    case "output_audio_buffer.stopped": $("orb").classList.remove("speaking"); break;
+    case "response.function_call_arguments.done": {
+      log("tool", "⚙ " + ev.name);
+      let output;
+      try { output = (await api("/api/tool", { name: ev.name, args: JSON.parse(ev.arguments || "{}") })).result; }
+      catch (e) { output = { error: String(e.message || e) }; log("err", ev.name + ": " + output.error); }
+      send({ type: "conversation.item.create", item: { type: "function_call_output", call_id: ev.call_id, output: JSON.stringify(output) } });
+      send({ type: "response.create" });
+      break;
+    }
+    case "error": log("err", ev.error?.message || "chyba"); break;
+  }
+}
+
+// Hlídání: když něco doběhne, kolega to během hovoru sám oznámí (na zamčený telefon chodí ntfy).
+let since = Date.now();
+function startWatch() {
+  watchTimer = setInterval(async () => {
+    try {
+      const { items, now } = await api("/api/feed?since=" + since);
+      since = now;
+      for (const n of items) {
+        send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text",
+          text: `[Upozornění systému, ne Františkova slova] Doběhla session „${n.title}": ${n.text}. Krátce to Františkovi oznam.` }] } });
+        send({ type: "response.create" });
+      }
+    } catch {}
+  }, 30000);
+}
+
+$("orb").onclick = async () => {
+  if (pc) return disconnect();
+  try { await connect(); }
+  catch (e) { log("err", String(e.message || e)); disconnect("chyba"); }
+};
+$("mute").onclick = () => {
+  if (!mic) return;
+  muted = !muted; mic.getTracks()[0].enabled = !muted;
+  $("orb").classList.toggle("muted", muted);
+  $("mute").textContent = muted ? "Zapnout mikrofon" : "Ztlumit mikrofon";
+};
+$("cfg").onclick = () => { $("url").value = store.get("url"); $("tok").value = store.get("tok"); $("dlg").showModal(); };
+$("dlg").onclose = () => { store.set("url", $("url").value.trim()); store.set("tok", $("tok").value.trim()); };
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body></html>

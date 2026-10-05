@@ -1,29 +1,21 @@
-# FD Kolega – jen na předplatném Claude (bez dalších plateb), ~10 min
+# FD Kolega – ovládací centrum (jen předplatné Claude)
 
-Hlas = hlasový režim v appce Claude · Mozek = Claude projekt · Session = Claude Code · Notifikace = appka Claude.
+**Dashboard:** https://frantisekdron.github.io/fd-board/kolega/ – stejný na MacBooku i v telefonu.
 
-## 1. Repo pro most (1 min)
-github.com/new → název **fd-kolega** → **Private** → zaškrtni „Add a README" → Create.
+## Jednorázově (3 min)
+1. github.com/settings/personal-access-tokens → **Generate new token** → Repository access: *Only select* → **fd-kolega** → Permissions: **Contents: Read and write** → Generate → zkopíruj.
+2. Otevři dashboard → vlož token → Uložit.
+3. Telefon: Safari → Sdílet → **Přidat na plochu** (Android/Chrome: ⋮ → Přidat na plochu). Chová se jako appka.
 
-## 2. Dispečer (3 min)
-Appka Claude / claude.ai/code → **Routines** → **FD Kolega – Dispečer** (je vypnutý):
-1. Prompt nahraď celým obsahem `kolega/dispecer-prompt.md`.
-2. Zapni **notifikace (push)**.
-3. Zapni rutinu a jednou klepni **Run now** – vytvoří první přehled.
+## Co umí
+- Všechny session: ☁ Cloud i 💻 Mac, co běží, co je hotové, **co čeká na tebe**.
+- **Poslat pokyn** do session (psaním nebo diktováním 🎙).
+- **Přenést do cloudu** – Mac session pokračuje v cloudu (soubory jen z Macu se nepřenesou).
+- **Nová session** v cloudu.
+- Hlasový kruh dole: „Pošli do FD STUDIO, ať…" · „Nová session…" · „Co čeká?" (přečte nahlas).
 
-## 3. Projekt „Kolega" (3 min)
-claude.ai → Projects → New project „Kolega" → Instructions: vlož obsah `kolega/projekt-instrukce.md`.
-Konektory (Settings → Connectors): **GitHub** (s přístupem k fd-kolega), **Gmail**, **Google Drive** – zapnuté.
+## Jak to funguje
+Pokyny jdou do soukromého repa fd-kolega. Dispečer (běží v cloudové session „Cloud control center") je každou hodinu doručí, obnoví přehled a pošle ti notifikaci.
+MacBook zapnutý být nemusí – jen pokyny do 💻 Mac session dorazí, až bude online.
 
-## 4. V autě
-Appka Claude → projekt Kolega → nový chat → ikona **hlasového režimu** (zvuková vlna) → mluv.
-- „Co se děje v mých session?"
-- „Pošli do session s webem, ať opraví tlačítko."
-- „Založ novou session v repu fd-board: …"
-- „Mám nové maily? Přečti mi ten od…"
-
-## Omezení (dané předplatným)
-- Dispečer běží max. 1× za hodinu (Claude kratší interval nepovolí); na spěch „Run now".
-- Session na claude.ai/code nemají veřejné API, proto jde řízení přes Dispečera, ne napřímo.
-
-Složka `worker/` a stránka `kolega/index.html` jsou starší varianta s placenými API (rychlejší, real-time). Nepoužívá se; dá se zapnout kdykoli později.
+Rutinu „Dispečer" na claude.ai nepotřebuješ – smaž ji. Session „Cloud control center s hlasovým asistentem" nearchivuj.

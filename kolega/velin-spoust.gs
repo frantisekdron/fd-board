@@ -5,7 +5,7 @@
 //   • nový soubor „KOLEGA pokyn – …" (pokud AUTO_POKYN = true),
 // napíše komentář VELIN_RUN do „schránky" – PR #1 v soukromém repu fd-kolega. Dispečer (session
 // CLAUDE VOICE CONTROL) je k PR přihlášený, takže ho komentář do pár sekund probudí.
-// Spouštěcí soubory pak vyhodí do koše (žádná smyčka), pokyny nechá Dispečerovi.
+// Spouštěcí soubory pak přesune do podsložky FD Kolega/Archiv (žádná smyčka, nic se nemaže), pokyny nechá Dispečerovi.
 // Stav posledního spuštění zapisuje do Google Docu „Velín – spoušť", aby si ho hlas mohl přečíst.
 //
 // Token NIKDY nedávej do kódu: Nastavení projektu (⚙) → Vlastnosti skriptu →
@@ -15,6 +15,7 @@ const SLOZKA = "1NpVVdaZs2ylWy4NbkNfg6aKwL_Ic-czm"; // FD Kolega
 const AUTO_POKYN = true;   // nový „KOLEGA pokyn" = spustit Dispečera hned (false = jen hodinový běh)
 const PAUZA_MIN = 2;       // min. rozestup dvou spuštění; co přijde mezitím, počká na další minutu
 const STAV_DOC = "Velín – spoušť";
+const ARCHIV = "118uN-cQinflP9JAfbqXhNNq0EvV6ShQY"; // FD Kolega/Archiv – místo koše (František nechce nic mazat)
 const SCHRANKA = "frantisekdron/fd-kolega/issues/1"; // PR #1 „Velín – schránka"
 
 function hlidej() {
@@ -48,7 +49,7 @@ function hlidej() {
 
   if (r.ok) {
     props.setProperty("posledni_spusteni", String(ted));
-    spousti.forEach((f) => f.setTrashed(true));
+    spousti.forEach((f) => { f.setName(f.getName() + " · spuštěno " + cas(ted)); f.moveTo(DriveApp.getFolderById(ARCHIV)); });
     pokyny.forEach((f) => (videne[f.getId()] = ted));
     for (const id in videne) if (ted - videne[id] > 2 * 86400000) delete videne[id];
     props.setProperty("videne_pokyny", JSON.stringify(videne));

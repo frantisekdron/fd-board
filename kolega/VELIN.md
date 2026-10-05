@@ -1,6 +1,7 @@
 # Velín – jedno ovládání session (hlas + dashboard)
 
-Stav: **návrh k odsouhlasení** + **fáze 1 připravená** (spoušť Dispečera přes Drive). Nic není nasazené naživo, dokud František nepotvrdí.
+Stav: návrh **schválen** 5. 10. (AUTO_POKYN ano, GitHub token na Vercelu). Fáze 1–3 hotové v kódu; čeká se na tokeny a nastavení od Františka.
+Dashboard Velín: kód v soukromém repu `fd-kolega`, složka `velin/` – návod k nasazení na Vercel je v `velin/README.md` tamtéž.
 
 ## Fáze 1 – spoušť Dispečera z hlasu (hotovo v kódu, čeká na 3 kroky Františka)
 
@@ -26,24 +27,23 @@ Kdyby rutina v UI neměla volbu API (vznikla z Claude Code, ne z formuláře), �
 **Jeden zdroj pravdy: `velin_state.json`**
 - Kanonická kopie: soukromé repo `frantisekdron/fd-kolega`, soubor `most/velin_state.json` (git = zdarma historie každé změny). Dashboard ho už dnes umí číst.
 - Zrcadlo na Drive: `velin_state.json` ve složce FD Kolega (jako Google Doc s JSON textem – Drive konektor hlasu jiné typy nepřečte) + lidský „Kolega – přehled". Obojí vzniká v **jednom** běhu Dispečera z **jednoho** objektu → data se nerozejdou. Apps Script může později držet obojí pod stálým ID (přepisovat obsah), takže odpadne mazání a vytváření nových souborů.
-- Formát (verze 1):
+- Formát (verze 1, klíče navazují na dosavadní prehled.json, takže starý dashboard funguje dál):
 ```json
 {
   "schema": 1,
-  "updated_at": "2026-10-05T07:30:00+02:00",
-  "dispatcher": {"last_run": "…", "mode": "hourly|on_demand", "next_hourly": "…"},
+  "updated_at": "2026-10-05T05:30:00Z", "updated_praha": "05. 10. 2026 07:30",
+  "dispecer": {"rezim": "hodinovy|na_vyzadani", "doruceno": 2},
+  "poznamky": {"mac": "…", "velin": "…"},
   "sessions": [{
-    "id": "session_…", "title": "…", "kind": "cloud|mac", "online": true,
-    "state": "working|blocked|review_ready|completed|failed",
-    "summary": "1 věta česky", "waiting_for_me": "" ,
-    "done": "co doběhlo", "failed": "",
-    "repo": "frantisekdron/…", "branch": "…", "pr": {"number": 12, "url": "…", "ci": "green|red|pending"},
-    "updated_at": "…"
+    "id": "session_…", "title": "…", "typ": "cloud|mac", "online": true,
+    "stav": "working|blocked|review_ready|completed|failed",
+    "shrnuti": "1 věta česky", "ceka": "co čeká na Františka",
+    "repo": "frantisekdron/…", "vetev": "…", "updated": "…"
   }],
-  "commands": {"pending": 0, "delivered_last_run": 2},
-  "events": [{"at": "…", "session": "…", "text": "…"}]
+  "events": [{"at": "…", "session": "session_…", "title": "…", "text": "…"}]
 }
 ```
+PR a CI se do stavu nezapisují – dashboard je k session dotáhne živě z GitHubu podle repa a větve.
 
 **Jak session zapisují stav:** nemusí nic. Dispečer stav čte sám z metadat session (stav, shrnutí, „čeká na tebe", repo/větev) – nulové náklady navíc v každé session. Kód session dál commitují a pushují do GitHubu jako dnes; PR a CI k tomu dashboard dotáhne přímo z GitHubu.
 

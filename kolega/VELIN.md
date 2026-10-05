@@ -3,23 +3,22 @@
 Stav: návrh **schválen** 5. 10. (AUTO_POKYN ano, GitHub token na Vercelu). Fáze 1–3 hotové v kódu; čeká se na tokeny a nastavení od Františka.
 Dashboard Velín: kód v soukromém repu `fd-kolega`, složka `velin/` – návod k nasazení na Vercel je v `velin/README.md` tamtéž.
 
-## Fáze 1 – spoušť Dispečera z hlasu (hotovo v kódu, čeká na 3 kroky Františka)
+## Fáze 1 – spoušť Dispečera z hlasu
 
 **Jak to funguje**
 1. Hlas (projekt „Kolega") položí do složky FD Kolega soubor **„KOLEGA spusť"** (nebo obyčejný „KOLEGA pokyn – …").
-2. **Google Apps Script** (zdarma, běží u Googlu, ne na kreditech Claude) se každou minutu podívá do složky. Když soubor najde, zavolá API rutiny „Velín spínač" (založíš ji sám v claude.ai), která přepošle povel rutině **„Velín spoušť – Dispečer na vyžádání"** (`trig_01S8EN4VNjmEGNA6nSbUVqyE`).
-3. Rutina probudí **stejnou** session CLAUDE VOICE CONTROL, ve které běží hodinový Dispečer → nikdy nepoběží dva Dispečeři naráz (zprávy se řadí za sebe). Dispečer doručí pokyny, obnoví „Kolega – přehled", pushne a **vždy** pošle notifikaci.
-4. Apps Script spouštěcí soubor vyhodí do koše (žádná smyčka) a do dokumentu **„Velín – spoušť"** zapíše, kdy Dispečera spustil (hlas si to může přečíst).
+2. **Google Apps Script** (zdarma, běží u Googlu) se každou minutu podívá do složky. Když soubor najde, napíše komentář `VELIN_RUN` do **schránky** – PR #1 „Velín – schránka" v soukromém repu fd-kolega.
+3. Session CLAUDE VOICE CONTROL (Dispečer) je k PR přihlášená, GitHub ji do pár sekund probudí. Dispečer doručí pokyny, obnoví stav i přehled a vždy pošle notifikaci. Nikdy nepoběží dva Dispečeři naráz.
+4. Apps Script spouštěcí soubor vyhodí do koše a do dokumentu **„Velín – spoušť"** zapíše, kdy Dispečera spustil.
+Dashboard Velín spouští Dispečera stejně (komentář do schránky).
 
-Latence: do ~1 min se Dispečer spustí, za 3–5 min je nový přehled. Kredity: Apps Script nic nestojí; Claude běží jen když ho opravdu zavoláš. Hodinový běh 7–23 v :18 a notifikace zůstávají beze změny (fallback).
-Pojistky: min. 2 min mezi spuštěními (co přijde mezitím, počká, neztratí se); limit API 30 spuštění/h na rutinu – při překročení Apps Script počká a zapíše chybu do „Velín – spoušť".
-`AUTO_POKYN = true`: i každý nový „KOLEGA pokyn" se doručí hned, ne až v další hodinu. Lze vypnout (false).
+Proč schránka: rutiny založené z Claude Code se v claude.ai nezobrazují (nejde k nim API token) a rutina založená ve formuláři běží v čerstvé session bez Františkova schválení, takže jinou session spustit odmítne. Schránka probouzí přímo session Dispečera, kde schválení je. Souhlas se schránkou dal František 5. 10. 2026.
 
-**Co potřebuju od Františka (asi 15 min, jednou)**
-Rutiny založené z Claude Code se v claude.ai nezobrazují (nejde k nim token), proto přibyl mezičlánek „Velín spínač", který založíš sám – návod a prompt v `kolega/velin-spinac.md`.
-1. **Spínač:** claude.ai/code/routines → nová rutina „Velín spínač" podle `velin-spinac.md` (konektor Claude_Code_Remote, model Haiku, API trigger) → *Generate token*. Token nikomu neposílej, ani mně.
-2. **Apps Script:** script.google.com → Nový projekt „Velín spoušť" → vlož `kolega/velin-spoust.gs` → ⚙ Vlastnosti skriptu: `ROUTINE_ID` (trig_… spínače) a `ROUTINE_TOKEN` → funkce **nastav** → ▶ Spustit → povol přístup. Funkce **test** spustí Dispečera hned.
+**Co potřebuju od Františka**
+1. **GitHub token pro Apps Script:** github.com/settings/personal-access-tokens → Generate new token → Repository access *Only select* → **fd-kolega** → Permissions: **Pull requests: Read and write** → Generate.
+2. **Apps Script:** script.google.com → Nový projekt „Velín spoušť" → vlož `kolega/velin-spoust.gs` → ⚙ Vlastnosti skriptu: `GITHUB_TOKEN` → funkce **nastav** → ▶ Spustit → povol přístup → funkce **test**.
 3. **Hlas:** v projektu „Kolega" nahraď instrukce novým `kolega/projekt-instrukce.md`.
+4. Rutinu „Velín spínač" v claude.ai můžeš smazat.
 
 ## Celkový návrh
 
@@ -46,7 +45,7 @@ PR a CI se do stavu nezapisují – dashboard je k session dotáhne živě z Git
 
 **Jak session zapisují stav:** nemusí nic. Dispečer stav čte sám z metadat session (stav, shrnutí, „čeká na tebe", repo/větev) – nulové náklady navíc v každé session. Kód session dál commitují a pushují do GitHubu jako dnes; PR a CI k tomu dashboard dotáhne přímo z GitHubu.
 
-**Dispečer:** hodinový běh 7–23 zůstává; nově i na vyžádání (fáze 1). Fáze 2 doplní zápis `velin_state.json` a spoušť i z dashboardu: GitHub Action v `fd-kolega` při pushi do `most/prikazy.json` (nebo tlačítkem „Obnovit teď") zavolá tutéž rutinu → pokyny z dashboardu taky okamžitě. Token rutiny pak bude i v GitHub secretu, ne v kódu.
+**Dispečer:** hodinový běh 7–23 zůstává; nově i na vyžádání (fáze 1). Dispečer zapisuje `velin_state.json`; dashboard (pokyn nebo „Obnovit teď") ho spouští stejnou schránkou.
 
 **Hlas:** čte „Kolega – přehled" / `velin_state.json`, posílá „KOLEGA pokyn", nově „KOLEGA spusť". GitHub nepotřebuje.
 
@@ -58,8 +57,8 @@ PR a CI se do stavu nezapisují – dashboard je k session dotáhne živě z Git
 
 | Fáze | Co | Moje práce | Od tebe |
 |---|---|---|---|
-| 1 | Spoušť přes Drive (hlas → Dispečer hned) | hotovo | token rutiny, Apps Script, instrukce hlasu (10 min) |
-| 2 | `velin_state.json` (repo + Drive), spoušť z dashboardu přes GitHub Action, úprava Dispečera | ~2–3 h | schválit formát; token rutiny i do GitHub secretu |
+| 1 | Spoušť přes Drive (hlas → Dispečer hned) | hotovo | GitHub token pro fd-kolega, Apps Script, instrukce hlasu (10 min) |
+| 2 | `velin_state.json` (repo + Drive), spoušť z dashboardu přes schránku, úprava Dispečera | hotovo | – |
 | 3 | Dashboard: filtry, detail, historie, GitHub náhled kódu/PR/CI přes proxy | ~1 den | rozhodnout Vercel vs. prohlížeč; classic token |
 | 4 | Doladění hlasu (krátké odpovědi z JSON, „co čeká") | ~1 h | vyzkoušet za jízdy |
 

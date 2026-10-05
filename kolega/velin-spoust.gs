@@ -3,22 +3,19 @@
 // Co dělá: každou minutu se podívá do složky „FD Kolega". Když tam najde
 //   • soubor „KOLEGA spusť" (nebo cokoli s RUN_NOW v názvu) – hlas chce čerstvý běh hned,
 //   • nový soubor „KOLEGA pokyn – …" (pokud AUTO_POKYN = true),
-// zavolá API rutiny „Velín spínač" (František ji založí v claude.ai s API triggerem a konektorem
-// Claude_Code_Remote). Spínač jen přepošle povel rutině „Velín spoušť – Dispečer na vyžádání",
-// která probudí Dispečera v session CLAUDE VOICE CONTROL. Spouštěcí soubory pak vyhodí do koše (žádná smyčka),
-// pokyny nechá Dispečerovi (ten je po doručení přejmenuje a vyhodí sám).
-// Stav posledního spuštění zapisuje do Google Docu „Velín – spoušť" (stejné ID, přepisuje obsah),
-// aby si ho hlas mohl přečíst.
+// napíše komentář VELIN_RUN do „schránky" – PR #1 v soukromém repu fd-kolega. Dispečer (session
+// CLAUDE VOICE CONTROL) je k PR přihlášený, takže ho komentář do pár sekund probudí.
+// Spouštěcí soubory pak vyhodí do koše (žádná smyčka), pokyny nechá Dispečerovi.
+// Stav posledního spuštění zapisuje do Google Docu „Velín – spoušť", aby si ho hlas mohl přečíst.
 //
-// Nastavení (jednou, ~5 min) – viz VELIN.md, část Fáze 1.
-// Token rutiny NIKDY nedávej do kódu: Nastavení projektu (⚙) → Vlastnosti skriptu →
-//   ROUTINE_ID    = trig_… rutiny „Velín spínač" (je v URL, kterou ukáže okno s tokenem)
-//   ROUTINE_TOKEN = sk-ant-oat01-… token té rutiny
+// Token NIKDY nedávej do kódu: Nastavení projektu (⚙) → Vlastnosti skriptu →
+//   GITHUB_TOKEN = fine-grained token jen pro repo fd-kolega (Pull requests: Read and write)
 
 const SLOZKA = "1NpVVdaZs2ylWy4NbkNfg6aKwL_Ic-czm"; // FD Kolega
 const AUTO_POKYN = true;   // nový „KOLEGA pokyn" = spustit Dispečera hned (false = jen hodinový běh)
 const PAUZA_MIN = 2;       // min. rozestup dvou spuštění; co přijde mezitím, počká na další minutu
 const STAV_DOC = "Velín – spoušť";
+const SCHRANKA = "frantisekdron/fd-kolega/issues/1"; // PR #1 „Velín – schránka"
 
 function hlidej() {
   const props = PropertiesService.getScriptProperties();
@@ -55,7 +52,7 @@ function hlidej() {
     pokyny.forEach((f) => (videne[f.getId()] = ted));
     for (const id in videne) if (ted - videne[id] > 2 * 86400000) delete videne[id];
     props.setProperty("videne_pokyny", JSON.stringify(videne));
-    zapisStav(`Dispečer spuštěn ${cas(ted)}. Důvod:\n${duvod}\nPřehled „Kolega – přehled" bude obnoven zhruba do 3–5 minut a přijde notifikace.\nSession: ${r.url || "-"}`);
+    zapisStav(`Dispečer spuštěn ${cas(ted)}. Důvod:\n${duvod}\nPřehled „Kolega – přehled" bude obnoven zhruba do 3–5 minut a přijde notifikace.\nKomentář: ${r.url || "-"}`);
   } else {
     if (r.retryAfter) props.setProperty("dalsi_povoleno", String(ted + r.retryAfter * 1000));
     // spouštěcí soubory zůstávají → zkusí se znovu příští minutu
@@ -64,23 +61,18 @@ function hlidej() {
 }
 
 function spust(text) {
-  const props = PropertiesService.getScriptProperties();
-  const token = props.getProperty("ROUTINE_TOKEN"), rutina = props.getProperty("ROUTINE_ID");
-  if (!token || !rutina) return { ok: false, chyba: "chybí ROUTINE_ID nebo ROUTINE_TOKEN ve Vlastnostech skriptu" };
-  const res = UrlFetchApp.fetch(`https://api.anthropic.com/v1/claude_code/routines/${rutina}/fire`, {
+  const token = PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN");
+  if (!token) return { ok: false, chyba: "chybí GITHUB_TOKEN ve Vlastnostech skriptu" };
+  const res = UrlFetchApp.fetch(`https://api.github.com/repos/${SCHRANKA}/comments`, {
     method: "post",
     contentType: "application/json",
-    headers: { Authorization: "Bearer " + token, "anthropic-version": "2023-06-01" },
-    payload: JSON.stringify({ text: "Spoušť z Google Drive (Velín):\n" + text }),
+    headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" },
+    payload: JSON.stringify({ body: "VELIN_RUN\nSpoušť z Google Drive (Velín):\n" + text }),
     muteHttpExceptions: true,
   });
   const kod = res.getResponseCode();
-  if (kod === 200) {
-    const b = JSON.parse(res.getContentText() || "{}");
-    return { ok: true, url: b.claude_code_session_url };
-  }
-  const ra = Number(res.getHeaders()["Retry-After"] || res.getHeaders()["retry-after"] || 0);
-  return { ok: false, chyba: `HTTP ${kod} ${res.getContentText().slice(0, 300)}`, retryAfter: ra || (kod === 429 ? 600 : 0) };
+  if (kod === 201) return { ok: true, url: JSON.parse(res.getContentText()).html_url };
+  return { ok: false, chyba: `GitHub HTTP ${kod} ${res.getContentText().slice(0, 300)}`, retryAfter: kod === 403 || kod === 429 ? 300 : 0 };
 }
 
 function zapisStav(text) {
@@ -114,7 +106,7 @@ function nastav() {
 function test() {
   const r = spust("ruční test z Apps Scriptu");
   Logger.log(JSON.stringify(r));
-  zapisStav(r.ok ? `Test OK ${cas(Date.now())} – Dispečer spuštěn.\nSession: ${r.url || "-"}` : `Test SELHAL: ${r.chyba}`);
+  zapisStav(r.ok ? `Test OK ${cas(Date.now())} – Dispečer spuštěn.\nKomentář: ${r.url || "-"}` : `Test SELHAL: ${r.chyba}`);
 }
 
 // Vypnutí spouště (hodinový Dispečer běží dál).

@@ -1,0 +1,45 @@
+# Nasadí backend FD Kolegy na Cloudflare. Spustíš z telefonu: Actions → kolega-deploy → Run workflow.
+name: kolega-deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['worker/**']
+concurrency: kolega-deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: KV úložiště (založí jen poprvé)
+        working-directory: worker
+        run: |
+          set -e
+          ID=$(npx -y wrangler@4 kv namespace list | node -e 'const l=JSON.parse(require("fs").readFileSync(0));const n=l.find(x=>x.title==="fd-kolega-STATE");console.log(n?n.id:"")')
+          if [ -z "$ID" ]; then
+            npx -y wrangler@4 kv namespace create fd-kolega-STATE > /tmp/kv.txt; cat /tmp/kv.txt
+            ID=$(grep -oE '[0-9a-f]{32}' /tmp/kv.txt | head -1)
+          fi
+          sed -i "s/KV_ID/$ID/" wrangler.toml
+      - name: Nasadit
+        working-directory: worker
+        run: npx -y wrangler@4 deploy
+      - name: Tajné klíče
+        working-directory: worker
+        env:
+          S_APP_TOKEN: ${{ secrets.APP_TOKEN }}
+          S_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          S_ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          S_GITHUB_TOKEN: ${{ secrets.KOLEGA_GITHUB_TOKEN }}
+          S_GOOGLE_URL: ${{ secrets.GOOGLE_URL }}
+          S_GOOGLE_KEY: ${{ secrets.GOOGLE_KEY }}
+          S_NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          node -e 'const o={};for(const[k,v]of Object.entries(process.env))if(k.startsWith("S_")&&v)o[k.slice(2)]=v;require("fs").writeFileSync("/tmp/s.json",JSON.stringify(o))'
+          npx -y wrangler@4 secret bulk /tmp/s.json
+          rm /tmp/s.json

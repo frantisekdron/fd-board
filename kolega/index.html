@@ -128,25 +128,25 @@ async function onEvent(ev) {
   }
 }
 
-// Hlídání session: když agent dokončí práci, kolega se sám ozve.
+// Hlídání: když něco doběhne, kolega to během hovoru sám oznámí (na zamčený telefon chodí ntfy).
+let since = Date.now();
 function startWatch() {
-  api("/api/watch").catch(() => {});
   watchTimer = setInterval(async () => {
     try {
-      const { done } = await api("/api/watch");
-      for (const s of done) {
-        if (document.hidden && Notification?.permission === "granted") new Notification("Hotovo: " + (s.title || s.id));
+      const { items, now } = await api("/api/feed?since=" + since);
+      since = now;
+      for (const n of items) {
         send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text",
-          text: `[Upozornění systému, ne Františkova slova] Session „${s.title}" (${s.id}) skončila ve stavu ${s.status}. Poslední odpověď agenta: ${s.last_reply}. Krátce to Františkovi oznam.` }] } });
+          text: `[Upozornění systému, ne Františkova slova] Doběhla session „${n.title}": ${n.text}. Krátce to Františkovi oznam.` }] } });
         send({ type: "response.create" });
       }
     } catch {}
-  }, 45000);
+  }, 30000);
 }
 
 $("orb").onclick = async () => {
   if (pc) return disconnect();
-  try { if (window.Notification && Notification.permission === "default") Notification.requestPermission(); await connect(); }
+  try { await connect(); }
   catch (e) { log("err", String(e.message || e)); disconnect("chyba"); }
 };
 $("mute").onclick = () => {

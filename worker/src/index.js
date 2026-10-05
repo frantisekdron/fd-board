@@ -6,8 +6,11 @@
 //   OPENAI_API_KEY       – realtime hlas
 //   ANTHROPIC_API_KEY    – Managed Agents (pracovní session)
 //   GITHUB_TOKEN         – fine-grained token na tvoje repa
-//   GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GOOGLE_REFRESH_TOKEN – Gmail + Drive
-// KV binding: STATE (id agenta/prostředí, poslední stavy session pro notifikace)
+//   GOOGLE_URL / GOOGLE_KEY – Apps Script most na Gmail + Drive (kolega/google-most.gs)
+//   NTFY_TOPIC           – tajný název kanálu v appce ntfy (upozornění na zamčený telefon)
+// KV binding: STATE. Cron každou minutu hlídá dokončené session a posílá upozornění.
+// Most k Claude Code session (claude.ai/code): soukromé repo BRIDGE_REPO, soubory most/*.json,
+// které čte a zapisuje Routine „Dispečer" (běží v Claude Code a má přístup ke všem session).
 
 const AGENT_MODEL = "claude-opus-5-5";
 const VOICE_MODEL = "gpt-realtime";
@@ -16,7 +19,7 @@ const GH_OWNER = "frantisekdron";
 const INSTRUCTIONS = `Jsi Kolega – hlasový asistent a parťák Františka (studio FrantišekDron: drony, video, 3D vizualizace, nabídky pro makléře a developery).
 Mluvíš česky, stručně a přirozeně, jako kolega v autě: krátké věty, žádné seznamy, žádné odkazy ani ID nahlas (ID si pamatuj a používej v nástrojích).
 František často řídí – odpovídej do pár vět, podrobnosti jen na vyžádání.
-Máš nástroje: pracovní session (agenti Claude, kteří umí programovat a pracovat v repozitářích), GitHub, Gmail a Drive.
+Máš nástroje: Claude Code session Františka (cc_overview, cc_command – přehled a pokyny do všech jeho rozjetých session), vlastní pracovní session (create_session atd. – agenti, které zakládáš ty), GitHub, Gmail a Drive.
 Než něco odešleš nebo založíš, jednou krátce zopakuj, co uděláš, a počkej na "jo"/"pošli". E-maily jen ukládáš jako koncepty, neodesíláš.
 Když nástroj selže, řekni to jednou větou a navrhni další krok.`;
 
@@ -31,6 +34,10 @@ const TOOLS = [
   }, ["title", "task"]),
   fn("send_to_session", "Pošle zprávu / další pokyn do existující session.", { session_id: str("ID"), message: str("Text") }, ["session_id", "message"]),
   fn("stop_session", "Přeruší běžící session.", { session_id: str("ID") }, ["session_id"]),
+  fn("cc_overview", "Přehled VŠECH Claude Code session (i těch, které František spustil ručně na claude.ai/code). Data obnovuje Dispečer – řekni, jak jsou stará.", {}),
+  fn("cc_command", "Pošle pokyn do existující Claude Code session (claude.ai/code). Doručí ho Dispečer při příštím běhu.", {
+    session: str("ID nebo název session z cc_overview"), message: str("Pokyn pro session"),
+  }, ["session", "message"]),
   fn("github_overview", "Přehled: naposledy upravená repa a otevřené pull requesty.", {}),
   fn("github_repo", "Detail repa: poslední commity a otevřené PR.", { repo: str("Název repa") }, ["repo"]),
   fn("gmail_search", "Hledá e-maily (Gmail syntax, např. 'is:unread newer_than:1d').", { query: str("Dotaz") }, ["query"]),
@@ -45,6 +52,7 @@ function str(description) { return { type: "string", description }; }
 
 // ---------- router ----------
 export default {
+  async scheduled(_ev, env) { await patrol(env); },
   async fetch(req, env) {
     const cors = {
       "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*",
@@ -65,7 +73,7 @@ export default {
         const { name, args } = await req.json();
         return json({ result: await runTool(env, name, args || {}) });
       }
-      if (pathname === "/api/watch") return json(await watch(env));
+      if (pathname === "/api/feed") return json(await feed(env, Number(new URL(req.url).searchParams.get("since") || 0)));
       if (pathname === "/api/health") return json(await health(env));
       return json({ error: "not found" }, 404);
     } catch (e) {
@@ -73,6 +81,76 @@ export default {
     }
   },
 };
+
+// ---------- hlídač (cron) ----------
+async function patrol(env) {
+  const news = [];
+  // 1) vlastní pracovní session (Managed Agents)
+  if (env.ANTHROPIC_API_KEY) {
+    const now = await listSessions(env).catch(() => []);
+    const prev = (await env.STATE.get("statuses", "json")) || {};
+    for (const s of now) {
+      if (prev[s.id] === "running" && s.status !== "running") {
+        news.push({ title: s.title || s.id, text: (await lastAgentText(env, s.id)).slice(0, 400) || `stav ${s.status}` });
+      }
+    }
+    if (now.length) await env.STATE.put("statuses", JSON.stringify(Object.fromEntries(now.map((s) => [s.id, s.status]))));
+  }
+  // 2) Claude Code session – události zapsané Dispečerem
+  const ov = await bridgeRead(env, "most/prehled.json").catch(() => null);
+  if (ov?.data?.events) {
+    const seen = Number((await env.STATE.get("cc_seen")) || 0);
+    for (const e of ov.data.events) if (Date.parse(e.at) > seen) news.push({ title: e.title, text: e.text });
+    const max = Math.max(seen, ...ov.data.events.map((e) => Date.parse(e.at) || 0));
+    await env.STATE.put("cc_seen", String(max));
+  }
+  if (!news.length) return;
+  const list = (await env.STATE.get("feed", "json")) || [];
+  const at = Date.now();
+  for (const n of news) {
+    list.push({ ...n, at });
+    await notify(env, `Hotovo: ${n.title}`, n.text);
+  }
+  await env.STATE.put("feed", JSON.stringify(list.slice(-30)));
+}
+
+async function notify(env, title, text) {
+  if (!env.NTFY_TOPIC) return;
+  await fetch("https://ntfy.sh/", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ topic: env.NTFY_TOPIC, title, message: text || title, click: env.APP_URL, tags: ["white_check_mark"] }),
+  }).catch(() => {});
+}
+
+async function feed(env, since) {
+  const list = (await env.STATE.get("feed", "json")) || [];
+  return { items: list.filter((x) => x.at > since), now: Date.now() };
+}
+
+// ---------- most k Claude Code (soukromé repo) ----------
+async function bridgeRead(env, path) {
+  const d = await gh(env, `/repos/${env.BRIDGE_REPO}/contents/${path}`);
+  const text = new TextDecoder().decode(Uint8Array.from(atob(d.content.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+  return { data: JSON.parse(text), sha: d.sha };
+}
+async function ccOverview(env) {
+  const { data } = await bridgeRead(env, "most/prehled.json");
+  const ageMin = Math.round((Date.now() - Date.parse(data.updated_at)) / 60000);
+  return { stari_dat_minut: ageMin, sessions: data.sessions };
+}
+async function ccCommand(env, { session, message }) {
+  let cur = { data: { commands: [] }, sha: undefined };
+  try { cur = await bridgeRead(env, "most/prikazy.json"); } catch {}
+  cur.data.commands.push({ session, message, at: new Date().toISOString() });
+  const r = await fetch(`https://api.github.com/repos/${env.BRIDGE_REPO}/contents/most/prikazy.json`, {
+    method: "PUT",
+    headers: { authorization: `Bearer ${env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "user-agent": "fd-kolega" },
+    body: JSON.stringify({ message: "kolega: nový pokyn", content: b64(JSON.stringify(cur.data, null, 2)), sha: cur.sha }),
+  });
+  if (!r.ok) throw new Error(`Most ${r.status}`);
+  return "Pokyn zařazen, Dispečer ho doručí při příštím běhu.";
+}
 
 // ---------- hlas ----------
 async function voiceToken(env) {
@@ -104,6 +182,8 @@ async function runTool(env, name, a) {
     case "create_session": return createSession(env, a);
     case "send_to_session": return sendMessage(env, a.session_id, a.message);
     case "stop_session": return ant(env, `/v1/sessions/${a.session_id}/events`, { events: [{ type: "user.interrupt" }] }).then(() => "Přerušeno.");
+    case "cc_overview": return ccOverview(env);
+    case "cc_command": return ccCommand(env, a);
     case "github_overview": return githubOverview(env);
     case "github_repo": return githubRepo(env, a.repo);
     case "gmail_search": return gmailSearch(env, a.query);
@@ -194,20 +274,6 @@ async function sendMessage(env, id, text) {
   return "Odesláno.";
 }
 
-// Pro notifikace: vrátí session, které od minula přešly z běhu do klidu.
-async function watch(env) {
-  const now = await listSessions(env);
-  const prev = (await env.STATE.get("statuses", "json")) || {};
-  const done = [];
-  for (const s of now) {
-    if (prev[s.id] === "running" && s.status !== "running") {
-      done.push({ id: s.id, title: s.title, status: s.status, last_reply: await lastAgentText(env, s.id) });
-    }
-  }
-  await env.STATE.put("statuses", JSON.stringify(Object.fromEntries(now.map((s) => [s.id, s.status]))));
-  return { done, sessions: now };
-}
-
 // ---------- GitHub ----------
 async function gh(env, path) {
   const r = await fetch(`https://api.github.com${path}`, {
@@ -238,74 +304,33 @@ async function githubRepo(env, repo) {
   };
 }
 
-// ---------- Google ----------
-async function googleToken(env) {
-  const cached = await env.STATE.get("gtoken");
-  if (cached) return cached;
-  const r = await fetch("https://oauth2.googleapis.com/token", {
+// ---------- Google (Apps Script most, kolega/google-most.gs) ----------
+async function gas(env, action, params) {
+  const r = await fetch(env.GOOGLE_URL, {
     method: "POST",
-    body: new URLSearchParams({
-      client_id: env.GOOGLE_CLIENT_ID,
-      client_secret: env.GOOGLE_CLIENT_SECRET,
-      refresh_token: env.GOOGLE_REFRESH_TOKEN,
-      grant_type: "refresh_token",
-    }),
+    headers: { "content-type": "text/plain" },
+    body: JSON.stringify({ key: env.GOOGLE_KEY, action, ...params }),
+    redirect: "follow",
   });
-  if (!r.ok) throw new Error(`Google auth ${r.status}`);
   const d = await r.json();
-  await env.STATE.put("gtoken", d.access_token, { expirationTtl: Math.max(60, d.expires_in - 120) });
-  return d.access_token;
+  if (d.error) throw new Error(d.error);
+  return d.result;
 }
-async function google(env, url, init = {}) {
-  const r = await fetch(url, { ...init, headers: { ...(init.headers || {}), authorization: `Bearer ${await googleToken(env)}` } });
-  if (!r.ok) throw new Error(`Google ${r.status}: ${(await r.text()).slice(0, 200)}`);
-  return r.json();
-}
-const GM = "https://gmail.googleapis.com/gmail/v1/users/me";
-async function gmailSearch(env, q) {
-  const list = await google(env, `${GM}/messages?maxResults=8&q=${encodeURIComponent(q)}`);
-  const out = [];
-  for (const m of list.messages || []) {
-    const d = await google(env, `${GM}/messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`);
-    const h = Object.fromEntries(d.payload.headers.map((x) => [x.name, x.value]));
-    out.push({ id: m.id, from: h.From, subject: h.Subject, date: h.Date, snippet: d.snippet });
-  }
-  return out;
-}
-async function gmailRead(env, id) {
-  const d = await google(env, `${GM}/messages/${id}?format=full`);
-  const h = Object.fromEntries(d.payload.headers.map((x) => [x.name, x.value]));
-  const findText = (p) => {
-    if (p.mimeType === "text/plain" && p.body?.data) return p.body.data;
-    for (const c of p.parts || []) { const t = findText(c); if (t) return t; }
-    return null;
-  };
-  const raw = findText(d.payload);
-  const body = raw ? new TextDecoder().decode(Uint8Array.from(atob(raw.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0))) : d.snippet;
-  return { from: h.From, subject: h.Subject, date: h.Date, body: body.slice(0, 4000) };
-}
-async function gmailDraft(env, { to, subject, body }) {
-  const mime = `To: ${to}\r\nSubject: =?UTF-8?B?${b64(subject)}?=\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n${b64(body)}`;
-  const raw = b64(mime).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  await google(env, `${GM}/drafts`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ message: { raw } }) });
-  return "Koncept uložen v Gmailu.";
-}
+const gmailSearch = (env, query) => gas(env, "gmail_search", { query });
+const gmailRead = (env, id) => gas(env, "gmail_read", { id });
+const gmailDraft = (env, a) => gas(env, "gmail_draft", a);
+const driveSearch = (env, query) => gas(env, "drive_search", { query });
 function b64(s) {
   const bytes = new TextEncoder().encode(s);
   let bin = "";
   for (const b of bytes) bin += String.fromCharCode(b);
   return btoa(bin);
 }
-async function driveSearch(env, q) {
-  const esc = q.replace(/'/g, "\\'");
-  const d = await google(env, `https://www.googleapis.com/drive/v3/files?pageSize=8&orderBy=modifiedTime desc&fields=files(id,name,modifiedTime,webViewLink)&q=${encodeURIComponent(`fullText contains '${esc}' and trashed = false`)}`);
-  return d.files;
-}
 
 async function health(env) {
   const has = (k) => Boolean(env[k]);
   return {
     openai: has("OPENAI_API_KEY"), anthropic: has("ANTHROPIC_API_KEY"), github: has("GITHUB_TOKEN"),
-    google: has("GOOGLE_REFRESH_TOKEN"), kv: Boolean(env.STATE),
+    google: has("GOOGLE_URL"), ntfy: has("NTFY_TOPIC"), bridge: has("BRIDGE_REPO"), kv: Boolean(env.STATE),
   };
 }

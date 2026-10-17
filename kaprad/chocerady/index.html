@@ -65,6 +65,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   background: transparent; cursor: pointer; white-space: nowrap; }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel); }
 .row.what .chip[aria-pressed="true"] { background: var(--fern); border-color: var(--fern); }
+#mapmenu { display: flex; flex-direction: column; gap: 7px; }
+#mapmenu[hidden] { display: none; }
+.round[aria-expanded="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel); }
 .row input[type=range] { flex: 1; min-width: 80px; accent-color: var(--fern); }
 .row .kv { flex: none; font-size: 12px; color: var(--muted); }
 
@@ -134,6 +137,7 @@ details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
 .box a { color: inherit; }
 .steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; }
 .kv { font-size: 12px; color: var(--muted); }
+.lnk { background: none; border: 0; padding: 0; font: inherit; color: var(--fern); text-decoration: underline; cursor: pointer; }
 
 /* špendlíky a moje poloha */
 .pinwrap { background: none; border: 0; padding: 0; cursor: pointer; }
@@ -163,12 +167,15 @@ details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
   <header class="bar" id="bar">
     <div class="top">
       <h1>Kapraď</h1><a class="place" id="place" href="../">Oblast</a><span class="sp"></span>
+      <button class="round" id="mapbtn" aria-expanded="false" title="Staré mapy a reliéf">Mapa ▾</button>
       <button class="round" id="locbtn" aria-pressed="false" title="Moje poloha">◎ Já</button>
       <button class="round" id="helpbtn" title="Pravidla a návod">?</button>
     </div>
     <div class="row what" id="what" role="group" aria-label="Co hledám"><span class="lbl">Hledám</span></div>
-    <div class="row" id="maps" role="group" aria-label="Mapa"><span class="lbl">Mapa</span></div>
-    <div class="row" id="oprow" hidden><span class="lbl">Prolnout</span><span class="kv">dnes</span><input id="op" type="range" min="0" max="100" value="70" aria-label="Prolnutí staré mapy s dneškem"><span class="kv" id="oplbl"></span></div>
+    <div id="mapmenu" hidden>
+      <div class="row" id="maps" role="group" aria-label="Mapa"><span class="lbl">Mapa</span></div>
+      <div class="row" id="oprow" hidden><span class="lbl">Prolnout</span><span class="kv">dnes</span><input id="op" type="range" min="0" max="100" value="70" aria-label="Prolnutí staré mapy s dneškem"><span class="kv" id="oplbl"></span></div>
+    </div>
   </header>
   <div id="map"><div class="loading" id="loading">Načítám mapu…</div></div>
   <div class="attrib" id="attrib"></div>
@@ -191,7 +198,14 @@ const CLASSES = {
 const WHAT = { modern_jewelry: "dnešní šperky (prstýnky, řetízky)", coins: "mince", silver: "stříbro", gold: "zlato",
   militaria: "vojenské věci", bronze: "pravěký bronz", natural_gold: "zlato v potoce (rýžování)" };
 const WHAT_OLD = { ...WHAT, coins: "staré mince (krejcary, groše)", modern_jewelry: "drobné šperky" };
-const MAPS = [["dnes", "Dnes"], ["r1950", "1950"], ["r1880", "1880"], ["r1840", "1840"], ["relief", "Reliéf"], ["relief_detail", "Reliéf střed"]];
+const MAPS = [["dnes", "Dnes"], ["r1950", "1950"], ["r1880", "1880"], ["r1840", "1840"], ["relief", "Reliéf"]];
+// „Hledám“: pět voleb; u dnešních ztrát patří zlato a stříbro hlavně do šperků
+const FOCUS = [["all", "Vše"], ["gold", "Zlato"], ["silver", "Stříbro"], ["coins", "Mince"], ["bronze", "Bronz"]];
+const FOCUS_NOW = { gold: ["gold", "modern_jewelry"], silver: ["silver", "modern_jewelry"], coins: ["coins"], bronze: ["bronze"] };
+const FOCUS_OLD = { gold: ["gold", "natural_gold"], silver: ["silver"], coins: ["coins"], bronze: ["bronze"] };
+// důvody, které se ke zvolené věci hodí, jdou v seznamu i na kartě dopředu
+const FOCUS_WHY = { gold: /gold/, silver: /silver|mining/, coins: /coin|market|inn|mill|ford|ferry|post_station/,
+  bronze: /bronze|hillfort|barrow|rampart|confluence|prominent_rock|spring/ };
 const WHY = {
   swimming_spot: "Koupaliště: lidé se převlékají a ve vodě i v trávě ztrácejí prstýnky a řetízky.",
   campsite: "Kemp: stany, ohně a posezení, ztrácejí se drobné, klíče i šperky.",
@@ -228,7 +242,7 @@ const MODERN = new Set(Object.keys(HOW));
 const LEGAL = { landowner_consent: ["Se souhlasem majitele", "b-ok"], caution: ["Se souhlasem majitele, pozor", "b-warn"] };
 
 // ---------------------------------------------------------------- stav a pomocníci
-const S = { focus: "all", map: "dnes", mode: "hist", hsub: "places", sort: "best", data: {}, open: null, markers: [] };
+const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", data: {}, open: null, markers: [] };
 const ME = { pos: null, watch: null, marker: null, fly: false, last: null, hideWhere: false };  // poloha jen v tomto prohlížeči
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -275,11 +289,11 @@ function whyItems(rs, max = 3) {
   for (const r of rs || []) {
     const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo|vrchol .*)$/i.test(r.name) ? r.name : "";
     const t = (WHY[r.type] || `${r.label}: {n}`).replace(" {n}", n ? " " + n : "").replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
-    const it = items.get(t) || { t, url: r.url, quote: r.quote, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))) };
+    const it = items.get(t) || { t, url: r.url, quote: r.quote, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))), fo: !!FOCUS_WHY[S.focus]?.test(r.type) };
     it.n++;
     items.set(t, it);
   }
-  return [...items.values()].sort((a, b) => b.specific - a.specific).slice(0, max)
+  return [...items.values()].sort((a, b) => (b.fo - a.fo) || (b.specific - a.specific)).slice(0, max)
     .map((it) => ({ ...it, t: it.n > 1 ? `${it.t.replace(/\.$/, "")} (${it.n}×).` : it.t }));
 }
 function modernFirst(rs) { return (rs || []).filter((r) => MODERN.has(r.type)).concat((rs || []).filter((r) => !MODERN.has(r.type))); }
@@ -291,7 +305,11 @@ async function load() {
   names.forEach((n, i) => (S.data[n] = res[i]));
   S.data.stories = await fetch("data/stories.json").then((r) => (r.ok ? r.json() : [])).catch(() => []);
   const byH3 = new Map(S.data.potential.features.map((f) => [f.properties.h3_r8, f]));
-  S.data.stories.forEach((st) => (st._hex = byH3.get(st.h3)));
+  S.hexStories = new Map();
+  for (const st of S.data.stories) {
+    const hx = byH3.get(st.h3);
+    if (hx) S.hexStories.set(hx, [...(S.hexStories.get(hx) || []), st]);
+  }
   S.data.potential.features.forEach((f, i) => { f.id = i; f.properties._c = center(f); });
   // jen místa se známým legálním stavem (nic se nepouští „naslepo“ jako legální)
   S.data.opps.features = S.data.opps.features.filter((f) => Object.hasOwn(LEGAL, f.properties.legal));
@@ -300,15 +318,30 @@ async function load() {
   rank();
 }
 function rank() {
-  const w = {};
-  for (const [c, d] of Object.entries(CLASSES)) w[c] = S.focus === "all" ? d.value : c === S.focus ? (d.focusValue || d.value) : d.value * 0.05;
   for (const [fc, key] of [[S.data.opps, "classes"], [S.data.potential, "cls"]]) {
+    const want = S.focus === "all" ? null : (key === "classes" ? FOCUS_NOW : FOCUS_OLD)[S.focus], w = {};
+    for (const [c, d] of Object.entries(CLASSES)) w[c] = !want ? d.value : want.includes(c) ? (d.focusValue || d.value) : d.value * 0.05;
     for (const f of fc.features) {
+      const cl = f.properties[key] || {};
       let u = 0;
-      for (const [c, v] of Object.entries(f.properties[key] || {})) u += (w[c] || 0) * v;
+      for (const [c, v] of Object.entries(cl)) u += (w[c] || 0) * v;
       f.properties._u = key === "classes" ? u * (f.properties.score || 1) : u;
+      f.properties._amt = want ? want.reduce((a, c) => a + (cl[c] || 0), 0) : 1;
     }
-    const sorted = [...fc.features].sort((a, b) => b.properties._u - a.properties._u);
+    // „Hledám“ opravdu filtruje: dnešní místo zůstane, když zvolená věc tvoří aspoň 10 % toho, co se tam dá čekat;
+    // v historii zůstane pětina území, kde je jí nejvíc
+    let cut = 0;
+    if (want && key === "cls") {
+      const amts = fc.features.map((f) => f.properties._amt).filter((a) => a > 0).sort((a, b) => b - a);
+      cut = amts.length ? amts[Math.min(Math.ceil(fc.features.length * 0.2), amts.length) - 1] : Infinity;
+    }
+    for (const f of fc.features) {
+      if (!want) f.properties._off = false;
+      else if (key === "classes") { const sh = Object.fromEntries(shares(f.properties.classes)); f.properties._off = want.reduce((a, c) => a + (sh[c] || 0), 0) < 0.1; }
+      else f.properties._off = !(f.properties._amt > 0 && f.properties._amt >= cut);
+    }
+    const sorted = [...fc.features].filter((f) => !f.properties._off).sort((a, b) => b.properties._u - a.properties._u);
+    fc.features.forEach((f) => { f.properties._rank = null; f.properties._p = 0; });
     sorted.forEach((f, i) => { f.properties._rank = i + 1; f.properties._p = Math.round(100 * (1 - i / Math.max(1, sorted.length - 1))); });
   }
 }
@@ -351,14 +384,14 @@ function initMap() {
     map.addLayer({ id: "zones-caution", type: "line", source: "zones", filter: ["==", ["get", "level"], "caution"], minzoom: 12,
       paint: { "line-color": css("--sun"), "line-width": 2, "line-dasharray": [2, 2] } });
     map.addSource("potential", { type: "geojson", data: S.data.potential });
-    map.addLayer({ id: "pot-fill", type: "fill", source: "potential", layout: { visibility: "none" }, paint: {
+    map.addLayer({ id: "pot-fill", type: "fill", source: "potential", filter: ["!=", ["get", "_off"], true], layout: { visibility: "none" }, paint: {
       "fill-color": css("--amber"), "fill-opacity": ["interpolate", ["linear"], ["get", "_p"], 0, 0, 50, .06, 80, .3, 100, .55] } });
-    map.addLayer({ id: "pot-line", type: "line", source: "potential", layout: { visibility: "none" }, paint: {
+    map.addLayer({ id: "pot-line", type: "line", source: "potential", filter: ["!=", ["get", "_off"], true], layout: { visibility: "none" }, paint: {
       "line-color": ["case", ["boolean", ["feature-state", "sel"], false], css("--ink"), css("--amber")],
       "line-width": ["case", ["boolean", ["feature-state", "sel"], false], 3, ["interpolate", ["linear"], ["get", "_p"], 85, 0, 95, 1.2]] } });
     map.addSource("opps", { type: "geojson", data: S.data.opps });
-    map.addLayer({ id: "opps-fill", type: "fill", source: "opps", paint: { "fill-color": css("--fern"), "fill-opacity": .25 } });
-    map.addLayer({ id: "opps-line", type: "line", source: "opps", paint: { "line-color": css("--fern"), "line-width": 2 } });
+    map.addLayer({ id: "opps-fill", type: "fill", source: "opps", filter: ["!=", ["get", "_off"], true], paint: { "fill-color": css("--fern"), "fill-opacity": .25 } });
+    map.addLayer({ id: "opps-line", type: "line", source: "opps", filter: ["!=", ["get", "_off"], true], paint: { "line-color": css("--fern"), "line-width": 2 } });
     map.addSource("radius", { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: circle(m.center.lon, m.center.lat, m.radius_km) } } });
     map.addLayer({ id: "radius", type: "line", source: "radius", paint: { "line-color": css("--ink"), "line-width": 1.5, "line-dasharray": [3, 3], "line-opacity": .5 } });
     for (const id of ["pot-fill", "zones-fill", "opps-fill"]) {
@@ -395,7 +428,7 @@ function fit() {
 function pins() {
   S.markers.forEach((mk) => mk.remove());
   S.markers = [];
-  for (const f of S.data.opps.features) {
+  for (const f of S.data.opps.features.filter((x) => !x.properties._off)) {
     const el = document.createElement("button");  // MapLibre přepisuje transform kořene značky → otáčí se vnitřní prvek
     el.className = "pinwrap";
     el.setAttribute("aria-label", `Místo ${f.properties._rank}: ${f.properties.headline || ""}`);
@@ -418,6 +451,7 @@ function setMap(key) {
   document.querySelectorAll("#maps .chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === key)));
   $("oprow").hidden = key === "dnes";
   $("oplbl").textContent = (MAPS.find((m) => m[0] === key) || [])[1] || "";
+  $("mapbtn").textContent = key === "dnes" ? "Mapa ▾" : `${(MAPS.find((m) => m[0] === key) || [])[1]} ▾`;
   setBarH();
   $("attrib").textContent = [S.data.meta.images.dnes?.attribution, key !== "dnes" ? im?.attribution : null, "© OpenStreetMap, Wikidata"].filter(Boolean).join(" · ");
 }
@@ -436,14 +470,19 @@ function setMode(mode, keepCard) {
 
 // ---------------------------------------------------------------- lišta a seznam
 function buildBar() {
-  for (const [k, label] of [["all", "Vše"], ...Object.entries(CLASSES).map(([c, d]) => [c, d.label])]) {
+  for (const [k, label] of FOCUS) {
     const b = document.createElement("button");
     b.className = "chip"; b.dataset.k = k; b.textContent = label; b.setAttribute("aria-pressed", String(k === S.focus));
     b.addEventListener("click", () => {
       S.focus = k;
       document.querySelectorAll("#what .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
       rank();
-      if (map?.getSource("potential")) { map.getSource("potential").setData(S.data.potential); pins(); setMode(S.mode, true); }
+      if (map?.getSource("potential")) {
+        map.getSource("potential").setData(S.data.potential);
+        map.getSource("opps").setData(S.data.opps);
+        pins();
+        setMode(S.mode);
+      }
       else render();
     });
     $("what").appendChild(b);
@@ -456,12 +495,18 @@ function buildBar() {
     $("maps").appendChild(b);
   }
   $("op").addEventListener("input", () => setMap(S.map));
+  $("mapbtn").addEventListener("click", () => {
+    const open = $("mapmenu").hidden;
+    $("mapmenu").hidden = !open;
+    $("mapbtn").setAttribute("aria-expanded", String(open));
+    setBarH();
+  });
   const m = S.data.meta;
-  $("place").textContent = `${m.place || ""} · ${m.radius_km} km ▾`;
+  $("place").textContent = `${m.place || "Oblast"} ▾`;
   document.title = `Kapraď ${m.place || ""}`.trim();
 }
 function render() {
-  const nOk = S.data.opps.features.length;
+  const nOk = S.data.opps.features.filter((f) => !f.properties._off).length;
   $("mode").innerHTML = `<button class="hist" data-m="hist" aria-pressed="${S.mode === "hist"}">Historie<small>co se tu dělo</small></button>
     <button class="ok" data-m="ok" aria-pressed="${S.mode === "ok"}">Hledat hned<small>${nOk} míst</small></button>`;
   $("mode").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.m)));
@@ -471,13 +516,13 @@ function render() {
   c.querySelectorAll("[data-opp]").forEach((el) => el.addEventListener("click", () => openOpp(+el.dataset.opp)));
   c.querySelectorAll("[data-hex]").forEach((el) => el.addEventListener("click", () => openHex(+el.dataset.hex)));
   c.querySelectorAll("[data-sort]").forEach((el) => el.addEventListener("click", () => { S.sort = el.dataset.sort; render(); }));
-  c.querySelectorAll("[data-hsub]").forEach((el) => el.addEventListener("click", () => { S.hsub = el.dataset.hsub; render(); }));
-  c.querySelectorAll("[data-story]").forEach((el) => el.addEventListener("click", () => openStory(+el.dataset.story)));
 }
 function listOk() {
   const near = ME.pos && S.sort === "near";
-  const feats = [...S.data.opps.features].sort((a, b) => near ? dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon) : a.properties._rank - b.properties._rank);
-  if (!feats.length) return `<p class="note">V okruhu nejsou místa, kde by stačil souhlas majitele.</p>`;
+  const feats = S.data.opps.features.filter((f) => !f.properties._off)
+    .sort((a, b) => near ? dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon) : a.properties._rank - b.properties._rank);
+  if (!feats.length) return S.focus === "all" ? `<p class="note">V okruhu nejsou místa, kde by stačil souhlas majitele.</p>`
+    : `<p class="note">${esc(focusLabel())}: tady nic k hledání hned. ${S.focus === "bronze" ? "Bronz je pravěký, najdeš ho v Historii." : "Zkus Vše."}</p>`;
   const sortRow = ME.pos ? `<div class="sortrow"><button class="chip" data-sort="best" aria-pressed="${!near}">Nejlepší</button><button class="chip" data-sort="near" aria-pressed="${!!near}">Nejblíž mně</button></div>` : "";
   return `${sortRow}<div class="list">${feats.map((f) => {
     const p = f.properties, why = whyItems(modernFirst(p.reasons), 1)[0];
@@ -499,42 +544,33 @@ function mapFor(y) {
   if (y[0] <= 1960) return "r1950";
   return null;
 }
-function listStories() {
-  const st = S.data.stories;
-  if (!st.length) return `<p class="note">Pro tuto oblast zatím nemáme příběhy z kronik.</p>`;
-  return `<p class="note">Co se tu dělo, seřazeno podle doby. Ze zápisů v kronikách a na Wikipedii, s citací.</p>
-  <div class="list">${st.map((x) => `<button class="item" data-story="${x.id}"><div class="num h yr">${esc(yearLabel(x.y).replace("–", "–\u200b"))}</div>
-      <div class="t"><b>${esc(x.title)}</b><span>${esc(x.obec ? `u obce ${x.obec}` : "")}</span></div><div class="r"></div></button>`).join("")}</div>`;
-}
-function openStory(id) {
-  const x = S.data.stories[id];
-  if (!x) return;
-  const mk = mapFor(x.y), hx = x._hex;
-  if (hx) { selectHex(hx.id); map.easeTo({ center: hx.properties._c, zoom: Math.min(Math.max(map.getZoom(), 12), 13), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } }); }
-  showCard(`<h2>${esc(yearLabel(x.y))}</h2><p><b>${esc(x.title)}</b></p>
-    <div class="box arch"><q>${esc(x.quote)}</q><br><span class="kv">${x.source === "kramerius" ? "Kramerius" : "Wikipedie"}${x.url ? ` · <a href="${esc(x.url)}" target="_blank" rel="noopener">otevřít zdroj</a>` : ""}</span></div>
-    <p class="kv">${x.obec ? `U obce ${esc(x.obec)}. ` : ""}Přesné místo neukazujeme, šestiúhelník na mapě je asi 0,7 km².</p>
-    <div class="nav">${mk && S.data.meta.images[mk] ? `<button class="btn" id="storymap">Mapa ${esc((MAPS.find((m) => m[0] === mk) || [])[1] || "")}</button>` : ""}
-      ${hx ? `<button class="btn" id="storyhex">Historické místo</button>` : ""}</div>`);
-  if (mk && $("storymap")) $("storymap").addEventListener("click", () => setMap(mk));
-  if (hx && $("storyhex")) $("storyhex").addEventListener("click", () => openHex(hx.id));
-}
+function focusLabel() { return (FOCUS.find((x) => x[0] === S.focus) || [])[1] || ""; }
 function listHist() {
-  const sub = `<div class="sortrow"><button class="chip" data-hsub="places" aria-pressed="${S.hsub === "places"}">Místa</button><button class="chip" data-hsub="stories" aria-pressed="${S.hsub === "stories"}">Příběhy podle doby · ${S.data.stories.length}</button></div>`;
-  if (S.hsub === "stories") return sub + listStories();
-  return sub + listPlaces();
-}
-function listPlaces() {
-  const feats = [...S.data.potential.features].sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
-  return `<p class="note">Kde v krajině leží historie: staré mince, stříbro, bronz. Ukazujeme ji po šestiúhelnících asi 0,7 km². <b>Přesná místa a navigaci odemkne dohoda s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
+  const feats = S.data.potential.features.filter((f) => !f.properties._off).sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
+  if (!feats.length) return `<p class="note">${esc(focusLabel())}: v okruhu jsme nic nenašli. Zkus Vše.</p>`;
+  return `<p class="note">Kde v krajině leží historie${S.focus === "all" ? "" : ` (${esc(focusLabel().toLowerCase())})`}. Šestiúhelník má asi 0,7 km². <b>Přesná místa a navigace jen po dohodě s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
   <div class="list">${feats.map((f) => {
-    const p = f.properties, [lon, lat] = p._c, why = whyItems(p.reasons, 1)[0];
+    const p = f.properties, [lon, lat] = p._c, why = whyItems(p.reasons, 1)[0], n = uniqStories(f).length;
     return `<button class="item" data-hex="${f.id}"><div class="num h">${p._rank}</div>
-      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc([why?.t.replace(/\.$/, ""), eraOf(p.reasons), whatLine(p.cls, true)].filter(Boolean).join(" · "))}</span></div>
+      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc([why?.t.replace(/\.$/, ""), eraOf(p.reasons), n ? `${n} ${n === 1 ? "zápis" : n < 5 ? "zápisy" : "zápisů"} z kronik` : ""].filter(Boolean).join(" · "))}</span></div>
       <div class="r">${potBars(p._p, true)}<br>${distLabel(lat, lon)}</div></button>`;
   }).join("")}</div>`;
 }
-
+function uniqStories(f) {  // víc zpráv z jedné věty zdroje = jeden zápis
+  const seen = new Set();
+  return (S.hexStories.get(f) || []).filter((x) => { const k = x.quote || x.title; return seen.has(k) ? false : seen.add(k); });
+}
+function storiesHtml(f) {
+  const st = uniqStories(f).sort((a, b) => (a.y?.[0] ?? 1e4) - (b.y?.[0] ?? 1e4));
+  if (!st.length) return "";
+  const li = (x) => {
+    const mk = mapFor(x.y), src = x.source === "kramerius" ? "Kramerius" : "Wikipedie";
+    return `<li><b>${esc(yearLabel(x.y))}:</b> ${esc(x.title)}${x.quote ? `<q>${esc(x.quote)}</q>` : ""}
+      <span class="kv">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${src}</a>` : src}${mk && S.data.meta.images[mk] ? ` · <button class="lnk" data-map="${mk}">mapa ${esc((MAPS.find((m) => m[0] === mk) || [])[1] || "")}</button>` : ""}</span></li>`;
+  };
+  return `<section><h3>Co se tu dělo</h3><ul class="why">${st.slice(0, 5).map(li).join("")}</ul>
+    ${st.length > 5 ? `<details><summary>Další zápisy (${st.length - 5})</summary><ul class="why">${st.slice(5).map(li).join("")}</ul></details>` : ""}</section>`;
+}
 // ---------------------------------------------------------------- karta místa
 function showCard(html) {
   S.open = true;
@@ -582,6 +618,7 @@ function openHex(id) {
     <div class="potrow">Potenciál ${potBars(p._p, true)} <b>${potWord(p._p)}</b> · ${distLabel(p._c[1], p._c[0])} <span class="badge b-arch">Jen s archeology</span></div>
     <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(p.reasons))}</section>
     <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}${eraOf(p.reasons) ? ` · ${esc(eraOf(p.reasons))}` : ""}</p></section>
+    ${storiesHtml(f)}
     <section><h3>Jak to legálně prohledat</h3><ol class="steps">
       <li><b>Zapiš se do AMČR-PAS</b> a absolvuj školení. <a href="https://amcr-info.aiscr.cz/amcr-pas/" target="_blank" rel="noopener">amcr-info.aiscr.cz</a></li>
       <li><b>Domluv se s muzeem</b> nebo archeologickým ústavem, který v okolí pracuje, že tu chceš hledat.</li>
@@ -589,6 +626,7 @@ function openHex(id) {
       <li>Nálezy zapiš do AMČR-PAS (poloha, hloubka, fotky) a předej.</li></ol></section>
     <div class="box arch">Po dohodě tu Kapraď ukáže přesná místa, navigaci a záznam nálezů. Do té doby proto chybí navigace.</div>
     <div class="box no"><b>Bez dohody tu nekopej.</b> Hledat staré předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji.</div>`);
+  $("content").querySelectorAll("[data-map]").forEach((el) => el.addEventListener("click", () => setMap(el.dataset.map)));
 }
 function selectHex(id) {
   if (!map?.getSource("potential")) return;
@@ -607,10 +645,10 @@ function openZone(p) {
 function openHelp() {
   const m = S.data.meta || {};
   showCard(`<h2>Jak na to</h2>
-    <ol class="steps"><li><b>Historie</b> (oranžová): kde v krajině leží historie, z jaké doby a proč. V záložce Příběhy je, co se tu dělo, s citací zdroje. Staré věci se smí hledat jen s archeology (AMČR-PAS), proto tu není navigace.</li>
+    <ol class="steps"><li><b>Historie</b> (oranžová): kde v krajině leží historie, z jaké doby a proč. Karta místa ukáže i to, co se tu dělo, s citací zdroje. Staré věci se smí hledat jen s archeology (AMČR-PAS), proto tu není navigace.</li>
       <li><b>Hledat hned</b> (zelená čísla): tady smíš hledat dnešní ztráty se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
-      <li><b>Hledám</b> seřadí místa podle toho, co chceš najít.</li>
-      <li><b>Mapa</b> přepíná staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem Prolnout je smícháš s dneškem.</li>
+      <li><b>Hledám</b> nechá jen místa, kde se to, co chceš najít, dá čekat.</li>
+      <li><b>Mapa ▾</b> otevře staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem Prolnout je smícháš s dneškem.</li>
       <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Polohu nikam neposíláme, mapové podklady se ale stahují podle toho, kam se díváš.</li></ol>
     <p class="legend"><i style="background:var(--fern)"></i>smíš (se souhlasem majitele)<i style="background:var(--amber)"></i>jen s archeology<i style="background:var(--carmine)"></i>nikdy<i style="background:var(--sun)"></i>pozor</p>
     <div class="box no"><b>Červená = nikdy</b> (hřbitov, památka, rezervace). <b>Munice:</b> nesahej, volej 158. <b>Něco starého</b> nech v zemi a do druhého dne ohlas muzeu.</div>

@@ -60,12 +60,13 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .round[aria-pressed="true"] { background: var(--me); border-color: var(--me); color: #fff; }
 .row { display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none; }
 .row::-webkit-scrollbar { display: none; }
-.row .lbl { flex: none; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); width: 58px; }
+.row .lbl { flex: none; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); min-width: 58px; }
 .chip { flex: none; font-family: var(--font-display); font-weight: 600; font-size: 16px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px;
   background: transparent; cursor: pointer; white-space: nowrap; }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel); }
 .row.what .chip[aria-pressed="true"] { background: var(--fern); border-color: var(--fern); }
-.row input[type=range] { flex: none; width: 90px; accent-color: var(--fern); }
+.row input[type=range] { flex: 1; min-width: 80px; accent-color: var(--fern); }
+.row .kv { flex: none; font-size: 12px; color: var(--muted); }
 
 /* panel se seznamem a kartou */
 #sheet { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 46%; background: var(--panel); border-top: 1px solid var(--line);
@@ -85,6 +86,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .handle { display: none; }
 }
 .note { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
+.legend { font-size: 12px; color: var(--muted); margin: 0; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }
+.legend i:first-child { margin-left: 0; }
+details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
 .sortrow { display: flex; gap: 6px; margin: 0 0 6px; }
 .sortrow .chip { font-size: 14px; padding: 2px 10px; }
 
@@ -163,6 +168,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
     </div>
     <div class="row what" id="what" role="group" aria-label="Co hledám"><span class="lbl">Hledám</span></div>
     <div class="row" id="maps" role="group" aria-label="Mapa"><span class="lbl">Mapa</span></div>
+    <div class="row" id="oprow" hidden><span class="lbl">Prolnout</span><span class="kv">dnes</span><input id="op" type="range" min="0" max="100" value="70" aria-label="Prolnutí staré mapy s dneškem"><span class="kv" id="oplbl"></span></div>
   </header>
   <div id="map"><div class="loading" id="loading">Načítám mapu…</div></div>
   <div class="attrib" id="attrib"></div>
@@ -185,7 +191,7 @@ const CLASSES = {
 const WHAT = { modern_jewelry: "dnešní šperky (prstýnky, řetízky)", coins: "mince", silver: "stříbro", gold: "zlato",
   militaria: "vojenské věci", bronze: "pravěký bronz", natural_gold: "zlato v potoce (rýžování)" };
 const WHAT_OLD = { ...WHAT, coins: "staré mince (krejcary, groše)", modern_jewelry: "drobné šperky" };
-const MAPS = [["dnes", "Dnes"], ["r1950", "1950"], ["r1880", "1880"], ["r1840", "1840"], ["relief", "Reliéf"], ["relief_detail", "Reliéf detail"]];
+const MAPS = [["dnes", "Dnes"], ["r1950", "1950"], ["r1880", "1880"], ["r1840", "1840"], ["relief", "Reliéf"], ["relief_detail", "Reliéf střed"]];
 const WHY = {
   swimming_spot: "Koupaliště: lidé se převlékají a ve vodě i v trávě ztrácejí prstýnky a řetízky.",
   campsite: "Kemp: stany, ohně a posezení, ztrácejí se drobné, klíče i šperky.",
@@ -199,7 +205,7 @@ const WHY = {
   castle: "Hrad nebo zámek {n}: panské sídlo, kolem něj ruch a obchod.", fortress_tvrz: "Tvrz {n}: sídlo zemanů.", ruin: "Rozvaliny staveb (zaniklé usedlosti nebo budovy) {n}.",
   hillfort: "Hradiště {n}: pravěké nebo slovanské opevnění.", rampart: "Val nebo hradba.",
   village_deserted_medieval: "Zaniklá ves: {n}.", village_deserted_1945: "Ves zaniklá po roce 1945: {n}.", farmstead_vanished: "Zaniklý statek: {n}.",
-  battlefield: "Bojiště: {n}.", skirmish: "Šarvátka: {n}.", ww2_fighting: "Vojenský prostor nebo boje: {n}. Pozor na munici!", military_camp: "Vojenský tábor: {n}.", march_route: "Tudy táhla vojska: {n}.",
+  battlefield: "Bojiště: {n}.", skirmish: "Šarvátka: {n}.", ww2_fighting: "Vojenský prostor nebo boje: {n}. Munice: nesahej, volej 158.", military_camp: "Vojenský tábor: {n}.", march_route: "Tudy táhla vojska: {n}.",
   ford: "Brod: přechod řeky, při brodění se ztrácelo.", ferry: "Přívoz: tady se platilo za převoz.", bridge_hist: "Starý most.",
   road_historic_map: "Stará cesta {n}.", hollow_way: "Úvoz: zahloubená stará cesta.", route_land_trail: "Zemská stezka: středověká dálková cesta. {n}",
   inn: "Hospoda: platilo se mincemi. {n}", mill: "Mlýn: jezdilo se sem s obilím a platilo. {n}", post_station: "Poštovní stanice: {n}",
@@ -233,14 +239,19 @@ function km(a1, o1, a2, o2) {
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 function dist(lat, lon) { const o = ME.pos || S.data.meta.center; return km(o.lat, o.lon, lat, lon); }
-function distLabel(lat, lon) { const d = dist(lat, lon); return (d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1)} km`) + (ME.pos ? "" : " od středu"); }
+function distLabel(lat, lon) { const d = dist(lat, lon); return (d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1).replace(".", ",")} km`) + (ME.pos ? "" : " od středu"); }
 function center(f) { const r = f.geometry.coordinates[0]; let x = 0, y = 0; for (let i = 0; i < r.length - 1; i++) { x += r[i][0]; y += r[i][1]; } return [x / (r.length - 1), y / (r.length - 1)]; }
 function shares(cls) {
   const e = Object.entries(cls || {}).filter(([c]) => CLASSES[c]);
   const tot = e.reduce((a, [, v]) => a + v, 0) || 1;
   return e.map(([c, v]) => [c, v / tot]).sort((a, b) => b[1] - a[1]);
 }
-function whatLine(cls, old) { return shares(cls).filter(([, v]) => v >= 0.1).slice(0, 3).map(([c]) => (old ? WHAT_OLD : WHAT)[c]).join(", "); }
+const WHAT_NOW = { modern_jewelry: "prstýnky a řetízky", coins: "drobné mince", silver: "stříbrné šperky", gold: "zlaté šperky",
+  militaria: "kovové drobnosti", bronze: "kovové drobnosti", natural_gold: "zlato v potoce (rýžování)" };
+function whatLine(cls, old, now) {
+  const dict = old ? WHAT_OLD : now ? WHAT_NOW : WHAT;
+  return [...new Set(shares(cls).filter(([, v]) => v >= 0.1).slice(0, 3).map(([c]) => dict[c]))].join(", ");
+}
 function potBars(p, hist) {
   const n = Math.max(1, Math.min(5, Math.ceil(p / 20)));
   return `<span class="pot${hist ? " h" : ""}" aria-label="potenciál ${n} z 5">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</span>`;
@@ -282,7 +293,10 @@ async function load() {
   const byH3 = new Map(S.data.potential.features.map((f) => [f.properties.h3_r8, f]));
   S.data.stories.forEach((st) => (st._hex = byH3.get(st.h3)));
   S.data.potential.features.forEach((f, i) => { f.id = i; f.properties._c = center(f); });
+  // jen místa se známým legálním stavem (nic se nepouští „naslepo“ jako legální)
+  S.data.opps.features = S.data.opps.features.filter((f) => Object.hasOwn(LEGAL, f.properties.legal));
   S.data.opps.features.forEach((f, i) => { f.id = i; });
+  S.data.meta.images = S.data.meta.images || {};
   rank();
 }
 function rank() {
@@ -318,26 +332,29 @@ function initMap() {
   map.on("load", () => {
     $("loading").hidden = true;
     const base = m.images.dnes || Object.values(m.images)[0];
-    map.addSource("img-base", { type: "image", url: "img/" + base.file, coordinates: corners(base.bbox) });
-    map.addLayer({ id: "img-base", type: "raster", source: "img-base", paint: { "raster-fade-duration": 0 } });
+    if (base) {
+      map.addSource("img-base", { type: "image", url: "img/" + base.file, coordinates: corners(base.bbox) });
+      map.addLayer({ id: "img-base", type: "raster", source: "img-base", paint: { "raster-fade-duration": 0 } });
+    }
     if (m.tiles?.ortofoto) {  // ostré ortofoto ČÚZK při přiblížení (jen na GitHubu, v Artifactu nejde)
       map.addSource("orto", { type: "raster", tiles: [m.tiles.ortofoto], tileSize: 256, maxzoom: 19 });
       map.addLayer({ id: "orto", type: "raster", source: "orto", minzoom: 12.5 });
     }
-    map.addSource("img-old", { type: "image", url: "img/" + base.file, coordinates: corners(base.bbox) });
-    map.addLayer({ id: "img-old", type: "raster", source: "img-old", paint: { "raster-opacity": 0, "raster-fade-duration": 0 } });
     map.addSource("zones", { type: "geojson", data: S.data.zones });
+    // červená = zákaz (vždy), oranžová = jen s archeology, žlutá čárkovaná = pozor
     const lv = (a, b, c) => ["match", ["get", "level"], "forbidden", a, "archaeologist_only", b, c];
     map.addLayer({ id: "zones-fill", type: "fill", source: "zones", paint: {
       "fill-color": lv(css("--carmine"), css("--amber"), css("--sun")),
-      "fill-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.32, 0, 0), 12.5, lv(.32, .14, .14)] } });
-    map.addLayer({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": lv(css("--carmine"), css("--amber"), css("--sun")), "line-width": 1.2,
-      "line-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.8, 0, 0), 12.5, .8] } });
+      "fill-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.32, 0, 0), 12.5, lv(.32, .14, 0)] } });
+    map.addLayer({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": lv(css("--carmine"), css("--amber"), css("--sun")), "line-width": 1.4,
+      "line-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.8, 0, 0), 12.5, .9] } });
+    map.addLayer({ id: "zones-caution", type: "line", source: "zones", filter: ["==", ["get", "level"], "caution"], minzoom: 12,
+      paint: { "line-color": css("--sun"), "line-width": 2, "line-dasharray": [2, 2] } });
     map.addSource("potential", { type: "geojson", data: S.data.potential });
     map.addLayer({ id: "pot-fill", type: "fill", source: "potential", layout: { visibility: "none" }, paint: {
-      "fill-color": css("--gold"), "fill-opacity": ["interpolate", ["linear"], ["get", "_p"], 0, 0, 50, .06, 80, .3, 100, .6] } });
+      "fill-color": css("--amber"), "fill-opacity": ["interpolate", ["linear"], ["get", "_p"], 0, 0, 50, .06, 80, .3, 100, .55] } });
     map.addLayer({ id: "pot-line", type: "line", source: "potential", layout: { visibility: "none" }, paint: {
-      "line-color": ["case", ["boolean", ["feature-state", "sel"], false], css("--ink"), css("--gold")],
+      "line-color": ["case", ["boolean", ["feature-state", "sel"], false], css("--ink"), css("--amber")],
       "line-width": ["case", ["boolean", ["feature-state", "sel"], false], 3, ["interpolate", ["linear"], ["get", "_p"], 85, 0, 95, 1.2]] } });
     map.addSource("opps", { type: "geojson", data: S.data.opps });
     map.addLayer({ id: "opps-fill", type: "fill", source: "opps", paint: { "fill-color": css("--fern"), "fill-opacity": .25 } });
@@ -349,6 +366,9 @@ function initMap() {
       map.on("mouseleave", id, () => (map.getCanvas().style.cursor = ""));
     }
     map.on("click", (e) => {
+      // zóna zákazu má vždy přednost před vším pod ní
+      const zf = hits(S.data.zones, e.lngLat.lng, e.lngLat.lat).find((f) => f.properties.level === "forbidden");
+      if (zf) return openZone(zf.properties);
       const layers = ["opps-fill", "pot-fill", "zones-fill"].filter((l) => map.getLayoutProperty(l, "visibility") !== "none");
       const h = map.queryRenderedFeatures(e.point, { layers })
         .filter((x) => x.layer.id !== "zones-fill" || map.getZoom() >= 12 || x.properties.level === "forbidden")[0];
@@ -387,25 +407,31 @@ function pins() {
 function setMap(key) {
   const im = S.data.meta.images[key];
   S.map = key;
-  if (map?.getSource("img-old") && im) {
-    if (key !== "dnes" && key !== S.loaded) { map.getSource("img-old").updateImage({ url: "img/" + im.file, coordinates: corners(im.bbox) }); S.loaded = key; }
-    map.setPaintProperty("img-old", "raster-opacity", key === "dnes" ? 0 : +$("op").value / 100);
+  if (map?.getLayer("zones-fill")) {
+    // každá stará mapa má vlastní vrstvu (načte se při prvním výběru), přepíná se jen průhlednost
+    if (key !== "dnes" && im && !map.getSource("old-" + key)) {
+      map.addSource("old-" + key, { type: "image", url: "img/" + im.file, coordinates: corners(im.bbox) });
+      map.addLayer({ id: "old-" + key, type: "raster", source: "old-" + key, paint: { "raster-opacity": 0, "raster-fade-duration": 0 } }, "zones-fill");
+    }
+    for (const [k] of MAPS) if (map.getLayer("old-" + k)) map.setPaintProperty("old-" + k, "raster-opacity", k === key ? +$("op").value / 100 : 0);
   }
   document.querySelectorAll("#maps .chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === key)));
-  $("op").hidden = key === "dnes";
+  $("oprow").hidden = key === "dnes";
+  $("oplbl").textContent = (MAPS.find((m) => m[0] === key) || [])[1] || "";
+  setBarH();
   $("attrib").textContent = [S.data.meta.images.dnes?.attribution, key !== "dnes" ? im?.attribution : null, "© OpenStreetMap, Wikidata"].filter(Boolean).join(" · ");
 }
-function setMode(mode) {
+function setMode(mode, keepCard) {
+  const keep = keepCard && S.open && S.mode === mode;
   S.mode = mode;
-  S.open = null;
-  selectHex(null);
+  if (!keep) { S.open = null; selectHex(null); }
   if (map?.getLayer("pot-fill")) {
     const hist = mode === "hist";
     for (const id of ["pot-fill", "pot-line"]) map.setLayoutProperty(id, "visibility", hist ? "visible" : "none");
     for (const id of ["opps-fill", "opps-line"]) map.setLayoutProperty(id, "visibility", hist ? "none" : "visible");
     S.markers.forEach((mk) => (mk.getElement().style.display = hist ? "none" : ""));
   }
-  render();
+  if (!keep) render();
 }
 
 // ---------------------------------------------------------------- lišta a seznam
@@ -417,7 +443,7 @@ function buildBar() {
       S.focus = k;
       document.querySelectorAll("#what .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
       rank();
-      if (map?.getSource("potential")) { map.getSource("potential").setData(S.data.potential); pins(); setMode(S.mode); }
+      if (map?.getSource("potential")) { map.getSource("potential").setData(S.data.potential); pins(); setMode(S.mode, true); }
       else render();
     });
     $("what").appendChild(b);
@@ -429,11 +455,7 @@ function buildBar() {
     b.addEventListener("click", () => setMap(k));
     $("maps").appendChild(b);
   }
-  const op = document.createElement("input");
-  Object.assign(op, { type: "range", min: 0, max: 100, value: 100, id: "op", hidden: true });
-  op.setAttribute("aria-label", "Prolnutí staré mapy");
-  op.addEventListener("input", () => setMap(S.map));
-  $("maps").appendChild(op);
+  $("op").addEventListener("input", () => setMap(S.map));
   const m = S.data.meta;
   $("place").textContent = `${m.place || ""} · ${m.radius_km} km ▾`;
   document.title = `Kapraď ${m.place || ""}`.trim();
@@ -460,7 +482,7 @@ function listOk() {
   return `${sortRow}<div class="list">${feats.map((f) => {
     const p = f.properties, why = whyItems(modernFirst(p.reasons), 1)[0];
     return `<button class="item" data-opp="${f.id}"><div class="num">${p._rank}</div>
-      <div class="t"><b>${esc(p.headline || "Místo")}</b><span>${esc(why?.t || whatLine(p.classes))}</span></div>
+      <div class="t"><b>${esc(p.headline || "Místo")}</b><span>${esc(why?.t || whatLine(p.classes, false, true))}</span></div>
       <div class="r">${potBars(p._p)}<br>${distLabel(p.lat, p.lon)}</div></button>`;
   }).join("")}</div>`;
 }
@@ -529,20 +551,26 @@ function openOpp(id) {
   const f = S.data.opps.features[id];
   if (!f) return;
   const p = f.properties, L = p.links || {}, main = (p.reasons || []).find((r) => MODERN.has(r.type));
+  const lg = LEGAL[p.legal];
+  if (!lg) return;
+  if (S.mode !== "ok") setMode("ok");
   map.easeTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 15.5), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
-  const lg = LEGAL[p.legal] || LEGAL.landowner_consent;
+  // na kartě legálního místa jen dnešní důvody (historie okolí sem nepatří)
+  const modern = (p.reasons || []).filter((r) => MODERN.has(r.type));
   showCard(`<h2>${p._rank}. ${esc(p.headline || "Místo")}</h2>
     <div class="potrow">Potenciál ${potBars(p._p)} <b>${potWord(p._p)}</b> · ${distLabel(p.lat, p.lon)} <span class="badge ${lg[1]}">${lg[0]}</span></div>
     <div class="nav"><a class="btn go" href="${esc(L.mapy)}" target="_blank" rel="noopener">Navigovat</a>
       <a class="btn" href="${esc(L.google)}" target="_blank" rel="noopener">Google</a><a class="btn" href="${esc(L.waze)}" target="_blank" rel="noopener">Waze</a>
       <a class="btn" href="${esc(L.katastr)}" target="_blank" rel="noopener">Majitel</a></div>
-    <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(modernFirst(p.reasons)))}</section>
-    <section><h3>Co tu najdeš</h3><p>${esc(whatLine(p.classes))}</p></section>
+    <section><h3>Proč zrovna tady</h3>${modern.length ? whyHtml(whyItems(modern, 2)) : `<p>${esc(whatLine(p.classes, false, true))}</p>`}</section>
+    <section><h3>Co tu najdeš</h3><p>${esc(whatLine(p.classes, false, true))}</p></section>
     <section><h3>Jak na to</h3><ol class="steps"><li><b>Domluv se s majitelem</b> (tlačítko Majitel otevře katastr).</li>
       <li>${esc(HOW[main?.type] || "Projdi okolí špendlíku v okruhu asi 50 m.")}</li>
-      <li>Ztracenou věc vrať nebo odevzdej na obci. Něco starého nech v zemi a do druhého dne ohlas muzeu.</li></ol></section>
-    ${(p.zones || []).length ? `<div class="box warn"><b>Pozor, zóna v místě:</b><br>${p.zones.map(esc).join("<br>")}</div>` : ""}
-    <p class="kv">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · skóre ${p.score}/100</p>`);
+      <li>Ztracenou věc vrať majiteli, nebo ji odevzdej na obci.</li>
+      <li><b>Něco starého</b> nech i s místem beze změny a nejpozději druhý den to ohlas muzeu nebo Archeologickému ústavu a majiteli pozemku.</li>
+      <li><b>Munice:</b> nesahej, nepřenášej, označ místo a volej 158. Nalezenou zbraň odevzdej policii.</li></ol></section>
+    ${(p.zones || []).length ? `<div class="box warn"><b>Pozor, v místě je:</b><br>${[...new Set(p.zones.map((z) => z.replace(/^Pozor:\s*/, "")))].map(esc).join("<br>")}<br>Tam nekopej.</div>` : ""}
+    <p class="kv">${p.lat.toFixed(5).replace(".", ",")}, ${p.lon.toFixed(5).replace(".", ",")}</p>`);
 }
 function openHex(id) {
   const f = S.data.potential.features[id];
@@ -569,20 +597,25 @@ function selectHex(id) {
   if (id != null) map.setFeatureState({ source: "potential", id }, { sel: true });
 }
 function openZone(p) {
-  const cls = p.level === "forbidden" ? ["no", "Zákaz"] : p.level === "archaeologist_only" ? ["arch", "Jen s archeology"] : ["warn", "Pozor"];
-  showCard(`<h2>${esc(p.name || "Zóna")}</h2><div class="box ${cls[0]}"><b>${cls[1]}.</b> ${esc(p.basis || "")}</div>`);
+  const cls = p.level === "forbidden" ? ["no", "Zákaz.", "Tady se s detektorem nesmí hledat nikdy."]
+    : p.level === "archaeologist_only" ? ["arch", "Jen s archeology.", "Území s archeologickými nálezy."] : ["warn", "Pozor.", ""];
+  const extra = p.category === "uxo_risk" ? "<br><b>Munice:</b> nic nevykopávej, munice se nedotýkej, volej 158."
+    : p.category === "shaft_risk" ? "<br><b>Staré šachty:</b> pozor na propady." : "";
+  const basis = String(p.basis || "").replace(/\s*\(specs\/[^)]*\)/g, "");
+  showCard(`<h2>${esc(zoneName(p))}</h2><div class="box ${cls[0]}"><b>${cls[1]}</b> ${cls[2]}${extra}<br><span class="kv">${esc(basis)}</span></div>`);
 }
 function openHelp() {
-  const m = S.data.meta;
+  const m = S.data.meta || {};
   showCard(`<h2>Jak na to</h2>
-    <ol class="steps"><li><b>Hledám</b> nahoře seřadí místa podle toho, co chceš najít (zlato, mince, stříbro, bronz…).</li>
-      <li><b>Historie</b> ukáže, kde v krajině leží staré nálezy a proč. Prohledat se dají legálně přes AMČR-PAS, pak aplikace odemkne přesná místa a navigaci.</li>
-      <li><b>Dnešní ztráty</b> jsou zelená čísla: tam smíš hledat hned, se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
-      <li><b>Mapa</b> přepíná staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem je prolneš s dneškem.</li>
-      <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Poloha zůstává jen v tvém telefonu, nikam se neposílá.</li></ol>
-    <div class="box no"><b>Červená = nikdy</b> (hřbitov, památka, rezervace). <b>Historie</b> jen s archeology. <b>Munice:</b> nesahej, volej 158.</div>
+    <ol class="steps"><li><b>Historie</b> (oranžová): kde v krajině leží historie, z jaké doby a proč. V záložce Příběhy je, co se tu dělo, s citací zdroje. Staré věci se smí hledat jen s archeology (AMČR-PAS), proto tu není navigace.</li>
+      <li><b>Hledat hned</b> (zelená čísla): tady smíš hledat dnešní ztráty se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
+      <li><b>Hledám</b> seřadí místa podle toho, co chceš najít.</li>
+      <li><b>Mapa</b> přepíná staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem Prolnout je smícháš s dneškem.</li>
+      <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Polohu nikam neposíláme, mapové podklady se ale stahují podle toho, kam se díváš.</li></ol>
+    <p class="legend"><i style="background:var(--fern)"></i>smíš (se souhlasem majitele)<i style="background:var(--amber)"></i>jen s archeology<i style="background:var(--carmine)"></i>nikdy<i style="background:var(--sun)"></i>pozor</p>
+    <div class="box no"><b>Červená = nikdy</b> (hřbitov, památka, rezervace). <b>Munice:</b> nesahej, volej 158. <b>Něco starého</b> nech v zemi a do druhého dne ohlas muzeu.</div>
     ${m.guide ? `<a class="btn" href="${esc(m.guide)}" target="_blank" rel="noopener">Návod na 1 stránku (PDF)</a>` : ""}
-    <p class="kv">Pilot ${esc(m.date || "")}. ${(m.caveats || []).map(esc).join(" ")}</p>`);
+    <details><summary>Jak vznikla data</summary><p class="kv">Pilot ${esc(m.date || "")}. ${(m.caveats || []).map(esc).join(" ")}</p></details>`);
 }
 
 // ---------------------------------------------------------------- moje poloha (jen v prohlížeči, nikam se neposílá)
@@ -610,27 +643,53 @@ function hits(fc, lon, lat) {
     return lon >= b[0] && lon <= b[2] && lat >= b[1] && lat <= b[3] && inGeom(lon, lat, f.geometry);
   });
 }
+function nearForbidden(lon, lat, acc) {
+  // nepřesná poloha: leží v zóně zákazu některý bod kružnice přesnosti?
+  const dlat = acc / 111320, dlon = acc / (111320 * Math.cos(lat * Math.PI / 180));
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * 2 * Math.PI;
+    if (hits(S.data.zones, lon + dlon * Math.cos(a), lat + dlat * Math.sin(a)).some((f) => f.properties.level === "forbidden")) return true;
+  }
+  return false;
+}
+// Pořadí podle závažnosti (pravni-pravidla.yaml: forbidden > archaeologist_only > caution > landowner_consent)
 function whereText() {
-  const { lat, lon } = ME.pos, m = S.data.meta;
+  const { lat, lon, acc } = ME.pos, m = S.data.meta;
   const fromC = km(m.center.lat, m.center.lon, lat, lon);
-  if (fromC > m.radius_km + 2) return ["", `<b>Jsi mimo oblast ${esc(m.place || "")}</b>${fromC.toFixed(0)} km od středu. Jinou oblast vybereš nahoře u názvu.`];
+  if (fromC > m.radius_km + 2) return ["", `<b>Jsi mimo oblast ${esc(m.place || "")}</b>${fromC.toFixed(0).replace(".", ",")} km od středu. Jinou oblast vybereš nahoře u názvu.`];
   const z = hits(S.data.zones, lon, lat);
   const zf = z.find((f) => f.properties.level === "forbidden");
-  if (zf) return ["no", `<b>Stojíš v zóně ZÁKAZ</b>${esc(zf.properties.name || "")}: tady nehledej.`];
-  const o = hits(S.data.opps, lon, lat)[0];
-  if (o) return ["ok", `<b>Jsi na místě č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele tu můžeš hledat.`, () => openOpp(o.id)];
-  const za = z.find((f) => f.properties.level === "archaeologist_only"), hx = hits(S.data.potential, lon, lat)[0];
+  if (zf) return ["no", `<b>ZÁKAZ: ${esc(zoneName(zf.properties))}</b>Tady detektor nepoužívej.`];
+  if (acc > 25 && nearForbidden(lon, lat, acc)) return ["no", `<b>Blízko je zóna ZÁKAZ</b>Poloha je nepřesná (±${Math.round(acc)} m). Hranici si ověř na mapě.`];
+  const zc = z.filter((f) => f.properties.level === "caution");
+  const warn = [
+    zc.some((f) => f.properties.category === "uxo_risk") ? "Riziko munice: nic nevykopávej, munice se nedotýkej, volej 158." : "",
+    zc.some((f) => f.properties.category === "shaft_risk") ? "Staré šachty a poddolování: pozor na propady." : "",
+    ...zc.filter((f) => !["uxo_risk", "shaft_risk"].includes(f.properties.category)).slice(0, 2).map((f) => `${zoneName(f.properties)}.`),
+  ].filter(Boolean).map(esc).join(" ");
   const best = [...S.data.opps.features].sort((a, b) => dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon))[0];
   const tip = best ? ` Nejbližší místo k hledání: č. ${best.properties._rank} ${esc(best.properties.headline || "")}, ${distLabel(best.properties.lat, best.properties.lon)}.` : "";
   const goBest = best ? () => openOpp(best.id) : null;
-  if (za || hx) return ["arch", `<b>Historické území</b>Bez archeologů tu nekopej.${tip}`, goBest];
-  const zc = z.find((f) => f.properties.level === "caution");
-  if (zc) return ["warn", `<b>Pozor: ${esc(zc.properties.name || "")}</b>${esc(zc.properties.basis || "")}.${tip}`, goBest];
-  return ["", `<b>Tady nic vyznačeného</b>Jen se souhlasem majitele a jen dnešní ztráty.${tip}`, goBest];
+  const za = z.find((f) => f.properties.level === "archaeologist_only");
+  if (za) return ["arch", `<b>Jen s archeology</b>${esc(zoneName(za.properties))}. Bez dohody tu nekopej.${warn ? " " + warn : ""}${tip}`, goBest];
+  const o = hits(S.data.opps, lon, lat)[0];
+  if (o && (warn || o.properties.legal !== "landowner_consent")) return ["warn", `<b>Místo č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele, ale pozor: ${warn || "v místě je zóna se zvláštními pravidly."}`, () => openOpp(o.id)];
+  if (o) return ["ok", `<b>Jsi na místě č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele tu smíš hledat.`, () => openOpp(o.id)];
+  if (warn) return ["warn", `<b>Pozor</b>${warn}${tip}`, goBest];
+  const hx = hits(S.data.potential, lon, lat).find((f) => f.properties._p >= 50);
+  if (hx) return ["arch", `<b>Historické území</b>Staré věci jen s archeology.${tip}`, goBest];
+  return ["", `<b>Tady není nic vyznačeného</b>Smíš hledat jen dnešní ztráty a jen se souhlasem majitele.${tip}`, goBest];
+}
+function zoneName(p) {
+  return String(p.name || "").replace(/^Pozor:\s*/, "").replace(/(^|\s)ÚAN(?=\s|$)/, "$1Území s archeologickými nálezy") || "zóna";
 }
 function updateWhere() {
-  if (!ME.pos || ME.hideWhere) return;
-  const [cls, html, act] = whereText(), w = $("where");
+  if (!ME.pos) return;
+  const [cls, html, act] = whereText(), w = $("where"), key = cls + html;
+  // × skryje jen tenhle verdikt; při změně (a vždy u zákazu) se lišta ukáže znovu
+  if (ME.hideWhere && ME.hideWhere === key && cls !== "no") return;
+  ME.hideWhere = false;
+  ME.lastWhere = key;
   w.className = "where " + cls;
   $("wheretxt").innerHTML = html;
   w.onclick = (e) => { if (e.target.id !== "whereclose" && act) act(); };
@@ -665,7 +724,13 @@ function applyPos() {
   if (moved) { ME.last = { ...ME.pos }; if (!S.open) { const c = $("content"), y = c.scrollTop; render(); c.scrollTop = y; } }
 }
 function onErr(e) {
-  stopLocate();
+  if (e.code !== 1 && ME.pos) return;  // dočasný výpadek: sledování běží dál, poslední poloha platí
+  if (e.code === 1) {  // zakázáno: zastavit a zapomenout polohu
+    stopLocate();
+    ME.pos = null;
+    if (ME.marker) { ME.marker.remove(); ME.marker = null; }
+    if (map?.getLayer("me-acc")) { map.removeLayer("me-acc"); map.removeSource("me-acc"); }
+  }
   const w = $("where");
   w.className = "where warn";
   $("wheretxt").innerHTML = e.code === 1 ? "<b>Poloha je zakázaná</b>Povol ji v nastavení prohlížeče. V náhledu na claude.ai poloha nejde, otevři odkaz z GitHubu."
@@ -675,7 +740,7 @@ function onErr(e) {
 }
 function startLocate(fly) {
   if (!("geolocation" in navigator)) return onErr({ code: 2 });
-  ME.fly = fly; ME.hideWhere = false;
+  ME.fly = ME.fly || fly; ME.hideWhere = false;
   $("locbtn").setAttribute("aria-pressed", "true");
   if (ME.pos && fly && S.ready) {
     ME.fly = false;
@@ -696,7 +761,7 @@ function stopLocate() {
 // ---------------------------------------------------------------- start
 $("locbtn").addEventListener("click", () => startLocate(true));
 $("helpbtn").addEventListener("click", openHelp);
-$("whereclose").addEventListener("click", (e) => { e.stopPropagation(); ME.hideWhere = true; $("where").hidden = true; });
+$("whereclose").addEventListener("click", (e) => { e.stopPropagation(); ME.hideWhere = ME.lastWhere || true; $("where").hidden = true; });
 $("handle").addEventListener("click", () => {
   const s = $("sheet");
   if (s.classList.contains("min")) s.classList.remove("min");

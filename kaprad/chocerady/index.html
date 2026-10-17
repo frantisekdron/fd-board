@@ -273,7 +273,7 @@ function whyList(rs) {
   const out = [];
   for (const r of rs || []) {
     const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo)$/i.test(r.name) ? r.name : "";
-    const t = (WHY[r.type] || `${r.label}: {n}`).replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
+    const t = (WHY[r.type] || `${r.label}: {n}`).replace(" {n}", n ? " " + n : "").replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
     if (seen.has(t)) continue;
     seen.add(t);
     out.push(`<li>${esc(t)}${r.url ? ` <a class="src" href="${esc(r.url)}" target="_blank" rel="noopener">zdroj</a>` : ""}${r.quote ? `<q>${esc(r.quote)}</q>` : ""}</li>`);

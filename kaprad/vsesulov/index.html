@@ -17,7 +17,7 @@
 /* Kapraď – mapa pro kopáče. Šest věcí: co hledám · mapa · místa · potenciál · proč tady · navigace. */
 :root {
   --paper: #EEF2EE; --panel: #FBFCFA; --ink: #18212B; --muted: #5A6862; --line: #D3DBD5;
-  --fern: #2C7A4C; --fern-soft: #DCEBDF; --gold: #B8860F; --carmine: #B3263E; --amber: #C9701A; --sun: #C9A21A; --me: #1A73E8;
+  --fern: #2C7A4C; --fern-soft: #DCEBDF; --gold: #B8860F; --carmine: #B3263E; --amber: #C9701A; --amber-ink: #9A5410; --sun: #C9A21A; --me: #1A73E8;
   --shadow: 0 6px 24px rgba(18, 28, 24, .16);
   --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
   --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
@@ -25,13 +25,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #0F1418; --panel: #161D22; --ink: #E4EBE6; --muted: #98A6A0; --line: #2A353C;
-    --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
+    --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --amber-ink: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
     --shadow: 0 6px 24px rgba(0, 0, 0, .5); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0F1418; --panel: #161D22; --ink: #E4EBE6; --muted: #98A6A0; --line: #2A353C;
-  --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
+  --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --amber-ink: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
   --shadow: 0 6px 24px rgba(0, 0, 0, .5); color-scheme: dark;
 }
 html, body { height: 100%; }
@@ -76,7 +76,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   border-radius: 16px 16px 0 0; box-shadow: var(--shadow); display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom, 0px); transition: height .25s ease; }
 #sheet.min { height: 104px; }
 #sheet.max { height: 80%; }
-.handle { display: flex; justify-content: center; padding: 8px 0 4px; cursor: pointer; border: 0; background: transparent; width: 100%; }
+.handle { display: flex; justify-content: center; padding: 12px 0 10px; cursor: pointer; border: 0; background: transparent; width: 100%; touch-action: none; }
 .handle span { width: 44px; height: 5px; border-radius: 3px; background: var(--line); }
 .mode { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 2px max(14px, env(safe-area-inset-right, 0px)) 8px max(14px, env(safe-area-inset-left, 0px)); }
 .mode button { font-family: var(--font-display); font-weight: 700; font-size: 17px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; background: transparent; cursor: pointer; }
@@ -92,7 +92,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .legend { font-size: 12px; color: var(--muted); margin: 0; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }
 .legend i:first-child { margin-left: 0; }
-details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
+.card > details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
+section details summary { font-size: 14px; font-weight: 600; color: var(--fern); padding: 8px 0; }
 .sortrow { display: flex; gap: 6px; margin: 0 0 6px; }
 .sortrow .chip { font-size: 14px; padding: 2px 10px; }
 
@@ -107,7 +108,9 @@ details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
 .item .t { min-width: 0; }
 .item .t b { display: block; font-weight: 600; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .item .t span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .t small { display: block; font-size: 12px; color: var(--amber-ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .item .r { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.btn.more { margin-top: 10px; width: 100%; cursor: pointer; }
 .pot { display: inline-flex; gap: 2px; vertical-align: middle; }
 .pot i { width: 6px; height: 12px; border-radius: 2px; background: var(--line); }
 .pot i.on { background: var(--fern); }
@@ -138,6 +141,7 @@ details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
 .steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; }
 .kv { font-size: 12px; color: var(--muted); }
 .lnk { background: none; border: 0; padding: 0; font: inherit; color: var(--fern); text-decoration: underline; cursor: pointer; }
+.why .kv a, .why .lnk { display: inline-block; padding: 8px 6px; margin: -4px 0; }
 
 /* špendlíky a moje poloha */
 .pinwrap { background: none; border: 0; padding: 0; cursor: pointer; }
@@ -154,9 +158,13 @@ details { font-size: 12px; color: var(--muted); } summary { cursor: pointer; }
 .where b { display: block; font-family: var(--font-display); font-size: 16px; }
 .where button { border: 0; background: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 6px; }
 @media (min-width: 900px) { .where { left: 412px; } }
-.attrib { position: absolute; z-index: 4; right: max(6px, env(safe-area-inset-right, 0px)); bottom: calc(46% + 4px); font-size: 10px; color: var(--muted);
+.attrib { position: absolute; z-index: 4; right: max(6px, env(safe-area-inset-right, 0px)); bottom: calc(46% + 4px + env(safe-area-inset-bottom, 0px)); font-size: 10px; color: var(--muted);
   background: color-mix(in srgb, var(--panel) 80%, transparent); padding: 1px 6px; border-radius: 6px; max-width: 70%; text-align: right; }
-@media (min-width: 900px) { .attrib { bottom: 4px; } }
+#app[data-sheet="min"] .attrib { bottom: calc(108px + env(safe-area-inset-bottom, 0px)); }
+#app[data-sheet="max"] .attrib { display: none; }
+@media (min-width: 900px) { .attrib, #app[data-sheet] .attrib { display: block; bottom: 4px; } }
+@media (max-width: 389px) { .chip { padding: 3px 8px; } .row { gap: 5px; } .row .lbl { min-width: 0; } }
+@media (max-width: 349px) { .row .lbl { display: none; } }
 .loading { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; font-family: var(--font-display); font-size: 20px; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { #sheet { transition: none; } .me::after { animation: none; } }
 </style>
@@ -206,6 +214,8 @@ const FOCUS_OLD = { gold: ["gold", "natural_gold"], silver: ["silver"], coins: [
 // důvody, které se ke zvolené věci hodí, jdou v seznamu i na kartě dopředu
 const FOCUS_WHY = { gold: /gold/, silver: /silver|mining/, coins: /coin|market|inn|mill|ford|ferry|post_station/,
   bronze: /bronze|hillfort|barrow|rampart|confluence|prominent_rock|spring/ };
+const FOCUS_KEEP = { gold: /^(gold_mine_hist|lidar_placer_heaps)$/, silver: /^(silver_mine_hist|mining_town)$/, coins: /^coin_find_hist$/,
+  bronze: /^(bronze_find_hist|hillfort|barrow|barrow_field|rampart)$/ };
 const WHY = {
   swimming_spot: "Koupaliště: lidé se převlékají a ve vodě i v trávě ztrácejí prstýnky a řetízky.",
   campsite: "Kemp: stany, ohně a posezení, ztrácejí se drobné, klíče i šperky.",
@@ -226,7 +236,7 @@ const WHY = {
   market_place: "Trh nebo jarmark: {n}", manor_farm: "Panský dvůr: {n}",
   silver_mine_hist: "Staré doly: {n}", gold_mine_hist: "Staré zlaté doly (pinky, štoly): {n}", mining_town: "Horní město: {n}",
   coin_find_hist: "Starý nález mincí: {n}", bronze_find_hist: "Nález bronzů: {n}", museum_record: "Archeologický nález: {n}",
-  treasure_legend: "Pověst o pokladu: {n}", chronicle_event: "Z kroniky: {n}", pilgrimage_site: "Poutní místo: {n}",
+  treasure_legend: "Pověst o pokladu: {n}", chronicle_event: "Z historie: {n}", pilgrimage_site: "Poutní místo: {n}",
   confluence: "Soutok: v pravěku oblíbené místo.", prominent_rock: "Výrazný vrch: pravěké obětiny.", spring: "Pramen: obětiny do vody.", holy_spring: "Svatý pramen: {n}",
 };
 const HOW = {
@@ -242,7 +252,7 @@ const MODERN = new Set(Object.keys(HOW));
 const LEGAL = { landowner_consent: ["Se souhlasem majitele", "b-ok"], caution: ["Se souhlasem majitele, pozor", "b-warn"] };
 
 // ---------------------------------------------------------------- stav a pomocníci
-const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", data: {}, open: null, markers: [] };
+const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", hsort: "best", more: 40, data: {}, open: null, markers: [] };
 const ME = { pos: null, watch: null, marker: null, fly: false, last: null, hideWhere: false };  // poloha jen v tomto prohlížeči
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -273,6 +283,7 @@ function potBars(p, hist) {
 function era(y) {
   if (!y || y[0] == null) return "";
   const a = y[0], b = y[1] ?? y[0];
+  if (b < -2200) return "pravěk";
   if (b < -800) return "doba bronzová";
   if (b < -450) return "doba halštatská";
   if (b <= 0) return "Keltové";
@@ -280,23 +291,41 @@ function era(y) {
   if (b < 1200) return "raný středověk";
   return a === b ? `${a}` : `${a}–${b}`;
 }
-function eraOf(rs) { const r = (rs || []).find((x) => x.years); return r ? era(r.years) : ""; }
 function potWord(p) { return p >= 80 ? "vysoký" : p >= 50 ? "dobrý" : p >= 25 ? "střední" : "nízký"; }
 // obecné důvody (bez jména) se sčítají; konkrétní (se jménem, z textů) jdou dopředu
 const GENERIC = new Set(["ruin", "village_hist", "road_historic_map", "confluence", "prominent_rock", "wayside_cross", "spring"]);
+// text důvodu ze šablony WHY; celá věta ze zdroje dostane jen krátkou hlavičku a bezpečnostní pokyn šablony
+const NOUN_GROUP = { kostel: 1, kaple: 1, kaplička: 1, tvrz: 2, tvrziště: 2, zámek: 3, zámeček: 3, hrad: 3, hradiště: 4, mlýn: 5, hospoda: 6 };
+function whyText(r, n) {
+  const tpl = WHY[r.type] || `${String(r.label || "").replace(/\s*\(.*?\)/g, "")}: {n}`;
+  const [pre, post = ""] = tpl.split("{n}");
+  const head = pre.split(":")[0].replace(/\s*\(.*?\)/g, "").replace(/[\s.]+$/, ""), safety = (post.match(/Munice:[^.]*\./) || [""])[0];
+  const w = (n || "").split(/\s+/)[0].toLowerCase(), h0 = head.split(/\s+/)[0].toLowerCase();
+  const same = (NOUN_GROUP[w] && head.toLowerCase().split(/\s+/).some((x) => NOUN_GROUP[x] === NOUN_GROUP[w]))  // „Kostel Kaple …“, „Tvrz Tvrziště …“
+    || (h0.length >= 5 && w.slice(0, 5) === h0.slice(0, 5));  // „Zaniklá ves: Zaniklá ves …“, „Archeologický nález: Archeologické nálezy …“
+  let t;
+  if (!n || head.toLowerCase().startsWith(n.toLowerCase())) t = pre.replace(/\s+$/, "") + post;  // jméno nic nového neříká („Bunkr“)
+  else if (/[.!?…]$/.test(n) || n.length > 45) t = `${same ? "" : head + ": "}${n}${/[.!?…]$/.test(n) ? "" : "."}${safety ? " " + safety : ""}`;
+  else if (!tpl.includes("{n}")) t = tpl;  // šablona bez jména (brod, vrch, kemp)
+  else t = same ? n + post : pre + n + post;
+  t = t.replace(/\s*:\s*\.?$/, ".").replace(/\s+\./g, ".").replace(/\.{2,}$/, ".").trim();
+  if (!/[.!?…]$/.test(t)) t += ".";
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
 function whyItems(rs, max = 3) {
   const items = new Map();
   for (const r of rs || []) {
     const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo|vrchol .*)$/i.test(r.name) ? r.name : "";
-    const t = (WHY[r.type] || `${r.label}: {n}`).replace(" {n}", n ? " " + n : "").replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
-    const it = items.get(t) || { t, url: r.url, quote: r.quote, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))), fo: !!FOCUS_WHY[S.focus]?.test(r.type) };
+    const t = whyText(r, n);
+    const it = items.get(t) || { t, url: r.url, quote: r.quote, years: null, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))), fo: !!FOCUS_WHY[S.focus]?.test(r.type) };
+    it.years = it.years || r.years;
     it.n++;
     items.set(t, it);
   }
-  return [...items.values()].sort((a, b) => (b.fo - a.fo) || (b.specific - a.specific)).slice(0, max)
+  const all = [...items.values()].sort((a, b) => (b.fo - a.fo) || (b.specific - a.specific));
+  return all.slice(0, max).concat(all.slice(max).filter((it) => /Munice:/.test(it.t)))  // pokyn k munici se nikdy neuřízne
     .map((it) => ({ ...it, t: it.n > 1 ? `${it.t.replace(/\.$/, "")} (${it.n}×).` : it.t }));
 }
-function modernFirst(rs) { return (rs || []).filter((r) => MODERN.has(r.type)).concat((rs || []).filter((r) => !MODERN.has(r.type))); }
 
 // ---------------------------------------------------------------- data a pořadí podle toho, co hledám
 async function load() {
@@ -316,6 +345,7 @@ async function load() {
   S.data.opps.features.forEach((f, i) => { f.id = i; });
   S.data.meta.images = S.data.meta.images || {};
   rank();
+  S.data.potential.features.forEach((f) => (f.properties._pAll = f.properties._p));  // pro lištu polohy, nezávisle na Hledám
 }
 function rank() {
   for (const [fc, key] of [[S.data.opps, "classes"], [S.data.potential, "cls"]]) {
@@ -330,19 +360,31 @@ function rank() {
     }
     // „Hledám“ opravdu filtruje: dnešní místo zůstane, když zvolená věc tvoří aspoň 10 % toho, co se tam dá čekat;
     // v historii zůstane pětina území, kde je jí nejvíc
+    // a vždy místa s přímou stopou (doly, nálezy, hradiště)
     let cut = 0;
+    const keep = key === "cls" && FOCUS_KEEP[S.focus];
     if (want && key === "cls") {
       const amts = fc.features.map((f) => f.properties._amt).filter((a) => a > 0).sort((a, b) => b - a);
       cut = amts.length ? amts[Math.min(Math.ceil(fc.features.length * 0.2), amts.length) - 1] : Infinity;
     }
     for (const f of fc.features) {
-      if (!want) f.properties._off = false;
-      else if (key === "classes") { const sh = Object.fromEntries(shares(f.properties.classes)); f.properties._off = want.reduce((a, c) => a + (sh[c] || 0), 0) < 0.1; }
-      else f.properties._off = !(f.properties._amt > 0 && f.properties._amt >= cut);
+      const pr = f.properties;
+      pr._direct = !!keep && (pr.reasons || []).some((r) => keep.test(r.type));
+      if (!want) pr._off = false;
+      else if (key === "classes") { const sh = Object.fromEntries(shares(pr.classes)); pr._off = want.reduce((a, c) => a + (sh[c] || 0), 0) < 0.1; }
+      else pr._off = !(pr._direct || (pr._amt > 0 && pr._amt >= cut));
     }
-    const sorted = [...fc.features].filter((f) => !f.properties._off).sort((a, b) => b.properties._u - a.properties._u);
-    fc.features.forEach((f) => { f.properties._rank = null; f.properties._p = 0; });
-    sorted.forEach((f, i) => { f.properties._rank = i + 1; f.properties._p = Math.round(100 * (1 - i / Math.max(1, sorted.length - 1))); });
+    // přímá stopa ke zvolené věci (důl, nález mincí, hradiště) jde dopředu; čárky i barva plynou z téhož klíče
+    const maxU = Math.max(...fc.features.map((f) => f.properties._u), 1e-9);
+    fc.features.forEach((f) => { f.properties._key = f.properties._u + (f.properties._direct ? maxU : 0); });
+    const sorted = [...fc.features].filter((f) => !f.properties._off).sort((a, b) => b.properties._key - a.properties._key);
+    fc.features.forEach((f) => { f.properties._rank = null; f.properties._p = 0; f.properties._q = 0; });
+    const hi = sorted[0]?.properties._key || 1, lo = sorted.at(-1)?.properties._key || 0;
+    sorted.forEach((f, i) => {
+      f.properties._rank = i + 1;
+      f.properties._p = Math.round(100 * (1 - i / Math.max(1, sorted.length - 1)));  // percentil: síla barvy na mapě
+      f.properties._q = Math.round(100 * (f.properties._key - lo) / Math.max(hi - lo, 1e-9));  // čárky: 5 = nejlepší v seznamu, 1 = nejslabší
+    });
   }
 }
 
@@ -400,15 +442,18 @@ function initMap() {
     }
     map.on("click", (e) => {
       // zóna zákazu má vždy přednost před vším pod ní
-      const zf = hits(S.data.zones, e.lngLat.lng, e.lngLat.lat).find((f) => f.properties.level === "forbidden");
+      const zs = hits(S.data.zones, e.lngLat.lng, e.lngLat.lat), zf = zs.find((f) => f.properties.level === "forbidden");
       if (zf) return openZone(zf.properties);
+      const za = zs.find((f) => f.properties.level === "archaeologist_only");
       const layers = ["opps-fill", "pot-fill", "zones-fill"].filter((l) => map.getLayoutProperty(l, "visibility") !== "none");
       const h = map.queryRenderedFeatures(e.point, { layers })
         .filter((x) => x.layer.id !== "zones-fill" || map.getZoom() >= 12 || x.properties.level === "forbidden")[0];
       if (!h) return;
-      if (h.layer.id === "opps-fill") openOpp(h.id);
-      else if (h.layer.id === "pot-fill") openHex(h.id);
-      else openZone(h.properties);
+      const zc = zs.filter((f) => f.properties.level === "caution").map((f) => f.properties);  // munice, šachty: vždy na kartě
+      if ((h.layer.id === "opps-fill" || h.layer.id === "zones-fill") && za) openZone(za.properties, zc);  // stejně jako lišta polohy: tady jen s archeology
+      else if (h.layer.id === "opps-fill") openOpp(h.id);
+      else if (h.layer.id === "pot-fill") openHex(h.id, false, zc);
+      else openZone(h.properties, zc);
     });
     pins();
     setMap(S.map);
@@ -431,10 +476,10 @@ function pins() {
   for (const f of S.data.opps.features.filter((x) => !x.properties._off)) {
     const el = document.createElement("button");  // MapLibre přepisuje transform kořene značky → otáčí se vnitřní prvek
     el.className = "pinwrap";
-    el.setAttribute("aria-label", `Místo ${f.properties._rank}: ${f.properties.headline || ""}`);
     el.innerHTML = `<div class="pin"><span>${f.properties._rank}</span></div>`;
     el.addEventListener("click", (ev) => { ev.stopPropagation(); openOpp(f.id); });
     S.markers.push(new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([f.properties.lon, f.properties.lat]).addTo(map));
+    el.setAttribute("aria-label", `Místo ${f.properties._rank}: ${f.properties.headline || ""}`);  // až po addTo, jinak ho MapLibre přepíše
   }
 }
 function setMap(key) {
@@ -458,7 +503,7 @@ function setMap(key) {
 function setMode(mode, keepCard) {
   const keep = keepCard && S.open && S.mode === mode;
   S.mode = mode;
-  if (!keep) { S.open = null; selectHex(null); }
+  if (!keep) { S.open = null; S.more = 40; selectHex(null); }
   if (map?.getLayer("pot-fill")) {
     const hist = mode === "hist";
     for (const id of ["pot-fill", "pot-line"]) map.setLayoutProperty(id, "visibility", hist ? "visible" : "none");
@@ -473,18 +518,7 @@ function buildBar() {
   for (const [k, label] of FOCUS) {
     const b = document.createElement("button");
     b.className = "chip"; b.dataset.k = k; b.textContent = label; b.setAttribute("aria-pressed", String(k === S.focus));
-    b.addEventListener("click", () => {
-      S.focus = k;
-      document.querySelectorAll("#what .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
-      rank();
-      if (map?.getSource("potential")) {
-        map.getSource("potential").setData(S.data.potential);
-        map.getSource("opps").setData(S.data.opps);
-        pins();
-        setMode(S.mode);
-      }
-      else render();
-    });
+    b.addEventListener("click", () => setFocus(k));
     $("what").appendChild(b);
   }
   for (const [k, label] of MAPS) {
@@ -505,17 +539,36 @@ function buildBar() {
   $("place").textContent = `${m.place || "Oblast"} ▾`;
   document.title = `Kapraď ${m.place || ""}`.trim();
 }
+function setFocus(k, keepBack) {
+  S.focus = k;
+  S.more = 40;
+  document.querySelectorAll("#what .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
+  rank();
+  if (!map?.getSource("potential")) return render();
+  map.getSource("potential").setData(S.data.potential);
+  map.getSource("opps").setData(S.data.opps);
+  pins();
+  const o = S.open, y = $("content").scrollTop, ly = S.listY;
+  setMode(S.mode);
+  // otevřenou kartu ukaž znovu s novým pořadím; když ji filtr skryl, zůstane seznam
+  if (o?.kind === "hex" && !S.data.potential.features[o.id].properties._off) openHex(o.id, true);
+  else if (o?.kind === "opp" && !S.data.opps.features[o.id].properties._off) openOpp(o.id, true);
+  if (S.open) { $("content").scrollTop = y; S.listY = 0; } else if (o && !keepBack) disarmBack();  // nový seznam začíná nahoře
+  if (ME.pos) updateWhere();
+}
 function render() {
   const nOk = S.data.opps.features.filter((f) => !f.properties._off).length;
   $("mode").innerHTML = `<button class="hist" data-m="hist" aria-pressed="${S.mode === "hist"}">Historie<small>co se tu dělo</small></button>
     <button class="ok" data-m="ok" aria-pressed="${S.mode === "ok"}">Hledat hned<small>${nOk} míst</small></button>`;
-  $("mode").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.m)));
+  $("mode").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { const had = !!S.open; setMode(b.dataset.m); if (had && !S.open) disarmBack(); }));
   const c = $("content");
   c.innerHTML = S.mode === "ok" ? listOk() : listHist();
   c.scrollTop = 0;
   c.querySelectorAll("[data-opp]").forEach((el) => el.addEventListener("click", () => openOpp(+el.dataset.opp)));
   c.querySelectorAll("[data-hex]").forEach((el) => el.addEventListener("click", () => openHex(+el.dataset.hex)));
   c.querySelectorAll("[data-sort]").forEach((el) => el.addEventListener("click", () => { S.sort = el.dataset.sort; render(); }));
+  c.querySelectorAll("[data-hsort]").forEach((el) => el.addEventListener("click", () => { S.hsort = el.dataset.hsort; S.more = 40; render(); }));
+  c.querySelectorAll("[data-more]").forEach((el) => el.addEventListener("click", () => { const y = c.scrollTop; S.more += 40; render(); c.scrollTop = y; }));
 }
 function listOk() {
   const near = ME.pos && S.sort === "near";
@@ -524,11 +577,12 @@ function listOk() {
   if (!feats.length) return S.focus === "all" ? `<p class="note">V okruhu nejsou místa, kde by stačil souhlas majitele.</p>`
     : `<p class="note">${esc(focusLabel())}: tady nic k hledání hned. ${S.focus === "bronze" ? "Bronz je pravěký, najdeš ho v Historii." : "Zkus Vše."}</p>`;
   const sortRow = ME.pos ? `<div class="sortrow"><button class="chip" data-sort="best" aria-pressed="${!near}">Nejlepší</button><button class="chip" data-sort="near" aria-pressed="${!!near}">Nejblíž mně</button></div>` : "";
-  return `${sortRow}<div class="list">${feats.map((f) => {
-    const p = f.properties, why = whyItems(modernFirst(p.reasons), 1)[0];
+  const same = S.focus !== "all" ? `<p class="note">Dnešní ztráty (prstýnky, řetízky, mince) čekáme na všech těchto místech, ${esc(focusLabel().toLowerCase())} tu jen mění pořadí.</p>` : "";
+  return `${sortRow}${same}<div class="list">${feats.map((f) => {
+    const p = f.properties, why = whyItems((p.reasons || []).filter((r) => MODERN.has(r.type)), 1)[0];
     return `<button class="item" data-opp="${f.id}"><div class="num">${p._rank}</div>
       <div class="t"><b>${esc(p.headline || "Místo")}</b><span>${esc(why?.t || whatLine(p.classes, false, true))}</span></div>
-      <div class="r">${potBars(p._p)}<br>${distLabel(p.lat, p.lon)}</div></button>`;
+      <div class="r">${potBars(p._q)}<br>${distLabel(p.lat, p.lon)}</div></button>`;
   }).join("")}</div>`;
 }
 function yearLabel(y) {
@@ -545,16 +599,35 @@ function mapFor(y) {
   return null;
 }
 function focusLabel() { return (FOCUS.find((x) => x[0] === S.focus) || [])[1] || ""; }
+function plural(n, one, few, many) { return `${n} ${n === 1 ? one : n < 5 ? few : many}`; }
 function listHist() {
-  const feats = S.data.potential.features.filter((f) => !f.properties._off).sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
+  const near = ME.pos && S.hsort === "near", byStories = S.hsort === "stories";
+  let feats = S.data.potential.features.filter((f) => !f.properties._off);
+  const withSt = feats.filter((f) => uniqStories(f).length);
+  if (byStories) feats = withSt.sort((a, b) => uniqStories(b).length - uniqStories(a).length || a.properties._rank - b.properties._rank);
+  else if (near) feats.sort((a, b) => dist(a.properties._c[1], a.properties._c[0]) - dist(b.properties._c[1], b.properties._c[0]));
+  else feats.sort((a, b) => a.properties._rank - b.properties._rank);
   if (!feats.length) return `<p class="note">${esc(focusLabel())}: v okruhu jsme nic nenašli. Zkus Vše.</p>`;
-  return `<p class="note">Kde v krajině leží historie${S.focus === "all" ? "" : ` (${esc(focusLabel().toLowerCase())})`}. Šestiúhelník má asi 0,7 km². <b>Přesná místa a navigace jen po dohodě s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
-  <div class="list">${feats.map((f) => {
-    const p = f.properties, [lon, lat] = p._c, why = whyItems(p.reasons, 1)[0], n = uniqStories(f).length;
+  const rows = [], byKey = new Map();  // sousední šestiúhelníky (do 1,2 km) se stejným popisem = jeden řádek
+  for (const f of feats) {
+    const p = f.properties, why = whyItems(p.reasons, 1)[0], key = `${p.obec}|${why?.t}`;
+    const nb = !byStories && !uniqStories(f).length && (byKey.get(key) || []).find((r) => r.c.some(([x, y]) => km(y, x, p._c[1], p._c[0]) < 1.2));
+    if (nb) { nb.more++; nb.c.push(p._c); continue; }
+    const r = { f, why, more: 0, c: [p._c] };
+    byKey.set(key, [...(byKey.get(key) || []), r]);
+    rows.push(r);
+  }
+  const chip = (k, label) => `<button class="chip" data-hsort="${k}" aria-pressed="${S.hsort === k || (k === "best" && S.hsort === "near" && !ME.pos)}">${label}</button>`;
+  const sortRow = `<div class="sortrow">${chip("best", "Nejlepší")}${ME.pos ? chip("near", "Nejblíž mně") : ""}${withSt.length ? chip("stories", `Příběhy · ${withSt.length}`) : ""}</div>`;
+  return `${sortRow}<p class="note">Kde v krajině leží historie${S.focus === "all" ? "" : ` (${esc(focusLabel().toLowerCase())})`}. Šestiúhelník má asi 0,7 km². <b>Přesná místa a navigace jen po dohodě s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
+  <div class="list">${rows.slice(0, S.more).map(({ f, why, more }) => {
+    const p = f.properties, [lon, lat] = p._c, n = uniqStories(f).length;
+    const sub = [era(why?.years), n ? plural(n, "příběh", "příběhy", "příběhů") : "", more ? `+${more} vedle` : ""].filter(Boolean).join(" · ");
     return `<button class="item" data-hex="${f.id}"><div class="num h">${p._rank}</div>
-      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc([why?.t.replace(/\.$/, ""), eraOf(p.reasons), n ? `${n} ${n === 1 ? "zápis" : n < 5 ? "zápisy" : "zápisů"} z kronik` : ""].filter(Boolean).join(" · "))}</span></div>
-      <div class="r">${potBars(p._p, true)}<br>${distLabel(lat, lon)}</div></button>`;
-  }).join("")}</div>`;
+      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc(why?.t.replace(/\.$/, "") || whatLine(p.cls, true))}</span>${sub ? `<small>${esc(sub)}</small>` : ""}</div>
+      <div class="r">${potBars(p._q, true)}<br>${distLabel(lat, lon)}</div></button>`;
+  }).join("")}</div>
+  ${rows.length > S.more ? `<button class="btn more" data-more>Další místa (${rows.length - S.more})</button>` : ""}`;
 }
 function uniqStories(f) {  // víc zpráv z jedné věty zdroje = jeden zápis
   const seen = new Set();
@@ -569,32 +642,81 @@ function storiesHtml(f) {
       <span class="kv">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${src}</a>` : src}${mk && S.data.meta.images[mk] ? ` · <button class="lnk" data-map="${mk}">mapa ${esc((MAPS.find((m) => m[0] === mk) || [])[1] || "")}</button>` : ""}</span></li>`;
   };
   return `<section><h3>Co se tu dělo</h3><ul class="why">${st.slice(0, 5).map(li).join("")}</ul>
-    ${st.length > 5 ? `<details><summary>Další zápisy (${st.length - 5})</summary><ul class="why">${st.slice(5).map(li).join("")}</ul></details>` : ""}</section>`;
+    ${st.length > 5 ? `<details><summary>Další příběhy (${st.length - 5})</summary><ul class="why">${st.slice(5).map(li).join("")}</ul></details>` : ""}</section>`;
 }
 // ---------------------------------------------------------------- karta místa
-function showCard(html) {
-  S.open = true;
+function showCard(html, ref, refresh) {
   const c = $("content");
+  if (!S.open) S.listY = c.scrollTop;  // kam se vrátit v seznamu
+  S.open = ref || { kind: "other" };
   c.innerHTML = `<div class="card"><button class="back" id="back">← Zpět na seznam</button>${html}</div>`;
   c.scrollTop = 0;
-  $("back").addEventListener("click", () => { S.open = null; selectHex(null); render(); });
-  if (innerWidth < 900) $("sheet").classList.remove("min");
+  $("back").addEventListener("click", () => closeCard());
+  if (innerWidth < 900 && !refresh) setSheet("");
+  armBack();
+}
+function closeCard(fromPop) {
+  S.open = null; selectHex(null); render();
+  $("content").scrollTop = S.listY || 0;
+  if (!fromPop) disarmBack();
+}
+// tlačítko Zpět v telefonu zavře kartu: otevřená karta = jeden záznam v historii, zavřená karta ho zase vezme zpět
+let backArmed = false, ignorePop = false;
+const LOAD = `${Date.now()}-${Math.random()}`;  // záznamy z dřívějšího načtení stránky nepočítáme
+function armBack() { if (backArmed) return; try { history.pushState({ kaprad: LOAD }, ""); backArmed = true; } catch (e) { /* bez historie */ } }
+function disarmBack() { if (!backArmed) return; backArmed = false; ignorePop = true; try { history.back(); } catch (e) { ignorePop = false; } }
+addEventListener("popstate", (e) => {
+  backArmed = e.state?.kaprad === LOAD;
+  if (ignorePop) { ignorePop = false; return; }
+  if (!backArmed && S.open) closeCard(true);
+  else if (backArmed && !S.open) { backArmed = false; ignorePop = true; history.back(); }  // dopředu na kartu, která už není otevřená
+});
+function setSheet(state) {  // "" = polovina, "min", "max"
+  const sh = $("sheet");
+  sh.classList.remove("min", "max");
+  if (state) sh.classList.add(state);
+  $("app").dataset.sheet = state;
+}
+function camPad() {  // místo na mapě nesmí skončit pod lištou nahoře, pod lištou polohy ani pod panelem
+  const w = $("where");
+  let top = barH() + (w.hidden ? 0 : w.offsetHeight + 8) + 12;
+  if (innerWidth >= 900) return { top, left: 412, right: 12, bottom: 12 };
+  const st = sheetNow(), sh = st === "min" ? 112 : st === "max" ? innerHeight * 0.8 : innerHeight * 0.46 + 8;
+  let left = 12;
+  if (innerHeight - sh - top < 60) {  // nízká obrazovka: místo vedle lišty polohy, nebo aspoň ne pod panel
+    top = barH() + 12;
+    const wr = w.hidden ? 0 : w.getBoundingClientRect().right;
+    if (wr && innerWidth - wr > 160) left = wr + 12;
+  }
+  return { top, left, right: 12, bottom: Math.max(0, Math.min(sh, innerHeight - top - 40)) };
+}
+function closeMapMenu() {
+  if (innerWidth >= 900 || $("mapmenu").hidden) return;
+  $("mapmenu").hidden = true; $("mapbtn").setAttribute("aria-expanded", "false"); setBarH();
 }
 function whyHtml(items) {
   return `<ul class="why">${items.map((w) => `<li>${esc(w.t)}${w.url ? ` <a href="${esc(w.url)}" target="_blank" rel="noopener">zdroj</a>` : ""}${w.quote ? `<q>${esc(w.quote)}</q>` : ""}</li>`).join("")}</ul>`;
 }
-function openOpp(id) {
+function openOpp(id, noFly) {
   const f = S.data.opps.features[id];
   if (!f) return;
   const p = f.properties, L = p.links || {}, main = (p.reasons || []).find((r) => MODERN.has(r.type));
   const lg = LEGAL[p.legal];
   if (!lg) return;
+  if (p._off) setFocus("all", true);  // místo skryté volbou Hledám (např. z lišty polohy): ukaž ho s platným číslem
   if (S.mode !== "ok") setMode("ok");
-  map.easeTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 15.5), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
+  if (!noFly) {
+    closeMapMenu();
+    if (innerWidth < 900) setSheet("");
+    map.easeTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 15.5), duration: 500, padding: camPad() });
+  }
   // na kartě legálního místa jen dnešní důvody (historie okolí sem nepatří)
   const modern = (p.reasons || []).filter((r) => MODERN.has(r.type));
   showCard(`<h2>${p._rank}. ${esc(p.headline || "Místo")}</h2>
-    <div class="potrow">Potenciál ${potBars(p._p)} <b>${potWord(p._p)}</b> · ${distLabel(p.lat, p.lon)} <span class="badge ${lg[1]}">${lg[0]}</span></div>
+    <div class="potrow">Potenciál ${potBars(p._q)} <b>${potWord(p._q)}</b> · ${distLabel(p.lat, p.lon)} <span class="badge ${lg[1]}">${lg[0]}</span></div>
+    ${(p.over_forbidden || []).length ? `<div class="box no"><b>Část místa je ZÁKAZ</b> (${esc(zoneName({ name: p.over_forbidden[0] }))}, červená hranice na mapě). Tam detektor nepoužívej.</div>` : ""}
+    ${(p.over_arch || []).length ? `<div class="box arch"><b>Část místa leží v území s archeologickými nálezy</b> (oranžová hranice na mapě). Tam nekopej.</div>` : ""}
+    ${(p.zones || []).length ? `<div class="box warn"><b>Pozor, v místě je:</b><br>${[...new Set(p.zones.map((z) => z.replace(/^Pozor:\s*/, "")))].map(esc).join("<br>")}<br>Tam nekopej.</div>` : ""}
     <div class="nav"><a class="btn go" href="${esc(L.mapy)}" target="_blank" rel="noopener">Navigovat</a>
       <a class="btn" href="${esc(L.google)}" target="_blank" rel="noopener">Google</a><a class="btn" href="${esc(L.waze)}" target="_blank" rel="noopener">Waze</a>
       <a class="btn" href="${esc(L.katastr)}" target="_blank" rel="noopener">Majitel</a></div>
@@ -605,19 +727,28 @@ function openOpp(id) {
       <li>Ztracenou věc vrať majiteli, nebo ji odevzdej na obci.</li>
       <li><b>Něco starého</b> nech i s místem beze změny a nejpozději druhý den to ohlas muzeu nebo Archeologickému ústavu a majiteli pozemku.</li>
       <li><b>Munice:</b> nesahej, nepřenášej, označ místo a volej 158. Nalezenou zbraň odevzdej policii.</li></ol></section>
-    ${(p.zones || []).length ? `<div class="box warn"><b>Pozor, v místě je:</b><br>${[...new Set(p.zones.map((z) => z.replace(/^Pozor:\s*/, "")))].map(esc).join("<br>")}<br>Tam nekopej.</div>` : ""}
-    <p class="kv">${p.lat.toFixed(5).replace(".", ",")}, ${p.lon.toFixed(5).replace(".", ",")}</p>`);
+    <p class="kv">${p.lat.toFixed(5).replace(".", ",")}, ${p.lon.toFixed(5).replace(".", ",")}</p>`, { kind: "opp", id }, noFly);
 }
-function openHex(id) {
+function openHex(id, noFly, zc = []) {
   const f = S.data.potential.features[id];
   if (!f) return;
-  const p = f.properties;
+  if (f.properties._off) setFocus("all", true);
+  const p = f.properties, why = whyItems(p.reasons);
+  const eras = [...new Set(why.map((w) => era(w.years)).filter(Boolean))].join(", ");
+  if (S.mode !== "hist") setMode("hist");
   selectHex(id);
-  map.easeTo({ center: p._c, zoom: Math.max(map.getZoom(), 13), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
+  if (!noFly) {
+    closeMapMenu();
+    if (innerWidth < 900) setSheet("");
+    map.easeTo({ center: p._c, zoom: Math.max(map.getZoom(), 13), duration: 500, padding: camPad() });
+  }
   showCard(`<h2>${p._rank}. Historické místo${p.obec ? ` u obce ${esc(p.obec)}` : ""}</h2>
-    <div class="potrow">Potenciál ${potBars(p._p, true)} <b>${potWord(p._p)}</b> · ${distLabel(p._c[1], p._c[0])} <span class="badge b-arch">Jen s archeology</span></div>
-    <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(p.reasons))}</section>
-    <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}${eraOf(p.reasons) ? ` · ${esc(eraOf(p.reasons))}` : ""}</p></section>
+    <div class="potrow">Potenciál ${potBars(p._q, true)} <b>${potWord(p._q)}</b> · ${distLabel(p._c[1], p._c[0])} <span class="badge b-arch">Jen s archeology</span></div>
+    ${(p.reasons || []).some((r) => /^(ww2_fighting|military_camp)$/.test(r.type)) || zc.some((z) => z.category === "uxo_risk")
+      ? `<div class="box warn"><b>Munice:</b> nic nevykopávej, munice se nedotýkej, volej 158.</div>` : ""}
+    ${zc.some((z) => z.category === "shaft_risk") ? `<div class="box warn"><b>Staré šachty:</b> pozor na propady.</div>` : ""}
+    <section><h3>Proč zrovna tady</h3>${whyHtml(why)}</section>
+    <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}${eras ? ` · ${esc(eras)}` : ""}</p></section>
     ${storiesHtml(f)}
     <section><h3>Jak to legálně prohledat</h3><ol class="steps">
       <li><b>Zapiš se do AMČR-PAS</b> a absolvuj školení. <a href="https://amcr-info.aiscr.cz/amcr-pas/" target="_blank" rel="noopener">amcr-info.aiscr.cz</a></li>
@@ -625,8 +756,11 @@ function openHex(id) {
       <li><b>Souhlas majitele pozemku.</b></li>
       <li>Nálezy zapiš do AMČR-PAS (poloha, hloubka, fotky) a předej.</li></ol></section>
     <div class="box arch">Po dohodě tu Kapraď ukáže přesná místa, navigaci a záznam nálezů. Do té doby proto chybí navigace.</div>
-    <div class="box no"><b>Bez dohody tu nekopej.</b> Hledat staré předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji.</div>`);
-  $("content").querySelectorAll("[data-map]").forEach((el) => el.addEventListener("click", () => setMap(el.dataset.map)));
+    <div class="box no"><b>Bez dohody tu nekopej.</b> Hledat staré předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji.</div>`, { kind: "hex", id }, noFly);
+  $("content").querySelectorAll("[data-map]").forEach((el) => el.addEventListener("click", () => {
+    setMap(el.dataset.map);
+    if (innerWidth < 900) { setSheet(""); map.easeTo({ center: p._c, duration: 400, padding: camPad() }); }  // ať je stará mapa vidět
+  }));
 }
 function selectHex(id) {
   if (!map?.getSource("potential")) return;
@@ -634,11 +768,15 @@ function selectHex(id) {
   S.selHex = id;
   if (id != null) map.setFeatureState({ source: "potential", id }, { sel: true });
 }
-function openZone(p) {
+function riskLines(zs) {  // munice a šachty z kterékoli zóny v místě
+  return [zs.some((z) => z.category === "uxo_risk") ? "<br><b>Munice:</b> nic nevykopávej, munice se nedotýkej, volej 158." : "",
+    zs.some((z) => z.category === "shaft_risk") ? "<br><b>Staré šachty:</b> pozor na propady." : ""].join("");
+}
+function openZone(p, more = []) {
   const cls = p.level === "forbidden" ? ["no", "Zákaz.", "Tady se s detektorem nesmí hledat nikdy."]
     : p.level === "archaeologist_only" ? ["arch", "Jen s archeology.", "Území s archeologickými nálezy."] : ["warn", "Pozor.", ""];
-  const extra = p.category === "uxo_risk" ? "<br><b>Munice:</b> nic nevykopávej, munice se nedotýkej, volej 158."
-    : p.category === "shaft_risk" ? "<br><b>Staré šachty:</b> pozor na propady." : "";
+  const extra = riskLines([p, ...more]) + more.filter((z) => z !== p && !["uxo_risk", "shaft_risk"].includes(z.category)).slice(0, 2)
+    .map((z) => `<br>Pozor: ${esc(zoneName(z))}.`).join("");
   const basis = String(p.basis || "").replace(/\s*\(specs\/[^)]*\)/g, "");
   showCard(`<h2>${esc(zoneName(p))}</h2><div class="box ${cls[0]}"><b>${cls[1]}</b> ${cls[2]}${extra}<br><span class="kv">${esc(basis)}</span></div>`);
 }
@@ -647,7 +785,8 @@ function openHelp() {
   showCard(`<h2>Jak na to</h2>
     <ol class="steps"><li><b>Historie</b> (oranžová): kde v krajině leží historie, z jaké doby a proč. Karta místa ukáže i to, co se tu dělo, s citací zdroje. Staré věci se smí hledat jen s archeology (AMČR-PAS), proto tu není navigace.</li>
       <li><b>Hledat hned</b> (zelená čísla): tady smíš hledat dnešní ztráty se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
-      <li><b>Hledám</b> nechá jen místa, kde se to, co chceš najít, dá čekat.</li>
+      <li><b>Hledám</b> vybere místa podle toho, co chceš najít. V Historii nechá jen území, kde se to dá čekat, v Hledat hned změní pořadí (bronz je pravěký, ten tu nenajdeš).</li>
+      <li><b>Čárky</b> porovnávají místa v seznamu: 5 = nejlepší, 1 = nejslabší. Síla barvy na mapě je pořadí. Panel zvětšíš nebo zmenšíš klepnutím na úchyt nebo tahem.</li>
       <li><b>Mapa ▾</b> otevře staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem Prolnout je smícháš s dneškem.</li>
       <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Polohu nikam neposíláme, mapové podklady se ale stahují podle toho, kam se díváš.</li></ol>
     <p class="legend"><i style="background:var(--fern)"></i>smíš (se souhlasem majitele)<i style="background:var(--amber)"></i>jen s archeology<i style="background:var(--carmine)"></i>nikdy<i style="background:var(--sun)"></i>pozor</p>
@@ -705,16 +844,17 @@ function whereText() {
     zc.some((f) => f.properties.category === "shaft_risk") ? "Staré šachty a poddolování: pozor na propady." : "",
     ...zc.filter((f) => !["uxo_risk", "shaft_risk"].includes(f.properties.category)).slice(0, 2).map((f) => `${zoneName(f.properties)}.`),
   ].filter(Boolean).map(esc).join(" ");
-  const best = [...S.data.opps.features].sort((a, b) => dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon))[0];
+  const best = S.data.opps.features.filter((f) => !f.properties._off).sort((a, b) => dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon))[0];
   const tip = best ? ` Nejbližší místo k hledání: č. ${best.properties._rank} ${esc(best.properties.headline || "")}, ${distLabel(best.properties.lat, best.properties.lon)}.` : "";
   const goBest = best ? () => openOpp(best.id) : null;
   const za = z.find((f) => f.properties.level === "archaeologist_only");
   if (za) return ["arch", `<b>Jen s archeology</b>${esc(zoneName(za.properties))}. Bez dohody tu nekopej.${warn ? " " + warn : ""}${tip}`, goBest];
-  const o = hits(S.data.opps, lon, lat)[0];
-  if (o && (warn || o.properties.legal !== "landowner_consent")) return ["warn", `<b>Místo č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele, ale pozor: ${warn || "v místě je zóna se zvláštními pravidly."}`, () => openOpp(o.id)];
-  if (o) return ["ok", `<b>Jsi na místě č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele tu smíš hledat.`, () => openOpp(o.id)];
+  const o = hits(S.data.opps, lon, lat)[0];  // i místo skryté volbou Hledám: o tom, co se tu smí, rozhoduje poloha
+  const no = o && !o.properties._off ? ` č. ${o.properties._rank}` : "";
+  if (o && (warn || o.properties.legal !== "landowner_consent")) return ["warn", `<b>Místo${no}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele, ale pozor: ${warn || "v místě je zóna se zvláštními pravidly."}`, () => openOpp(o.id)];
+  if (o) return ["ok", `<b>Jsi na místě${no}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele tu smíš hledat.`, () => openOpp(o.id)];
   if (warn) return ["warn", `<b>Pozor</b>${warn}${tip}`, goBest];
-  const hx = hits(S.data.potential, lon, lat).find((f) => f.properties._p >= 50);
+  const hx = hits(S.data.potential, lon, lat).find((f) => f.properties._pAll >= 50);
   if (hx) return ["arch", `<b>Historické území</b>Staré věci jen s archeology.${tip}`, goBest];
   return ["", `<b>Tady není nic vyznačeného</b>Smíš hledat jen dnešní ztráty a jen se souhlasem majitele.${tip}`, goBest];
 }
@@ -737,8 +877,9 @@ function drawMe() {
   const { lat, lon, acc } = ME.pos;
   if (!ME.marker) {
     const el = document.createElement("div");
-    el.className = "me"; el.setAttribute("aria-label", "Moje poloha");
+    el.className = "me";
     ME.marker = new maplibregl.Marker({ element: el }).setLngLat([lon, lat]).addTo(map);
+    el.setAttribute("aria-label", "Moje poloha");
   } else ME.marker.setLngLat([lon, lat]);
   const poly = { type: "Feature", geometry: { type: "Polygon", coordinates: [circle(lon, lat, Math.max(acc, 5) / 1000)] } };
   if (map.getSource("me-acc")) map.getSource("me-acc").setData(poly);
@@ -754,8 +895,10 @@ function onPos(p) {
 function applyPos() {
   drawMe();
   const m = S.data.meta;
-  if (ME.fly && km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2) map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
-  if (ME.fly && S.sort === "best") S.sort = "near";
+  const inArea = km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2;
+  if (ME.fly && inArea) map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
+  if (ME.fly && inArea && S.sort === "best") S.sort = "near";
+  if (ME.fly && inArea && S.hsort === "best") S.hsort = "near";
   ME.fly = false;
   updateWhere();
   const moved = !ME.last || km(ME.last.lat, ME.last.lon, ME.pos.lat, ME.pos.lon) > 0.05;  // seznam jen po pohybu o víc než 50 m
@@ -771,7 +914,7 @@ function onErr(e) {
   }
   const w = $("where");
   w.className = "where warn";
-  $("wheretxt").innerHTML = e.code === 1 ? "<b>Poloha je zakázaná</b>Povol ji v nastavení prohlížeče. V náhledu na claude.ai poloha nejde, otevři odkaz z GitHubu."
+  $("wheretxt").innerHTML = e.code === 1 ? `<b>Poloha je zakázaná</b>Povol ji v nastavení prohlížeče.${S.data.meta.tiles ? "" : " V náhledu na claude.ai poloha nejde, otevři odkaz z GitHubu."}`
     : "<b>Polohu se nepodařilo zjistit</b>Zkus to venku nebo za chvíli znovu.";
   w.onclick = null;
   w.hidden = false;
@@ -783,8 +926,11 @@ function startLocate(fly) {
   if (ME.pos && fly && S.ready) {
     ME.fly = false;
     const m = S.data.meta;
-    if (km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2) map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
-    S.sort = "near";
+    if (km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2) {
+      map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
+      S.sort = "near";
+      if (S.hsort === "best") S.hsort = "near";
+    }
     updateWhere();
     if (!S.open) render();
   }
@@ -800,11 +946,22 @@ function stopLocate() {
 $("locbtn").addEventListener("click", () => startLocate(true));
 $("helpbtn").addEventListener("click", openHelp);
 $("whereclose").addEventListener("click", (e) => { e.stopPropagation(); ME.hideWhere = ME.lastWhere || true; $("where").hidden = true; });
+const SHEET = ["min", "", "max"];
+function sheetNow() { const s = $("sheet"); return s.classList.contains("min") ? "min" : s.classList.contains("max") ? "max" : ""; }
+let drag = null, dragEnd = 0;
+$("handle").addEventListener("pointerdown", (e) => { drag = { y: e.clientY }; });
+addEventListener("pointercancel", () => { drag = null; });
+addEventListener("pointerup", (e) => {
+  if (!drag) return;
+  const dy = e.clientY - drag.y;
+  drag = null;
+  if (Math.abs(dy) < 25) return;
+  dragEnd = Date.now();  // tah nahoru zvětší, dolů zmenší
+  setSheet(SHEET[Math.max(0, Math.min(2, SHEET.indexOf(sheetNow()) + (dy < 0 ? 1 : -1)))]);
+});
 $("handle").addEventListener("click", () => {
-  const s = $("sheet");
-  if (s.classList.contains("min")) s.classList.remove("min");
-  else if (s.classList.contains("max")) { s.classList.remove("max"); s.classList.add("min"); }
-  else s.classList.add("max");
+  if (Date.now() - dragEnd < 400) return;  // klik, který prohlížeč pošle hned po tahu
+  setSheet({ "": "max", max: "min", min: "" }[sheetNow()]);
 });
 load().then(() => { buildBar(); setBarH(); render(); initMap(); }).catch((e) => {
   $("loading").textContent = "Data se nepodařilo načíst. Zkus stránku obnovit.";

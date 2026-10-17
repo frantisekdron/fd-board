@@ -90,11 +90,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 
 /* řádek místa */
 .list { display: flex; flex-direction: column; }
-.item { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 9px 4px; border: 0; border-bottom: 1px solid var(--line);
+.item { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; padding: 9px 4px; border: 0; border-bottom: 1px solid var(--line);
   background: none; text-align: left; cursor: pointer; width: 100%; }
 .item:hover { background: var(--fern-soft); }
 .num { font-family: var(--font-display); font-weight: 700; font-size: 24px; text-align: center; color: var(--fern); line-height: 1; }
 .num.h { color: var(--amber); font-size: 18px; }
+.num.yr { font-size: 14px; line-height: 1.05; word-break: break-word; }
 .item .t { min-width: 0; }
 .item .t b { display: block; font-weight: 600; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .item .t span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -221,7 +222,7 @@ const MODERN = new Set(Object.keys(HOW));
 const LEGAL = { landowner_consent: ["Se souhlasem majitele", "b-ok"], caution: ["Se souhlasem majitele, pozor", "b-warn"] };
 
 // ---------------------------------------------------------------- stav a pomocníci
-const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", data: {}, open: null, markers: [] };
+const S = { focus: "all", map: "dnes", mode: "hist", hsub: "places", sort: "best", data: {}, open: null, markers: [] };
 const ME = { pos: null, watch: null, marker: null, fly: false, last: null, hideWhere: false };  // poloha jen v tomto prohlížeči
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -277,6 +278,9 @@ async function load() {
   const names = ["meta", "potential", "opps", "zones"];
   const res = await Promise.all(names.map((n) => fetch(`data/${n}.json`).then((r) => r.json())));
   names.forEach((n, i) => (S.data[n] = res[i]));
+  S.data.stories = await fetch("data/stories.json").then((r) => (r.ok ? r.json() : [])).catch(() => []);
+  const byH3 = new Map(S.data.potential.features.map((f) => [f.properties.h3_r8, f]));
+  S.data.stories.forEach((st) => (st._hex = byH3.get(st.h3)));
   S.data.potential.features.forEach((f, i) => { f.id = i; f.properties._c = center(f); });
   S.data.opps.features.forEach((f, i) => { f.id = i; });
   rank();
@@ -445,6 +449,8 @@ function render() {
   c.querySelectorAll("[data-opp]").forEach((el) => el.addEventListener("click", () => openOpp(+el.dataset.opp)));
   c.querySelectorAll("[data-hex]").forEach((el) => el.addEventListener("click", () => openHex(+el.dataset.hex)));
   c.querySelectorAll("[data-sort]").forEach((el) => el.addEventListener("click", () => { S.sort = el.dataset.sort; render(); }));
+  c.querySelectorAll("[data-hsub]").forEach((el) => el.addEventListener("click", () => { S.hsub = el.dataset.hsub; render(); }));
+  c.querySelectorAll("[data-story]").forEach((el) => el.addEventListener("click", () => openStory(+el.dataset.story)));
 }
 function listOk() {
   const near = ME.pos && S.sort === "near";
@@ -458,7 +464,45 @@ function listOk() {
       <div class="r">${potBars(p._p)}<br>${distLabel(p.lat, p.lon)}</div></button>`;
   }).join("")}</div>`;
 }
+function yearLabel(y) {
+  if (!y || y[0] == null) return "bez roku";
+  const f = (v) => (v < 0 ? `${-v} př. n. l.` : `${v}`);
+  return y[1] == null || y[1] === y[0] ? f(y[0]) : `${f(y[0])}–${f(y[1])}`;
+}
+function mapFor(y) {
+  if (!y || y[0] == null) return null;
+  if ((y[1] ?? y[0]) < 600) return "relief";
+  if (y[0] <= 1850) return "r1840";
+  if (y[0] <= 1900) return "r1880";
+  if (y[0] <= 1960) return "r1950";
+  return null;
+}
+function listStories() {
+  const st = S.data.stories;
+  if (!st.length) return `<p class="note">Pro tuto oblast zatím nemáme příběhy z kronik.</p>`;
+  return `<p class="note">Co se tu dělo, seřazeno podle doby. Ze zápisů v kronikách a na Wikipedii, s citací.</p>
+  <div class="list">${st.map((x) => `<button class="item" data-story="${x.id}"><div class="num h yr">${esc(yearLabel(x.y).replace("–", "–\u200b"))}</div>
+      <div class="t"><b>${esc(x.title)}</b><span>${esc(x.obec ? `u obce ${x.obec}` : "")}</span></div><div class="r"></div></button>`).join("")}</div>`;
+}
+function openStory(id) {
+  const x = S.data.stories[id];
+  if (!x) return;
+  const mk = mapFor(x.y), hx = x._hex;
+  if (hx) { selectHex(hx.id); map.easeTo({ center: hx.properties._c, zoom: Math.min(Math.max(map.getZoom(), 12), 13), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } }); }
+  showCard(`<h2>${esc(yearLabel(x.y))}</h2><p><b>${esc(x.title)}</b></p>
+    <div class="box arch"><q>${esc(x.quote)}</q><br><span class="kv">${x.source === "kramerius" ? "Kramerius" : "Wikipedie"}${x.url ? ` · <a href="${esc(x.url)}" target="_blank" rel="noopener">otevřít zdroj</a>` : ""}</span></div>
+    <p class="kv">${x.obec ? `U obce ${esc(x.obec)}. ` : ""}Přesné místo neukazujeme, šestiúhelník na mapě je asi 0,7 km².</p>
+    <div class="nav">${mk && S.data.meta.images[mk] ? `<button class="btn" id="storymap">Mapa ${esc((MAPS.find((m) => m[0] === mk) || [])[1] || "")}</button>` : ""}
+      ${hx ? `<button class="btn" id="storyhex">Historické místo</button>` : ""}</div>`);
+  if (mk && $("storymap")) $("storymap").addEventListener("click", () => setMap(mk));
+  if (hx && $("storyhex")) $("storyhex").addEventListener("click", () => openHex(hx.id));
+}
 function listHist() {
+  const sub = `<div class="sortrow"><button class="chip" data-hsub="places" aria-pressed="${S.hsub === "places"}">Místa</button><button class="chip" data-hsub="stories" aria-pressed="${S.hsub === "stories"}">Příběhy podle doby · ${S.data.stories.length}</button></div>`;
+  if (S.hsub === "stories") return sub + listStories();
+  return sub + listPlaces();
+}
+function listPlaces() {
   const feats = [...S.data.potential.features].sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
   return `<p class="note">Kde v krajině leží historie: staré mince, stříbro, bronz. Ukazujeme ji po šestiúhelnících asi 0,7 km². <b>Přesná místa a navigaci odemkne dohoda s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
   <div class="list">${feats.map((f) => {

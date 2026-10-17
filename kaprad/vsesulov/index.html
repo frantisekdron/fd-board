@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2C7A4C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C7A4C'/%3E%3Cpath d='M32 10c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z' fill='%23B8860F'/%3E%3Ccircle cx='32' cy='26' r='6' fill='%23FBFCFA'/%3E%3C/svg%3E">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<title>Kapraď</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Kapraď – mapa pro kopáče. Šest věcí: co hledám · mapa · místa · potenciál · proč tady · navigace. */
+:root {
+  --paper: #EEF2EE; --panel: #FBFCFA; --ink: #18212B; --muted: #5A6862; --line: #D3DBD5;
+  --fern: #2C7A4C; --fern-soft: #DCEBDF; --gold: #B8860F; --carmine: #B3263E; --amber: #C9701A; --sun: #C9A21A; --me: #1A73E8;
+  --shadow: 0 6px 24px rgba(18, 28, 24, .16);
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0F1418; --panel: #161D22; --ink: #E4EBE6; --muted: #98A6A0; --line: #2A353C;
+    --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
+    --shadow: 0 6px 24px rgba(0, 0, 0, .5); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0F1418; --panel: #161D22; --ink: #E4EBE6; --muted: #98A6A0; --line: #2A353C;
+  --fern: #5DBB83; --fern-soft: #1D3328; --gold: #E1B548; --carmine: #E0566C; --amber: #E8913F; --sun: #E2C04A; --me: #5EA1FF;
+  --shadow: 0 6px 24px rgba(0, 0, 0, .5); color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.4; overflow: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+#app { position: relative; height: 100%; }
+#map { position: absolute; inset: 0; background: var(--paper); }
+.maplibregl-map { position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.maplibregl-canvas-container, .maplibregl-canvas { position: absolute; left: 0; top: 0; }
+.maplibregl-canvas:focus { outline: none; }
+.maplibregl-marker { position: absolute; top: 0; left: 0; will-change: transform; }
+button { font: inherit; color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--fern); outline-offset: 2px; }
+
+/* lišta: název · co hledám · mapa */
+.bar { position: absolute; top: 0; left: 0; right: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: var(--shadow);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 8px); padding-bottom: 8px;
+  padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 7px; }
+.top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.top h1 { font-family: var(--font-display); font-weight: 700; font-size: 23px; margin: 0; line-height: 1; }
+.top a.place { font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--muted); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.top .sp { flex: 1; }
+.round { flex: none; height: 32px; min-width: 32px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel);
+  font-family: var(--font-display); font-weight: 700; font-size: 16px; cursor: pointer; }
+.round[aria-pressed="true"] { background: var(--me); border-color: var(--me); color: #fff; }
+.row { display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.row::-webkit-scrollbar { display: none; }
+.row .lbl { flex: none; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); width: 58px; }
+.chip { flex: none; font-family: var(--font-display); font-weight: 600; font-size: 16px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px;
+  background: transparent; cursor: pointer; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel); }
+.row.what .chip[aria-pressed="true"] { background: var(--fern); border-color: var(--fern); }
+.row input[type=range] { flex: none; width: 90px; accent-color: var(--fern); }
+
+/* panel se seznamem a kartou */
+#sheet { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 46%; background: var(--panel); border-top: 1px solid var(--line);
+  border-radius: 16px 16px 0 0; box-shadow: var(--shadow); display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom, 0px); transition: height .25s ease; }
+#sheet.min { height: 104px; }
+#sheet.max { height: 80%; }
+.handle { display: flex; justify-content: center; padding: 8px 0 4px; cursor: pointer; border: 0; background: transparent; width: 100%; }
+.handle span { width: 44px; height: 5px; border-radius: 3px; background: var(--line); }
+.mode { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 2px max(14px, env(safe-area-inset-right, 0px)) 8px max(14px, env(safe-area-inset-left, 0px)); }
+.mode button { font-family: var(--font-display); font-weight: 700; font-size: 17px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; background: transparent; cursor: pointer; }
+.mode button[aria-pressed="true"].ok { background: var(--fern); border-color: var(--fern); color: var(--panel); }
+.mode button[aria-pressed="true"].hist { background: var(--amber); border-color: var(--amber); color: var(--panel); }
+.mode small { font-family: var(--font-body); font-weight: 600; font-size: 12px; opacity: .85; margin-left: 6px; }
+.content { flex: 1; overflow-y: auto; padding-block: 2px 18px; padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 900px) {
+  #sheet, #sheet.min, #sheet.max { left: 0; top: var(--bar-h, 120px); bottom: 0; right: auto; width: 400px; height: auto; border-radius: 0; border-top: 0; border-right: 1px solid var(--line); }
+  .handle { display: none; }
+}
+.note { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
+.sortrow { display: flex; gap: 6px; margin: 0 0 6px; }
+.sortrow .chip { font-size: 14px; padding: 2px 10px; }
+
+/* řádek místa */
+.list { display: flex; flex-direction: column; }
+.item { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 9px 4px; border: 0; border-bottom: 1px solid var(--line);
+  background: none; text-align: left; cursor: pointer; width: 100%; }
+.item:hover { background: var(--fern-soft); }
+.num { font-family: var(--font-display); font-weight: 700; font-size: 24px; text-align: center; color: var(--fern); line-height: 1; }
+.num.h { color: var(--amber); font-size: 18px; }
+.item .t { min-width: 0; }
+.item .t b { display: block; font-weight: 600; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .t span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .r { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.pot { display: inline-flex; gap: 2px; vertical-align: middle; }
+.pot i { width: 6px; height: 12px; border-radius: 2px; background: var(--line); }
+.pot i.on { background: var(--fern); }
+.pot.h i.on { background: var(--amber); }
+
+/* karta místa */
+.card { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+.back { align-self: flex-start; font-family: var(--font-display); font-weight: 600; font-size: 16px; background: none; border: 0; color: var(--fern); cursor: pointer; padding: 0; }
+.card h2 { font-family: var(--font-display); font-weight: 700; font-size: 25px; line-height: 1.05; margin: 0; text-wrap: balance; }
+.potrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; }
+.potrow b { font-family: var(--font-display); font-size: 18px; }
+.badge { display: inline-flex; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 6px; padding: 2px 8px; border: 1px solid; }
+.b-ok { color: var(--fern); } .b-arch { color: var(--amber); } .b-warn { color: var(--sun); } .b-no { color: var(--carmine); }
+.nav { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.btn { display: flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 12px; border: 1px solid var(--line); text-decoration: none;
+  color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 18px; background: var(--panel); text-align: center; padding: 0 8px; }
+.btn.go { grid-column: 1 / -1; background: var(--fern); border-color: var(--fern); color: var(--panel); font-size: 21px; min-height: 52px; }
+.card h3 { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+.card p { margin: 0; }
+.why { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; }
+.why a { font-size: 12px; color: var(--muted); }
+.why q { display: block; font-size: 13px; font-style: italic; color: var(--muted); }
+.box { border-left: 4px solid var(--fern); padding: 8px 12px; border-radius: 0 10px 10px 0; background: color-mix(in srgb, var(--fern) 8%, var(--panel)); font-size: 14px; }
+.box.arch { border-left-color: var(--amber); background: color-mix(in srgb, var(--amber) 9%, var(--panel)); }
+.box.no { border-left-color: var(--carmine); background: color-mix(in srgb, var(--carmine) 9%, var(--panel)); }
+.box.warn { border-left-color: var(--sun); background: color-mix(in srgb, var(--sun) 10%, var(--panel)); }
+.box a { color: inherit; }
+.steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; }
+.kv { font-size: 12px; color: var(--muted); }
+
+/* špendlíky a moje poloha */
+.pinwrap { background: none; border: 0; padding: 0; cursor: pointer; }
+.pin { width: 28px; height: 28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--fern); border: 2px solid var(--panel);
+  box-shadow: var(--shadow); display: grid; place-items: center; }
+.pin span { display: block; transform: rotate(45deg); font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--panel); }
+.me { width: 18px; height: 18px; border-radius: 50%; background: var(--me); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--me), var(--shadow); position: relative; }
+.me::after { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 2px solid var(--me); opacity: .6; animation: ping 2s ease-out infinite; }
+@keyframes ping { from { transform: scale(.6); opacity: .7; } to { transform: scale(1.6); opacity: 0; } }
+.where { position: absolute; z-index: 5; left: max(10px, env(safe-area-inset-left, 0px)); right: max(10px, env(safe-area-inset-right, 0px)); top: calc(var(--bar-h, 120px) + 8px);
+  display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 8px 8px 8px 12px; border-radius: 12px; background: var(--panel);
+  border-left: 5px solid var(--muted); box-shadow: var(--shadow); font-size: 14px; line-height: 1.3; cursor: pointer; max-width: 560px; }
+.where.ok { border-left-color: var(--fern); } .where.no { border-left-color: var(--carmine); } .where.arch { border-left-color: var(--amber); } .where.warn { border-left-color: var(--sun); }
+.where b { display: block; font-family: var(--font-display); font-size: 16px; }
+.where button { border: 0; background: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 6px; }
+@media (min-width: 900px) { .where { left: 412px; } }
+.attrib { position: absolute; z-index: 4; right: max(6px, env(safe-area-inset-right, 0px)); bottom: calc(46% + 4px); font-size: 10px; color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 80%, transparent); padding: 1px 6px; border-radius: 6px; max-width: 70%; text-align: right; }
+@media (min-width: 900px) { .attrib { bottom: 4px; } }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; font-family: var(--font-display); font-size: 20px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { #sheet { transition: none; } .me::after { animation: none; } }
+</style>
+
+</head>
+<body>
+<div id="app">
+  <header class="bar" id="bar">
+    <div class="top">
+      <h1>Kapraď</h1><a class="place" id="place" href="../">Oblast</a><span class="sp"></span>
+      <button class="round" id="locbtn" aria-pressed="false" title="Moje poloha">◎ Já</button>
+      <button class="round" id="helpbtn" title="Pravidla a návod">?</button>
+    </div>
+    <div class="row what" id="what" role="group" aria-label="Co hledám"><span class="lbl">Hledám</span></div>
+    <div class="row" id="maps" role="group" aria-label="Mapa"><span class="lbl">Mapa</span></div>
+  </header>
+  <div id="map"><div class="loading" id="loading">Načítám mapu…</div></div>
+  <div class="attrib" id="attrib"></div>
+  <div class="where" id="where" hidden role="status" aria-live="polite"><div id="wheretxt"></div><button id="whereclose" aria-label="Skrýt">×</button></div>
+  <aside id="sheet" aria-label="Místa">
+    <button class="handle" id="handle" aria-label="Zvětšit nebo zmenšit panel"><span></span></button>
+    <div class="mode" id="mode"></div>
+    <div class="content" id="content"></div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+// ---------------------------------------------------------------- slovníky
+const CLASSES = {
+  gold: { label: "Zlato", value: 10 }, coins: { label: "Mince", value: 1 }, silver: { label: "Stříbro", value: 4 },
+  modern_jewelry: { label: "Šperky", value: 2 }, militaria: { label: "Militaria", value: 1 }, bronze: { label: "Bronz", value: 5 },
+  natural_gold: { label: "Rýžování", value: 0, focusValue: 10 },  // zlato z potoka: do „Vše“ se nepočítá (jako v enginu)
+};
+const WHAT = { modern_jewelry: "dnešní šperky (prstýnky, řetízky)", coins: "mince", silver: "stříbro", gold: "zlato",
+  militaria: "vojenské věci", bronze: "pravěký bronz", natural_gold: "zlato v potoce (rýžování)" };
+const WHAT_OLD = { ...WHAT, coins: "staré mince (krejcary, groše)", modern_jewelry: "drobné šperky" };
+const MAPS = [["dnes", "Dnes"], ["r1950", "1950"], ["r1880", "1880"], ["r1840", "1840"], ["relief", "Reliéf"], ["relief_detail", "Reliéf detail"]];
+const WHY = {
+  swimming_spot: "Koupaliště: lidé se převlékají a ve vodě i v trávě ztrácejí prstýnky a řetízky.",
+  campsite: "Kemp: stany, ohně a posezení, ztrácejí se drobné, klíče i šperky.",
+  sports_field: "Hřiště: při hře a na lavičkách padají mince a řetízky.",
+  park: "Park: lavičky, cesty a akce, ztráty se tu sbírají desítky let.",
+  picnic_site: "Odpočívadlo nebo vyhlídka: lidé tu sedají a vytahují peněženky.",
+  ski_slope: "Sjezdovka: pády na sněhu, v létě leží ztráty v trávě.",
+  recreation_ground: "Rekreační areál: akce, stánky a tancovačky.", festival_ground: "Louka pro slavnosti a poutě: davy lidí a stánky.",
+  village_hist: "Stará ves {n}: staletí života, v okolí i starší mince.",
+  church: "Kostel {n}: poutě a trhy u kostela.", chapel: "Kaple {n}: poutní místo.", wayside_cross: "Kříž nebo boží muka: zastavení poutníků.",
+  castle: "Hrad nebo zámek {n}: panské sídlo, kolem něj ruch a obchod.", fortress_tvrz: "Tvrz {n}: sídlo zemanů.", ruin: "Rozvaliny staveb (zaniklé usedlosti nebo budovy) {n}.",
+  hillfort: "Hradiště {n}: pravěké nebo slovanské opevnění.", rampart: "Val nebo hradba.",
+  village_deserted_medieval: "Zaniklá ves: {n}.", village_deserted_1945: "Ves zaniklá po roce 1945: {n}.", farmstead_vanished: "Zaniklý statek: {n}.",
+  battlefield: "Bojiště: {n}.", skirmish: "Šarvátka: {n}.", ww2_fighting: "Vojenský prostor nebo boje: {n}. Pozor na munici!", military_camp: "Vojenský tábor: {n}.", march_route: "Tudy táhla vojska: {n}.",
+  ford: "Brod: přechod řeky, při brodění se ztrácelo.", ferry: "Přívoz: tady se platilo za převoz.", bridge_hist: "Starý most.",
+  road_historic_map: "Stará cesta {n}.", hollow_way: "Úvoz: zahloubená stará cesta.", route_land_trail: "Zemská stezka: středověká dálková cesta. {n}",
+  inn: "Hospoda: platilo se mincemi. {n}", mill: "Mlýn: jezdilo se sem s obilím a platilo. {n}", post_station: "Poštovní stanice: {n}",
+  market_place: "Trh nebo jarmark: {n}", manor_farm: "Panský dvůr: {n}",
+  silver_mine_hist: "Staré doly: {n}", gold_mine_hist: "Staré zlaté doly (pinky, štoly): {n}", mining_town: "Horní město: {n}",
+  coin_find_hist: "Starý nález mincí: {n}", bronze_find_hist: "Nález bronzů: {n}", museum_record: "Archeologický nález: {n}",
+  treasure_legend: "Pověst o pokladu: {n}", chronicle_event: "Z kroniky: {n}", pilgrimage_site: "Poutní místo: {n}",
+  confluence: "Soutok: v pravěku oblíbené místo.", prominent_rock: "Výrazný vrch: pravěké obětiny.", spring: "Pramen: obětiny do vody.", holy_spring: "Svatý pramen: {n}",
+};
+const HOW = {
+  swimming_spot: "Hledej v trávě a písku u vstupu do vody, u převlékáren a stánku. Nejlíp mimo sezónu.",
+  campsite: "Kolem ohnišť, laviček, recepce a míst pro stany. Mimo sezónu a se souhlasem provozovatele.",
+  sports_field: "U laviček, střídaček a tribuny a za brankami. Trávník po sobě urovnej.",
+  park: "Pod lavičkami, podél cest, kolem velkých stromů a altánu. Park většinou patří obci.",
+  picnic_site: "Kolem stolů, ohniště a vyhlídky, v okruhu asi 20 m.",
+  ski_slope: "V létě v dojezdu, kolem vleků a bufetu.",
+  recreation_ground: "Tam, kde stávají stany, stánky a pódium, a u vstupu.", festival_ground: "Tam, kde stávají stánky a pódium, a u vstupu.",
+};
+const MODERN = new Set(Object.keys(HOW));
+const LEGAL = { landowner_consent: ["Se souhlasem majitele", "b-ok"], caution: ["Se souhlasem majitele, pozor", "b-warn"] };
+
+// ---------------------------------------------------------------- stav a pomocníci
+const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", data: {}, open: null, markers: [] };
+const ME = { pos: null, watch: null, marker: null, fly: false, last: null, hideWhere: false };  // poloha jen v tomto prohlížeči
+const $ = (id) => document.getElementById(id);
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function km(a1, o1, a2, o2) {
+  const R = 6371, r = Math.PI / 180;
+  const a = Math.sin((a2 - a1) * r / 2) ** 2 + Math.cos(a1 * r) * Math.cos(a2 * r) * Math.sin((o2 - o1) * r / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+function dist(lat, lon) { const o = ME.pos || S.data.meta.center; return km(o.lat, o.lon, lat, lon); }
+function distLabel(lat, lon) { const d = dist(lat, lon); return (d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1)} km`) + (ME.pos ? "" : " od středu"); }
+function center(f) { const r = f.geometry.coordinates[0]; let x = 0, y = 0; for (let i = 0; i < r.length - 1; i++) { x += r[i][0]; y += r[i][1]; } return [x / (r.length - 1), y / (r.length - 1)]; }
+function shares(cls) {
+  const e = Object.entries(cls || {}).filter(([c]) => CLASSES[c]);
+  const tot = e.reduce((a, [, v]) => a + v, 0) || 1;
+  return e.map(([c, v]) => [c, v / tot]).sort((a, b) => b[1] - a[1]);
+}
+function whatLine(cls, old) { return shares(cls).filter(([, v]) => v >= 0.1).slice(0, 3).map(([c]) => (old ? WHAT_OLD : WHAT)[c]).join(", "); }
+function potBars(p, hist) {
+  const n = Math.max(1, Math.min(5, Math.ceil(p / 20)));
+  return `<span class="pot${hist ? " h" : ""}" aria-label="potenciál ${n} z 5">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</span>`;
+}
+function era(y) {
+  if (!y || y[0] == null) return "";
+  const a = y[0], b = y[1] ?? y[0];
+  if (b < -800) return "doba bronzová";
+  if (b < -450) return "doba halštatská";
+  if (b <= 0) return "Keltové";
+  if (b < 600) return "doba římská";
+  if (b < 1200) return "raný středověk";
+  return a === b ? `${a}` : `${a}–${b}`;
+}
+function eraOf(rs) { const r = (rs || []).find((x) => x.years); return r ? era(r.years) : ""; }
+function potWord(p) { return p >= 80 ? "vysoký" : p >= 50 ? "dobrý" : p >= 25 ? "střední" : "nízký"; }
+// obecné důvody (bez jména) se sčítají; konkrétní (se jménem, z textů) jdou dopředu
+const GENERIC = new Set(["ruin", "village_hist", "road_historic_map", "confluence", "prominent_rock", "wayside_cross", "spring"]);
+function whyItems(rs, max = 3) {
+  const items = new Map();
+  for (const r of rs || []) {
+    const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo|vrchol .*)$/i.test(r.name) ? r.name : "";
+    const t = (WHY[r.type] || `${r.label}: {n}`).replace(" {n}", n ? " " + n : "").replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
+    const it = items.get(t) || { t, url: r.url, quote: r.quote, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))) };
+    it.n++;
+    items.set(t, it);
+  }
+  return [...items.values()].sort((a, b) => b.specific - a.specific).slice(0, max)
+    .map((it) => ({ ...it, t: it.n > 1 ? `${it.t.replace(/\.$/, "")} (${it.n}×).` : it.t }));
+}
+function modernFirst(rs) { return (rs || []).filter((r) => MODERN.has(r.type)).concat((rs || []).filter((r) => !MODERN.has(r.type))); }
+
+// ---------------------------------------------------------------- data a pořadí podle toho, co hledám
+async function load() {
+  const names = ["meta", "potential", "opps", "zones"];
+  const res = await Promise.all(names.map((n) => fetch(`data/${n}.json`).then((r) => r.json())));
+  names.forEach((n, i) => (S.data[n] = res[i]));
+  S.data.potential.features.forEach((f, i) => { f.id = i; f.properties._c = center(f); });
+  S.data.opps.features.forEach((f, i) => { f.id = i; });
+  rank();
+}
+function rank() {
+  const w = {};
+  for (const [c, d] of Object.entries(CLASSES)) w[c] = S.focus === "all" ? d.value : c === S.focus ? (d.focusValue || d.value) : d.value * 0.05;
+  for (const [fc, key] of [[S.data.opps, "classes"], [S.data.potential, "cls"]]) {
+    for (const f of fc.features) {
+      let u = 0;
+      for (const [c, v] of Object.entries(f.properties[key] || {})) u += (w[c] || 0) * v;
+      f.properties._u = key === "classes" ? u * (f.properties.score || 1) : u;
+    }
+    const sorted = [...fc.features].sort((a, b) => b.properties._u - a.properties._u);
+    sorted.forEach((f, i) => { f.properties._rank = i + 1; f.properties._p = Math.round(100 * (1 - i / Math.max(1, sorted.length - 1))); });
+  }
+}
+
+// ---------------------------------------------------------------- mapa
+let map;
+function corners(b) { const [w, s, e, n] = b; return [[w, n], [e, n], [e, s], [w, s]]; }
+function circle(lon, lat, rkm) {
+  const pts = [];
+  for (let i = 0; i <= 96; i++) { const a = (i / 96) * 2 * Math.PI; pts.push([lon + (rkm / (111.32 * Math.cos(lat * Math.PI / 180))) * Math.cos(a), lat + (rkm / 110.57) * Math.sin(a)]); }
+  return pts;
+}
+function barH() { return $("bar").offsetHeight; }
+function setBarH() { document.documentElement.style.setProperty("--bar-h", barH() + "px"); }
+addEventListener("resize", setBarH);
+function initMap() {
+  const m = S.data.meta;
+  map = new maplibregl.Map({ container: "map", style: { version: 8, sources: {}, layers: [{ id: "bg", type: "background", paint: { "background-color": css("--paper") } }] },
+    center: [m.center.lon, m.center.lat], zoom: 10.6, minZoom: 9, maxZoom: 18, attributionControl: false, dragRotate: false, pitchWithRotate: false, touchPitch: false });
+  map.touchZoomRotate.disableRotation();
+  map.on("load", () => {
+    $("loading").hidden = true;
+    const base = m.images.dnes || Object.values(m.images)[0];
+    map.addSource("img-base", { type: "image", url: "img/" + base.file, coordinates: corners(base.bbox) });
+    map.addLayer({ id: "img-base", type: "raster", source: "img-base", paint: { "raster-fade-duration": 0 } });
+    if (m.tiles?.ortofoto) {  // ostré ortofoto ČÚZK při přiblížení (jen na GitHubu, v Artifactu nejde)
+      map.addSource("orto", { type: "raster", tiles: [m.tiles.ortofoto], tileSize: 256, maxzoom: 19 });
+      map.addLayer({ id: "orto", type: "raster", source: "orto", minzoom: 12.5 });
+    }
+    map.addSource("img-old", { type: "image", url: "img/" + base.file, coordinates: corners(base.bbox) });
+    map.addLayer({ id: "img-old", type: "raster", source: "img-old", paint: { "raster-opacity": 0, "raster-fade-duration": 0 } });
+    map.addSource("zones", { type: "geojson", data: S.data.zones });
+    const lv = (a, b, c) => ["match", ["get", "level"], "forbidden", a, "archaeologist_only", b, c];
+    map.addLayer({ id: "zones-fill", type: "fill", source: "zones", paint: {
+      "fill-color": lv(css("--carmine"), css("--amber"), css("--sun")),
+      "fill-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.32, 0, 0), 12.5, lv(.32, .14, .14)] } });
+    map.addLayer({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": lv(css("--carmine"), css("--amber"), css("--sun")), "line-width": 1.2,
+      "line-opacity": ["interpolate", ["linear"], ["zoom"], 11.5, lv(.8, 0, 0), 12.5, .8] } });
+    map.addSource("potential", { type: "geojson", data: S.data.potential });
+    map.addLayer({ id: "pot-fill", type: "fill", source: "potential", layout: { visibility: "none" }, paint: {
+      "fill-color": css("--gold"), "fill-opacity": ["interpolate", ["linear"], ["get", "_p"], 0, 0, 50, .06, 80, .3, 100, .6] } });
+    map.addLayer({ id: "pot-line", type: "line", source: "potential", layout: { visibility: "none" }, paint: {
+      "line-color": ["case", ["boolean", ["feature-state", "sel"], false], css("--ink"), css("--gold")],
+      "line-width": ["case", ["boolean", ["feature-state", "sel"], false], 3, ["interpolate", ["linear"], ["get", "_p"], 85, 0, 95, 1.2]] } });
+    map.addSource("opps", { type: "geojson", data: S.data.opps });
+    map.addLayer({ id: "opps-fill", type: "fill", source: "opps", paint: { "fill-color": css("--fern"), "fill-opacity": .25 } });
+    map.addLayer({ id: "opps-line", type: "line", source: "opps", paint: { "line-color": css("--fern"), "line-width": 2 } });
+    map.addSource("radius", { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: circle(m.center.lon, m.center.lat, m.radius_km) } } });
+    map.addLayer({ id: "radius", type: "line", source: "radius", paint: { "line-color": css("--ink"), "line-width": 1.5, "line-dasharray": [3, 3], "line-opacity": .5 } });
+    for (const id of ["pot-fill", "zones-fill", "opps-fill"]) {
+      map.on("mouseenter", id, () => (map.getCanvas().style.cursor = "pointer"));
+      map.on("mouseleave", id, () => (map.getCanvas().style.cursor = ""));
+    }
+    map.on("click", (e) => {
+      const layers = ["opps-fill", "pot-fill", "zones-fill"].filter((l) => map.getLayoutProperty(l, "visibility") !== "none");
+      const h = map.queryRenderedFeatures(e.point, { layers })
+        .filter((x) => x.layer.id !== "zones-fill" || map.getZoom() >= 12 || x.properties.level === "forbidden")[0];
+      if (!h) return;
+      if (h.layer.id === "opps-fill") openOpp(h.id);
+      else if (h.layer.id === "pot-fill") openHex(h.id);
+      else openZone(h.properties);
+    });
+    pins();
+    setMap(S.map);
+    setMode(S.mode);
+    fit();
+    S.ready = true;
+    if (ME.pos) applyPos();
+    try { navigator.permissions?.query({ name: "geolocation" }).then((st) => { if (st.state === "granted") startLocate(false); }).catch(() => {}); } catch (e) { /* bez Permissions API */ }
+  });
+}
+function fit() {
+  const m = S.data.meta, r = m.radius_km, dlat = r / 110.57, dlon = r / (111.32 * Math.cos(m.center.lat * Math.PI / 180));
+  const wide = innerWidth >= 900;
+  map.fitBounds([[m.center.lon - dlon, m.center.lat - dlat], [m.center.lon + dlon, m.center.lat + dlat]],
+    { padding: wide ? { top: barH() + 10, bottom: 20, left: 420, right: 20 } : { top: barH() + 10, bottom: innerHeight * 0.46 + 10, left: 10, right: 10 }, duration: 0 });
+}
+function pins() {
+  S.markers.forEach((mk) => mk.remove());
+  S.markers = [];
+  for (const f of S.data.opps.features) {
+    const el = document.createElement("button");  // MapLibre přepisuje transform kořene značky → otáčí se vnitřní prvek
+    el.className = "pinwrap";
+    el.setAttribute("aria-label", `Místo ${f.properties._rank}: ${f.properties.headline || ""}`);
+    el.innerHTML = `<div class="pin"><span>${f.properties._rank}</span></div>`;
+    el.addEventListener("click", (ev) => { ev.stopPropagation(); openOpp(f.id); });
+    S.markers.push(new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([f.properties.lon, f.properties.lat]).addTo(map));
+  }
+}
+function setMap(key) {
+  const im = S.data.meta.images[key];
+  S.map = key;
+  if (map?.getSource("img-old") && im) {
+    if (key !== "dnes" && key !== S.loaded) { map.getSource("img-old").updateImage({ url: "img/" + im.file, coordinates: corners(im.bbox) }); S.loaded = key; }
+    map.setPaintProperty("img-old", "raster-opacity", key === "dnes" ? 0 : +$("op").value / 100);
+  }
+  document.querySelectorAll("#maps .chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === key)));
+  $("op").hidden = key === "dnes";
+  $("attrib").textContent = [S.data.meta.images.dnes?.attribution, key !== "dnes" ? im?.attribution : null, "© OpenStreetMap, Wikidata"].filter(Boolean).join(" · ");
+}
+function setMode(mode) {
+  S.mode = mode;
+  S.open = null;
+  selectHex(null);
+  if (map?.getLayer("pot-fill")) {
+    const hist = mode === "hist";
+    for (const id of ["pot-fill", "pot-line"]) map.setLayoutProperty(id, "visibility", hist ? "visible" : "none");
+    for (const id of ["opps-fill", "opps-line"]) map.setLayoutProperty(id, "visibility", hist ? "none" : "visible");
+    S.markers.forEach((mk) => (mk.getElement().style.display = hist ? "none" : ""));
+  }
+  render();
+}
+
+// ---------------------------------------------------------------- lišta a seznam
+function buildBar() {
+  for (const [k, label] of [["all", "Vše"], ...Object.entries(CLASSES).map(([c, d]) => [c, d.label])]) {
+    const b = document.createElement("button");
+    b.className = "chip"; b.dataset.k = k; b.textContent = label; b.setAttribute("aria-pressed", String(k === S.focus));
+    b.addEventListener("click", () => {
+      S.focus = k;
+      document.querySelectorAll("#what .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
+      rank();
+      if (map?.getSource("potential")) { map.getSource("potential").setData(S.data.potential); pins(); setMode(S.mode); }
+      else render();
+    });
+    $("what").appendChild(b);
+  }
+  for (const [k, label] of MAPS) {
+    if (!S.data.meta.images[k]) continue;
+    const b = document.createElement("button");
+    b.className = "chip"; b.dataset.k = k; b.textContent = label;
+    b.addEventListener("click", () => setMap(k));
+    $("maps").appendChild(b);
+  }
+  const op = document.createElement("input");
+  Object.assign(op, { type: "range", min: 0, max: 100, value: 100, id: "op", hidden: true });
+  op.setAttribute("aria-label", "Prolnutí staré mapy");
+  op.addEventListener("input", () => setMap(S.map));
+  $("maps").appendChild(op);
+  const m = S.data.meta;
+  $("place").textContent = `${m.place || ""} · ${m.radius_km} km ▾`;
+  document.title = `Kapraď ${m.place || ""}`.trim();
+}
+function render() {
+  const nOk = S.data.opps.features.length;
+  $("mode").innerHTML = `<button class="hist" data-m="hist" aria-pressed="${S.mode === "hist"}">Historie<small>co se tu dělo</small></button>
+    <button class="ok" data-m="ok" aria-pressed="${S.mode === "ok"}">Hledat hned<small>${nOk} míst</small></button>`;
+  $("mode").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.m)));
+  const c = $("content");
+  c.innerHTML = S.mode === "ok" ? listOk() : listHist();
+  c.scrollTop = 0;
+  c.querySelectorAll("[data-opp]").forEach((el) => el.addEventListener("click", () => openOpp(+el.dataset.opp)));
+  c.querySelectorAll("[data-hex]").forEach((el) => el.addEventListener("click", () => openHex(+el.dataset.hex)));
+  c.querySelectorAll("[data-sort]").forEach((el) => el.addEventListener("click", () => { S.sort = el.dataset.sort; render(); }));
+}
+function listOk() {
+  const near = ME.pos && S.sort === "near";
+  const feats = [...S.data.opps.features].sort((a, b) => near ? dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon) : a.properties._rank - b.properties._rank);
+  if (!feats.length) return `<p class="note">V okruhu nejsou místa, kde by stačil souhlas majitele.</p>`;
+  const sortRow = ME.pos ? `<div class="sortrow"><button class="chip" data-sort="best" aria-pressed="${!near}">Nejlepší</button><button class="chip" data-sort="near" aria-pressed="${!!near}">Nejblíž mně</button></div>` : "";
+  return `${sortRow}<div class="list">${feats.map((f) => {
+    const p = f.properties, why = whyItems(modernFirst(p.reasons), 1)[0];
+    return `<button class="item" data-opp="${f.id}"><div class="num">${p._rank}</div>
+      <div class="t"><b>${esc(p.headline || "Místo")}</b><span>${esc(why?.t || whatLine(p.classes))}</span></div>
+      <div class="r">${potBars(p._p)}<br>${distLabel(p.lat, p.lon)}</div></button>`;
+  }).join("")}</div>`;
+}
+function listHist() {
+  const feats = [...S.data.potential.features].sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
+  return `<p class="note">Kde v krajině leží historie: staré mince, stříbro, bronz. Ukazujeme ji po šestiúhelnících asi 0,7 km². <b>Přesná místa a navigaci odemkne dohoda s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
+  <div class="list">${feats.map((f) => {
+    const p = f.properties, [lon, lat] = p._c, why = whyItems(p.reasons, 1)[0];
+    return `<button class="item" data-hex="${f.id}"><div class="num h">${p._rank}</div>
+      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc([why?.t.replace(/\.$/, ""), eraOf(p.reasons), whatLine(p.cls, true)].filter(Boolean).join(" · "))}</span></div>
+      <div class="r">${potBars(p._p, true)}<br>${distLabel(lat, lon)}</div></button>`;
+  }).join("")}</div>`;
+}
+
+// ---------------------------------------------------------------- karta místa
+function showCard(html) {
+  S.open = true;
+  const c = $("content");
+  c.innerHTML = `<div class="card"><button class="back" id="back">← Zpět na seznam</button>${html}</div>`;
+  c.scrollTop = 0;
+  $("back").addEventListener("click", () => { S.open = null; selectHex(null); render(); });
+  if (innerWidth < 900) $("sheet").classList.remove("min");
+}
+function whyHtml(items) {
+  return `<ul class="why">${items.map((w) => `<li>${esc(w.t)}${w.url ? ` <a href="${esc(w.url)}" target="_blank" rel="noopener">zdroj</a>` : ""}${w.quote ? `<q>${esc(w.quote)}</q>` : ""}</li>`).join("")}</ul>`;
+}
+function openOpp(id) {
+  const f = S.data.opps.features[id];
+  if (!f) return;
+  const p = f.properties, L = p.links || {}, main = (p.reasons || []).find((r) => MODERN.has(r.type));
+  map.easeTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 15.5), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
+  const lg = LEGAL[p.legal] || LEGAL.landowner_consent;
+  showCard(`<h2>${p._rank}. ${esc(p.headline || "Místo")}</h2>
+    <div class="potrow">Potenciál ${potBars(p._p)} <b>${potWord(p._p)}</b> · ${distLabel(p.lat, p.lon)} <span class="badge ${lg[1]}">${lg[0]}</span></div>
+    <div class="nav"><a class="btn go" href="${esc(L.mapy)}" target="_blank" rel="noopener">Navigovat</a>
+      <a class="btn" href="${esc(L.google)}" target="_blank" rel="noopener">Google</a><a class="btn" href="${esc(L.waze)}" target="_blank" rel="noopener">Waze</a>
+      <a class="btn" href="${esc(L.katastr)}" target="_blank" rel="noopener">Majitel</a></div>
+    <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(modernFirst(p.reasons)))}</section>
+    <section><h3>Co tu najdeš</h3><p>${esc(whatLine(p.classes))}</p></section>
+    <section><h3>Jak na to</h3><ol class="steps"><li><b>Domluv se s majitelem</b> (tlačítko Majitel otevře katastr).</li>
+      <li>${esc(HOW[main?.type] || "Projdi okolí špendlíku v okruhu asi 50 m.")}</li>
+      <li>Ztracenou věc vrať nebo odevzdej na obci. Něco starého nech v zemi a do druhého dne ohlas muzeu.</li></ol></section>
+    ${(p.zones || []).length ? `<div class="box warn"><b>Pozor, zóna v místě:</b><br>${p.zones.map(esc).join("<br>")}</div>` : ""}
+    <p class="kv">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · skóre ${p.score}/100</p>`);
+}
+function openHex(id) {
+  const f = S.data.potential.features[id];
+  if (!f) return;
+  const p = f.properties;
+  selectHex(id);
+  map.easeTo({ center: p._c, zoom: Math.max(map.getZoom(), 13), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
+  showCard(`<h2>${p._rank}. Historické místo${p.obec ? ` u obce ${esc(p.obec)}` : ""}</h2>
+    <div class="potrow">Potenciál ${potBars(p._p, true)} <b>${potWord(p._p)}</b> · ${distLabel(p._c[1], p._c[0])} <span class="badge b-arch">Jen s archeology</span></div>
+    <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(p.reasons))}</section>
+    <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}${eraOf(p.reasons) ? ` · ${esc(eraOf(p.reasons))}` : ""}</p></section>
+    <section><h3>Jak to legálně prohledat</h3><ol class="steps">
+      <li><b>Zapiš se do AMČR-PAS</b> a absolvuj školení. <a href="https://amcr-info.aiscr.cz/amcr-pas/" target="_blank" rel="noopener">amcr-info.aiscr.cz</a></li>
+      <li><b>Domluv se s muzeem</b> nebo archeologickým ústavem, který v okolí pracuje, že tu chceš hledat.</li>
+      <li><b>Souhlas majitele pozemku.</b></li>
+      <li>Nálezy zapiš do AMČR-PAS (poloha, hloubka, fotky) a předej.</li></ol></section>
+    <div class="box arch">Po dohodě tu Kapraď ukáže přesná místa, navigaci a záznam nálezů. Do té doby proto chybí navigace.</div>
+    <div class="box no"><b>Bez dohody tu nekopej.</b> Hledat staré předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji.</div>`);
+}
+function selectHex(id) {
+  if (!map?.getSource("potential")) return;
+  if (S.selHex != null) map.setFeatureState({ source: "potential", id: S.selHex }, { sel: false });
+  S.selHex = id;
+  if (id != null) map.setFeatureState({ source: "potential", id }, { sel: true });
+}
+function openZone(p) {
+  const cls = p.level === "forbidden" ? ["no", "Zákaz"] : p.level === "archaeologist_only" ? ["arch", "Jen s archeology"] : ["warn", "Pozor"];
+  showCard(`<h2>${esc(p.name || "Zóna")}</h2><div class="box ${cls[0]}"><b>${cls[1]}.</b> ${esc(p.basis || "")}</div>`);
+}
+function openHelp() {
+  const m = S.data.meta;
+  showCard(`<h2>Jak na to</h2>
+    <ol class="steps"><li><b>Hledám</b> nahoře seřadí místa podle toho, co chceš najít (zlato, mince, stříbro, bronz…).</li>
+      <li><b>Historie</b> ukáže, kde v krajině leží staré nálezy a proč. Prohledat se dají legálně přes AMČR-PAS, pak aplikace odemkne přesná místa a navigaci.</li>
+      <li><b>Dnešní ztráty</b> jsou zelená čísla: tam smíš hledat hned, se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
+      <li><b>Mapa</b> přepíná staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem je prolneš s dneškem.</li>
+      <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Poloha zůstává jen v tvém telefonu, nikam se neposílá.</li></ol>
+    <div class="box no"><b>Červená = nikdy</b> (hřbitov, památka, rezervace). <b>Historie</b> jen s archeology. <b>Munice:</b> nesahej, volej 158.</div>
+    ${m.guide ? `<a class="btn" href="${esc(m.guide)}" target="_blank" rel="noopener">Návod na 1 stránku (PDF)</a>` : ""}
+    <p class="kv">Pilot ${esc(m.date || "")}. ${(m.caveats || []).map(esc).join(" ")}</p>`);
+}
+
+// ---------------------------------------------------------------- moje poloha (jen v prohlížeči, nikam se neposílá)
+function inRing(x, y, ring) {
+  let ins = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) ins = !ins;
+  }
+  return ins;
+}
+function inGeom(lon, lat, g) {
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+  return polys.some((rings) => inRing(lon, lat, rings[0]) && !rings.slice(1).some((h) => inRing(lon, lat, h)));
+}
+function bboxOf(g) {
+  let b = [180, 90, -180, -90];
+  const walk = (c) => (typeof c[0] === "number" ? (b = [Math.min(b[0], c[0]), Math.min(b[1], c[1]), Math.max(b[2], c[0]), Math.max(b[3], c[1])]) : c.forEach(walk));
+  walk(g.coordinates);
+  return b;
+}
+function hits(fc, lon, lat) {
+  return fc.features.filter((f) => {
+    const b = f._bb || (f._bb = bboxOf(f.geometry));
+    return lon >= b[0] && lon <= b[2] && lat >= b[1] && lat <= b[3] && inGeom(lon, lat, f.geometry);
+  });
+}
+function whereText() {
+  const { lat, lon } = ME.pos, m = S.data.meta;
+  const fromC = km(m.center.lat, m.center.lon, lat, lon);
+  if (fromC > m.radius_km + 2) return ["", `<b>Jsi mimo oblast ${esc(m.place || "")}</b>${fromC.toFixed(0)} km od středu. Jinou oblast vybereš nahoře u názvu.`];
+  const z = hits(S.data.zones, lon, lat);
+  const zf = z.find((f) => f.properties.level === "forbidden");
+  if (zf) return ["no", `<b>Stojíš v zóně ZÁKAZ</b>${esc(zf.properties.name || "")}: tady nehledej.`];
+  const o = hits(S.data.opps, lon, lat)[0];
+  if (o) return ["ok", `<b>Jsi na místě č. ${o.properties._rank}: ${esc(o.properties.headline || "")}</b>Se souhlasem majitele tu můžeš hledat.`, () => openOpp(o.id)];
+  const za = z.find((f) => f.properties.level === "archaeologist_only"), hx = hits(S.data.potential, lon, lat)[0];
+  const best = [...S.data.opps.features].sort((a, b) => dist(a.properties.lat, a.properties.lon) - dist(b.properties.lat, b.properties.lon))[0];
+  const tip = best ? ` Nejbližší místo k hledání: č. ${best.properties._rank} ${esc(best.properties.headline || "")}, ${distLabel(best.properties.lat, best.properties.lon)}.` : "";
+  const goBest = best ? () => openOpp(best.id) : null;
+  if (za || hx) return ["arch", `<b>Historické území</b>Bez archeologů tu nekopej.${tip}`, goBest];
+  const zc = z.find((f) => f.properties.level === "caution");
+  if (zc) return ["warn", `<b>Pozor: ${esc(zc.properties.name || "")}</b>${esc(zc.properties.basis || "")}.${tip}`, goBest];
+  return ["", `<b>Tady nic vyznačeného</b>Jen se souhlasem majitele a jen dnešní ztráty.${tip}`, goBest];
+}
+function updateWhere() {
+  if (!ME.pos || ME.hideWhere) return;
+  const [cls, html, act] = whereText(), w = $("where");
+  w.className = "where " + cls;
+  $("wheretxt").innerHTML = html;
+  w.onclick = (e) => { if (e.target.id !== "whereclose" && act) act(); };
+  w.hidden = false;
+}
+function drawMe() {
+  const { lat, lon, acc } = ME.pos;
+  if (!ME.marker) {
+    const el = document.createElement("div");
+    el.className = "me"; el.setAttribute("aria-label", "Moje poloha");
+    ME.marker = new maplibregl.Marker({ element: el }).setLngLat([lon, lat]).addTo(map);
+  } else ME.marker.setLngLat([lon, lat]);
+  const poly = { type: "Feature", geometry: { type: "Polygon", coordinates: [circle(lon, lat, Math.max(acc, 5) / 1000)] } };
+  if (map.getSource("me-acc")) map.getSource("me-acc").setData(poly);
+  else {
+    map.addSource("me-acc", { type: "geojson", data: poly });
+    map.addLayer({ id: "me-acc", type: "fill", source: "me-acc", paint: { "fill-color": css("--me"), "fill-opacity": 0.12 } });
+  }
+}
+function onPos(p) {
+  ME.pos = { lat: p.coords.latitude, lon: p.coords.longitude, acc: p.coords.accuracy || 50 };
+  if (S.ready) applyPos();  // jinak až po načtení mapy
+}
+function applyPos() {
+  drawMe();
+  const m = S.data.meta;
+  if (ME.fly && km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2) map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
+  if (ME.fly && S.sort === "best") S.sort = "near";
+  ME.fly = false;
+  updateWhere();
+  const moved = !ME.last || km(ME.last.lat, ME.last.lon, ME.pos.lat, ME.pos.lon) > 0.05;  // seznam jen po pohybu o víc než 50 m
+  if (moved) { ME.last = { ...ME.pos }; if (!S.open) { const c = $("content"), y = c.scrollTop; render(); c.scrollTop = y; } }
+}
+function onErr(e) {
+  stopLocate();
+  const w = $("where");
+  w.className = "where warn";
+  $("wheretxt").innerHTML = e.code === 1 ? "<b>Poloha je zakázaná</b>Povol ji v nastavení prohlížeče. V náhledu na claude.ai poloha nejde, otevři odkaz z GitHubu."
+    : "<b>Polohu se nepodařilo zjistit</b>Zkus to venku nebo za chvíli znovu.";
+  w.onclick = null;
+  w.hidden = false;
+}
+function startLocate(fly) {
+  if (!("geolocation" in navigator)) return onErr({ code: 2 });
+  ME.fly = fly; ME.hideWhere = false;
+  $("locbtn").setAttribute("aria-pressed", "true");
+  if (ME.pos && fly && S.ready) {
+    ME.fly = false;
+    const m = S.data.meta;
+    if (km(m.center.lat, m.center.lon, ME.pos.lat, ME.pos.lon) <= m.radius_km + 2) map.easeTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 600 });
+    S.sort = "near";
+    updateWhere();
+    if (!S.open) render();
+  }
+  if (ME.watch == null) ME.watch = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 });
+}
+function stopLocate() {
+  if (ME.watch != null) navigator.geolocation.clearWatch(ME.watch);
+  ME.watch = null;
+  $("locbtn").setAttribute("aria-pressed", "false");
+}
+
+// ---------------------------------------------------------------- start
+$("locbtn").addEventListener("click", () => startLocate(true));
+$("helpbtn").addEventListener("click", openHelp);
+$("whereclose").addEventListener("click", (e) => { e.stopPropagation(); ME.hideWhere = true; $("where").hidden = true; });
+$("handle").addEventListener("click", () => {
+  const s = $("sheet");
+  if (s.classList.contains("min")) s.classList.remove("min");
+  else if (s.classList.contains("max")) { s.classList.remove("max"); s.classList.add("min"); }
+  else s.classList.add("max");
+});
+load().then(() => { buildBar(); setBarH(); render(); initMap(); }).catch((e) => {
+  $("loading").textContent = "Data se nepodařilo načíst. Zkus stránku obnovit.";
+  console.error(e);
+});
+</script>
+</body>
+</html>

@@ -195,7 +195,7 @@ const WHY = {
   recreation_ground: "Rekreační areál: akce, stánky a tancovačky.", festival_ground: "Louka pro slavnosti a poutě: davy lidí a stánky.",
   village_hist: "Stará ves {n}: staletí života, v okolí i starší mince.",
   church: "Kostel {n}: poutě a trhy u kostela.", chapel: "Kaple {n}: poutní místo.", wayside_cross: "Kříž nebo boží muka: zastavení poutníků.",
-  castle: "Hrad nebo zámek {n}: panské sídlo, kolem něj ruch a obchod.", fortress_tvrz: "Tvrz {n}: sídlo zemanů.", ruin: "Zřícenina {n}.",
+  castle: "Hrad nebo zámek {n}: panské sídlo, kolem něj ruch a obchod.", fortress_tvrz: "Tvrz {n}: sídlo zemanů.", ruin: "Rozvaliny staveb (zaniklé usedlosti nebo budovy) {n}.",
   hillfort: "Hradiště {n}: pravěké nebo slovanské opevnění.", rampart: "Val nebo hradba.",
   village_deserted_medieval: "Zaniklá ves: {n}.", village_deserted_1945: "Ves zaniklá po roce 1945: {n}.", farmstead_vanished: "Zaniklý statek: {n}.",
   battlefield: "Bojiště: {n}.", skirmish: "Šarvátka: {n}.", ww2_fighting: "Vojenský prostor nebo boje: {n}. Pozor na munici!", military_camp: "Vojenský tábor: {n}.", march_route: "Tudy táhla vojska: {n}.",
@@ -221,7 +221,7 @@ const MODERN = new Set(Object.keys(HOW));
 const LEGAL = { landowner_consent: ["Se souhlasem majitele", "b-ok"], caution: ["Se souhlasem majitele, pozor", "b-warn"] };
 
 // ---------------------------------------------------------------- stav a pomocníci
-const S = { focus: "all", map: "dnes", mode: "ok", sort: "best", data: {}, open: null, markers: [] };
+const S = { focus: "all", map: "dnes", mode: "hist", sort: "best", data: {}, open: null, markers: [] };
 const ME = { pos: null, watch: null, marker: null, fly: false, last: null, hideWhere: false };  // poloha jen v tomto prohlížeči
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -244,18 +244,31 @@ function potBars(p, hist) {
   const n = Math.max(1, Math.min(5, Math.ceil(p / 20)));
   return `<span class="pot${hist ? " h" : ""}" aria-label="potenciál ${n} z 5">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</span>`;
 }
+function era(y) {
+  if (!y || y[0] == null) return "";
+  const a = y[0], b = y[1] ?? y[0];
+  if (b < -800) return "doba bronzová";
+  if (b < -450) return "doba halštatská";
+  if (b <= 0) return "Keltové";
+  if (b < 600) return "doba římská";
+  if (b < 1200) return "raný středověk";
+  return a === b ? `${a}` : `${a}–${b}`;
+}
+function eraOf(rs) { const r = (rs || []).find((x) => x.years); return r ? era(r.years) : ""; }
 function potWord(p) { return p >= 80 ? "vysoký" : p >= 50 ? "dobrý" : p >= 25 ? "střední" : "nízký"; }
+// obecné důvody (bez jména) se sčítají; konkrétní (se jménem, z textů) jdou dopředu
+const GENERIC = new Set(["ruin", "village_hist", "road_historic_map", "confluence", "prominent_rock", "wayside_cross", "spring"]);
 function whyItems(rs, max = 3) {
-  const out = [], seen = new Set();
+  const items = new Map();
   for (const r of rs || []) {
-    const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo)$/i.test(r.name) ? r.name : "";
+    const n = r.name && !/^(Rozvalina, zřícenina|Zámek|Hrad|soutok|důlní dílo|vrchol .*)$/i.test(r.name) ? r.name : "";
     const t = (WHY[r.type] || `${r.label}: {n}`).replace(" {n}", n ? " " + n : "").replace("{n}", n).replace(/\s*:\s*\.?$/, ".").replace(/\s+\./, ".").trim();
-    if (seen.has(t)) continue;
-    seen.add(t);
-    out.push({ t, url: r.url, quote: r.quote });
-    if (out.length >= max) break;
+    const it = items.get(t) || { t, url: r.url, quote: r.quote, n: 0, specific: !!(r.quote || (n && !GENERIC.has(r.type))) };
+    it.n++;
+    items.set(t, it);
   }
-  return out;
+  return [...items.values()].sort((a, b) => b.specific - a.specific).slice(0, max)
+    .map((it) => ({ ...it, t: it.n > 1 ? `${it.t.replace(/\.$/, "")} (${it.n}×).` : it.t }));
 }
 function modernFirst(rs) { return (rs || []).filter((r) => MODERN.has(r.type)).concat((rs || []).filter((r) => !MODERN.has(r.type))); }
 
@@ -423,8 +436,8 @@ function buildBar() {
 }
 function render() {
   const nOk = S.data.opps.features.length;
-  $("mode").innerHTML = `<button class="ok" data-m="ok" aria-pressed="${S.mode === "ok"}">Kde hledat<small>${nOk} míst</small></button>
-    <button class="hist" data-m="hist" aria-pressed="${S.mode === "hist"}">Historie<small>jen s archeology</small></button>`;
+  $("mode").innerHTML = `<button class="hist" data-m="hist" aria-pressed="${S.mode === "hist"}">Historie<small>co se tu dělo</small></button>
+    <button class="ok" data-m="ok" aria-pressed="${S.mode === "ok"}">Hledat hned<small>${nOk} míst</small></button>`;
   $("mode").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.m)));
   const c = $("content");
   c.innerHTML = S.mode === "ok" ? listOk() : listHist();
@@ -447,11 +460,11 @@ function listOk() {
 }
 function listHist() {
   const feats = [...S.data.potential.features].sort((a, b) => a.properties._rank - b.properties._rank).slice(0, 40);
-  return `<p class="note"><b>Tady bez archeologů nekopej.</b> Šestiúhelníky (asi 0,7 km²) ukazují, kde je v zemi nejvíc historie. Legálně jen ve spolupráci s archeology (AMČR-PAS).</p>
+  return `<p class="note">Kde v krajině leží historie: staré mince, stříbro, bronz. Ukazujeme ji po šestiúhelnících asi 0,7 km². <b>Přesná místa a navigaci odemkne dohoda s archeology (AMČR-PAS)</b>, bez ní tu nekopej.</p>
   <div class="list">${feats.map((f) => {
     const p = f.properties, [lon, lat] = p._c, why = whyItems(p.reasons, 1)[0];
     return `<button class="item" data-hex="${f.id}"><div class="num h">${p._rank}</div>
-      <div class="t"><b>${esc(why?.t || "Historie krajiny")}</b><span>${esc(whatLine(p.cls, true))}</span></div>
+      <div class="t"><b>${esc(p.obec ? `u obce ${p.obec}` : "Historie krajiny")}</b><span>${esc([why?.t.replace(/\.$/, ""), eraOf(p.reasons), whatLine(p.cls, true)].filter(Boolean).join(" · "))}</span></div>
       <div class="r">${potBars(p._p, true)}<br>${distLabel(lat, lon)}</div></button>`;
   }).join("")}</div>`;
 }
@@ -493,12 +506,17 @@ function openHex(id) {
   const p = f.properties;
   selectHex(id);
   map.easeTo({ center: p._c, zoom: Math.max(map.getZoom(), 13), duration: 500, padding: innerWidth >= 900 ? { left: 400 } : { bottom: innerHeight * 0.46 } });
-  showCard(`<h2>Historické místo č. ${p._rank}</h2>
+  showCard(`<h2>${p._rank}. Historické místo${p.obec ? ` u obce ${esc(p.obec)}` : ""}</h2>
     <div class="potrow">Potenciál ${potBars(p._p, true)} <b>${potWord(p._p)}</b> · ${distLabel(p._c[1], p._c[0])} <span class="badge b-arch">Jen s archeology</span></div>
-    <div class="box no"><b>Bez archeologů tu nekopej.</b> Hledat historické předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji. Proto tu není navigace.</div>
     <section><h3>Proč zrovna tady</h3>${whyHtml(whyItems(p.reasons))}</section>
-    <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}</p></section>
-    <div class="box arch">Legálně jen ve spolupráci s archeology: školení AMČR-PAS a dohoda s muzeem. Pak tu Kapraď ukáže přesná místa. <a href="https://amcr-info.aiscr.cz/amcr-pas/" target="_blank" rel="noopener">Jak na to</a></div>`);
+    <section><h3>Co se tu skrývá</h3><p>${esc(whatLine(p.cls, true))}${eraOf(p.reasons) ? ` · ${esc(eraOf(p.reasons))}` : ""}</p></section>
+    <section><h3>Jak to legálně prohledat</h3><ol class="steps">
+      <li><b>Zapiš se do AMČR-PAS</b> a absolvuj školení. <a href="https://amcr-info.aiscr.cz/amcr-pas/" target="_blank" rel="noopener">amcr-info.aiscr.cz</a></li>
+      <li><b>Domluv se s muzeem</b> nebo archeologickým ústavem, který v okolí pracuje, že tu chceš hledat.</li>
+      <li><b>Souhlas majitele pozemku.</b></li>
+      <li>Nálezy zapiš do AMČR-PAS (poloha, hloubka, fotky) a předej.</li></ol></section>
+    <div class="box arch">Po dohodě tu Kapraď ukáže přesná místa, navigaci a záznam nálezů. Do té doby proto chybí navigace.</div>
+    <div class="box no"><b>Bez dohody tu nekopej.</b> Hledat staré předměty bez oprávnění je přestupek (pokuta až 2 mil. Kč) a nálezy patří kraji.</div>`);
 }
 function selectHex(id) {
   if (!map?.getSource("potential")) return;
@@ -513,9 +531,9 @@ function openZone(p) {
 function openHelp() {
   const m = S.data.meta;
   showCard(`<h2>Jak na to</h2>
-    <ol class="steps"><li><b>Hledám</b> nahoře seřadí místa podle toho, co chceš najít.</li>
-      <li><b>Kde hledat</b> jsou zelená čísla. Tam smíš hledat se souhlasem majitele (koupaliště, kempy, hřiště, parky).</li>
-      <li>Ťukni na místo: uvidíš <b>proč zrovna tady</b>, co tam najdeš a velké tlačítko <b>Navigovat</b>.</li>
+    <ol class="steps"><li><b>Hledám</b> nahoře seřadí místa podle toho, co chceš najít (zlato, mince, stříbro, bronz…).</li>
+      <li><b>Historie</b> ukáže, kde v krajině leží staré nálezy a proč. Prohledat se dají legálně přes AMČR-PAS, pak aplikace odemkne přesná místa a navigaci.</li>
+      <li><b>Dnešní ztráty</b> jsou zelená čísla: tam smíš hledat hned, se souhlasem majitele (koupaliště, kempy, hřiště, parky). Karta má velké tlačítko <b>Navigovat</b>.</li>
       <li><b>Mapa</b> přepíná staré mapy (1840, 1880, 1950) a reliéf. Posuvníkem je prolneš s dneškem.</li>
       <li><b>◎ Já</b> ukáže, kde stojíš, a řekne, jestli tu smíš hledat. Poloha zůstává jen v tvém telefonu, nikam se neposílá.</li></ol>
     <div class="box no"><b>Červená = nikdy</b> (hřbitov, památka, rezervace). <b>Historie</b> jen s archeology. <b>Munice:</b> nesahej, volej 158.</div>

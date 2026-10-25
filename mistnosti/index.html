@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="cs"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07090c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Místnosti">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="icon" href="../icon.png">
+<title>FD Místnosti</title>
+<style>
+:root{
+  --bg:#07090c;--bg2:#0d1116;--card:#11161c;--line:#1c2530;--fg:#eef3f7;--dim:#8293a3;--mute:#56636f;
+  --acc:#35e0d0;--acc2:#7c6cff;--wait:#ffb547;--ok:#6ee787;--err:#ff6b7a;
+  --r:16px;--safe-b:env(safe-area-inset-bottom);--safe-t:env(safe-area-inset-top);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 Inter,system-ui,-apple-system,sans-serif}
+body{min-height:100dvh;background:radial-gradient(900px 500px at 85% -10%,#35e0d014,transparent 60%),var(--bg);
+  -webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+input{font:inherit;color:var(--fg);-webkit-user-select:text;user-select:text}
+.wrap{max-width:560px;margin:0 auto;padding:calc(14px + var(--safe-t)) 16px calc(160px + var(--safe-b))}
+[hidden]{display:none!important}
+header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-weight:700;color:#041014;flex:none}
+header h1{font-size:18px;margin:0;letter-spacing:.02em}
+header .sub{font-size:12px;color:var(--dim)}
+header .sp{flex:1}
+h2{font-size:13px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin:22px 0 8px}
+label.f{display:block;font-size:13px;color:var(--dim);margin:14px 0 6px}
+.in{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:17px}
+.in:focus{outline:2px solid var(--acc);border-color:transparent}
+.cams{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.cam{padding:16px 8px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);font-weight:700;font-size:18px}
+.cam small{display:block;font-weight:400;font-size:11px;color:var(--dim);margin-top:2px}
+.cam.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset;color:var(--acc)}
+.btn{display:block;width:100%;padding:15px 16px;border-radius:14px;background:linear-gradient(135deg,var(--acc),#2bc4b6);color:#041014;font-weight:700;font-size:17px;margin-top:18px}
+.btn:disabled{opacity:.4}
+.btn.ghost{background:var(--bg2);border:1px solid var(--line);color:var(--fg);font-weight:600}
+.btn.sm{display:inline-block;width:auto;padding:9px 14px;font-size:14px;margin:0;border-radius:11px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 12px 14px}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{font-size:12px;color:var(--dim)}
+.badge{font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.badge.w{color:var(--wait);border-color:#ffb54766}
+.badge.ok{color:var(--ok);border-color:#6ee78766}
+.muted{color:var(--dim);font-size:13px}
+.foot{margin-top:28px;font-size:13px;color:var(--dim);line-height:1.6}
+.foot a{color:var(--acc)}
+
+/* natáčení */
+.shoothead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.shoothead .t{flex:1;min-width:0}
+.shoothead .t b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.camchip{font-weight:700;color:#041014;background:var(--acc);border-radius:9px;padding:3px 9px;font-size:14px}
+.clock{font:600 30px/1 ui-monospace,"B612 Mono",Menlo,monospace;letter-spacing:.02em;text-align:right}
+.clock small{display:block;font:500 11px/1.3 Inter,system-ui,sans-serif;color:var(--dim);letter-spacing:0;margin-top:3px}
+.hint{font-size:13px;color:var(--dim);margin:6px 0 10px}
+.last{display:flex;width:100%;text-align:left;gap:8px;align-items:center;min-height:38px;margin-bottom:10px;padding:8px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);font-size:14px}
+.last b{color:var(--acc)}
+.last .sp{flex:1}
+.sec{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin:12px 2px 6px}
+.rooms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.room{min-height:64px;padding:8px 6px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:15px;line-height:1.2;
+  transition:transform .08s ease, background .2s ease}
+.room:active{transform:scale(.96)}
+.room.out{background:#0f1a17}
+.room.mine{background:#16132a}
+.room.add{border-style:dashed;color:var(--dim);font-weight:500}
+.room.lastone{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.room.flash{background:var(--acc);color:#041014}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:8px 16px calc(10px + var(--safe-b));background:var(--bg);border-top:1px solid var(--line)}
+.bar .stav{max-width:560px;margin:0 auto 8px;display:flex;align-items:center;gap:10px;min-height:36px;font-size:15px}
+.bar .stav span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--dim)}
+.bar .stav span b{color:var(--fg)}
+.bar .stav button{padding:7px 14px;border-radius:10px;border:1px solid var(--line);color:var(--acc);font-weight:700;font-size:15px}
+.bar .in2{max-width:560px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
+.bar button{padding:15px 10px;border-radius:14px;font-weight:700;font-size:16px}
+.bad{background:#2a1015;border:1px solid #ff6b7a66;color:var(--err)}
+.done{background:linear-gradient(135deg,var(--acc),#2bc4b6);color:#041014}
+
+/* panel se záznamy */
+.sheet{position:fixed;inset:0;background:#000a;z-index:30;display:flex;align-items:flex-end}
+.sheet .box{width:100%;max-width:560px;margin:0 auto;max-height:82dvh;overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:16px 16px calc(20px + var(--safe-b))}
+.sheet h3{margin:0 0 10px;font-size:17px;display:flex;align-items:center}
+.sheet h3 span{flex:1}
+.zap{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.zap time{font:600 15px ui-monospace,Menlo,monospace;color:var(--dim);width:74px;flex:none}
+.zap b{flex:1;font-weight:600}
+.zap b.bad2{color:var(--err)}
+.zap button{color:var(--mute);font-size:22px;line-height:1;padding:4px 8px}
+.p{font-size:14px;line-height:1.6;color:var(--fg)}
+.p li{margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===== START ===== -->
+<section id="start">
+  <header>
+    <div class="logo">FD</div>
+    <div><h1>FD Místnosti</h1><div class="sub">Po každém záběru klepni, kde jsi točil</div></div>
+    <div class="sp"></div>
+    <button class="btn ghost sm" id="navodBtn">Návod</button>
+  </header>
+
+  <label class="f" for="zakazka">Zakázka</label>
+  <input class="in" id="zakazka" list="zakazkyList" placeholder="např. Klamovka 2" autocomplete="off" enterkeyhint="done">
+  <datalist id="zakazkyList"></datalist>
+
+  <label class="f">Kamera</label>
+  <div class="cams" id="cams">
+    <button class="cam" data-cam="S1II">S1II<small>Panasonic</small></button>
+    <button class="cam" data-cam="S5">S5<small>Panasonic</small></button>
+    <button class="cam" data-cam="*">Jiná<small id="jinaLbl">dron, telefon…</small></button>
+  </div>
+
+  <button class="btn" id="zacit" disabled>Začít natáčet</button>
+
+  <div id="sessWrap" hidden>
+    <h2>Natáčení v telefonu</h2>
+    <div class="list" id="sessList"></div>
+  </div>
+
+  <div class="foot">
+    Záznamy zůstávají v telefonu, dokud je neodešleš. Na Macu je načte plugin pro DaVinci a přiřadí místnosti klipům podle času natočení.<br>
+    <a href="davinci/FD_Mistnosti.py" download>Plugin pro DaVinci (Mac)</a> · <a href="navod.html">Návod k pluginu</a>
+  </div>
+</section>
+
+<!-- ===== NATÁČENÍ ===== -->
+<section id="shoot" hidden>
+  <div class="shoothead">
+    <button class="btn ghost sm" id="zpetBtn" aria-label="Zpět">‹</button>
+    <div class="t"><b id="sZak"></b><span class="camchip" id="sCam"></span></div>
+    <div class="clock" id="clock">--:--:--<small>čas v telefonu</small></div>
+  </div>
+  <div class="hint">Po každém záběru klepni místnost. Víc záběrů v jedné místnosti = stačí klepnout po posledním.</div>
+  <button class="last" id="lastBar">
+    <span id="lastTxt">Zatím nic zapsáno</span><span class="sp"></span><span class="badge" id="zapCount">0</span>
+  </button>
+  <div class="sec">Uvnitř</div>
+  <div class="rooms" id="roomsIn"></div>
+  <div class="sec">Venku</div>
+  <div class="rooms" id="roomsOut"></div>
+  <div class="sec">Vlastní</div>
+  <div class="rooms" id="roomsMine"></div>
+</section>
+</div>
+
+<div class="bar" id="shootBar" hidden>
+  <div class="stav"><span id="stavTxt">Zatím nic zapsáno</span><button id="stavUndo" hidden>Zpět</button></div>
+  <div class="in2">
+    <button class="bad" id="zmetekBtn">Zmetek</button>
+    <button class="done" id="hotovoBtn">Hotovo · odeslat</button>
+  </div>
+</div>
+
+
+<div class="sheet" id="sheet" hidden>
+  <div class="box">
+    <h3><span id="sheetTitle">Záznamy</span><button class="btn ghost sm" id="sheetClose">Zavřít</button></h3>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// Slovník místností: klíče jsou stejné jako RoomType ve FD Studiu (src/types/domain.ts), ať jde přiřazení rovnou převzít.
+const MISTNOSTI = [
+  { id: "hallway", k: "hallway", n: "Vstup a chodba", s: "in" },
+  { id: "living_room", k: "living_room", n: "Obývák", s: "in" },
+  { id: "kitchen", k: "kitchen", n: "Kuchyně", s: "in" },
+  { id: "dining_room", k: "dining_room", n: "Jídelna", s: "in" },
+  { id: "bedroom", k: "bedroom", n: "Ložnice", s: "in" },
+  { id: "kids_room", k: "kids_room", n: "Dětský pokoj", s: "in" },
+  { id: "office", k: "office", n: "Pracovna", s: "in" },
+  { id: "bathroom", k: "bathroom", n: "Koupelna", s: "in" },
+  { id: "wc", k: "bathroom", n: "WC", s: "in" },
+  { id: "stairs", k: "stairs", n: "Schodiště", s: "in" },
+  { id: "basement", k: "basement", n: "Sklep a suterén", s: "in" },
+  { id: "technical", k: "technical", n: "Technická", s: "in" },
+  { id: "garage", k: "garage", n: "Garáž", s: "in" },
+  { id: "facade", k: "facade", n: "Fasáda", s: "out" },
+  { id: "terrace", k: "terrace", n: "Terasa a balkon", s: "out" },
+  { id: "garden", k: "garden", n: "Zahrada", s: "out" },
+  { id: "pool", k: "pool", n: "Bazén", s: "out" },
+  { id: "view", k: "view", n: "Výhled", s: "out" },
+  { id: "aerial", k: "aerial", n: "Letecký", s: "out" },
+];
+const FORMAT = "fd-mistnosti/1";
+const KEY = "fdm1";
+const DEBOUNCE_MS = 1500;
+
+// ---------- úložiště (vždy v try/catch: soukromý režim nebo plné úložiště nesmí appku shodit) ----------
+const mem = { sessions: [], vlastni: [], zakazky: [], posledniKamera: "" };
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) Object.assign(mem, JSON.parse(raw));
+  } catch (e) { /* bez úložiště běží appka jen v paměti */ }
+  if (!Array.isArray(mem.sessions)) mem.sessions = [];
+  if (!Array.isArray(mem.vlastni)) mem.vlastni = [];
+  if (!Array.isArray(mem.zakazky)) mem.zakazky = [];
+}
+let saveWarned = false;
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(mem)); }
+  catch (e) {
+    if (!saveWarned) { saveWarned = true; alert("Telefon nedovolil uložit záznamy. Před zavřením stránky je odešli tlačítkem Hotovo."); }
+  }
+}
+
+// ---------- pomocné ----------
+const $ = (id) => document.getElementById(id);
+const pad = (n, w = 2) => String(n).padStart(w, "0");
+function isoLocal(d) {
+  const off = -d.getTimezoneOffset();
+  const sign = off >= 0 ? "+" : "-";
+  const a = Math.abs(off);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}${sign}${pad(Math.floor(a / 60))}:${pad(a % 60)}`;
+}
+const hms = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+const datumCs = (d) => `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}`;
+function slug(s) {
+  return (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "zakazka";
+}
+function uid() {
+  try { return crypto.randomUUID().slice(0, 12); } catch (e) { return Math.random().toString(36).slice(2, 14); }
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+const zapisy = (s) => s.zapisy.filter((z) => !z.smazano);
+
+// ---------- start ----------
+let kamera = "";
+function renderStart() {
+  $("zakazkyList").innerHTML = mem.zakazky.slice(0, 15).map((z) => `<option value="${esc(z)}">`).join("");
+  document.querySelectorAll(".cam").forEach((b) => {
+    const c = b.dataset.cam;
+    b.classList.toggle("on", c === "*" ? !!kamera && kamera !== "S1II" && kamera !== "S5" : c === kamera);
+  });
+  $("jinaLbl").textContent = kamera && kamera !== "S1II" && kamera !== "S5" ? kamera : "dron, telefon…";
+  $("zacit").disabled = !($("zakazka").value.trim() && kamera);
+
+  const list = [...mem.sessions].sort((a, b) => b.zalozeno.localeCompare(a.zalozeno)).slice(0, 20);
+  $("sessWrap").hidden = list.length === 0;
+  $("sessList").innerHTML = list.map((s) => {
+    const n = zapisy(s).length;
+    const nove = n - (s.odeslanoPocet || 0);
+    const stav = !s.odeslano ? `<span class="badge w">neodesláno</span>`
+      : nove > 0 ? `<span class="badge w">${nove} nových</span>` : `<span class="badge ok">odesláno</span>`;
+    return `<div class="row" data-id="${s.id}">
+      <div class="t"><b>${esc(s.zakazka)} · ${esc(s.kamera)}</b><span>${datumCs(new Date(s.zalozeno))} · ${n} ${n === 1 ? "zápis" : n >= 2 && n <= 4 ? "zápisy" : "zápisů"}</span></div>
+      ${stav}
+      <button class="btn ghost sm" data-act="open">Otevřít</button>
+    </div>`;
+  }).join("");
+}
+$("zakazka").addEventListener("input", renderStart);
+$("cams").addEventListener("click", (e) => {
+  const b = e.target.closest(".cam");
+  if (!b) return;
+  if (b.dataset.cam === "*") {
+    const v = prompt("Název kamery (např. Dron, iPhone, S5 #2):", kamera && kamera !== "S1II" && kamera !== "S5" ? kamera : "");
+    if (v === null) return;
+    kamera = v.trim().slice(0, 20);
+  } else kamera = b.dataset.cam;
+  mem.posledniKamera = kamera;
+  save();
+  renderStart();
+});
+$("sessList").addEventListener("click", (e) => {
+  const row = e.target.closest(".row");
+  if (row && e.target.closest("[data-act=open]")) openShoot(row.dataset.id);
+});
+$("zacit").addEventListener("click", () => {
+  const zak = $("zakazka").value.trim();
+  if (!zak || !kamera) return;
+  const dnes = new Date().toDateString();
+  // stejná zakázka a kamera ze dneška pokračuje, ať se zápisy netříští do víc souborů
+  let s = mem.sessions.find((x) => x.zakazka === zak && x.kamera === kamera && new Date(x.zalozeno).toDateString() === dnes);
+  if (!s) {
+    s = { id: uid(), zakazka: zak, kamera, zalozeno: isoLocal(new Date()), zapisy: [], odeslano: null, odeslanoPocet: 0 };
+    mem.sessions.push(s);
+  }
+  mem.zakazky = [zak, ...mem.zakazky.filter((z) => z !== zak)].slice(0, 30);
+  save();
+  openShoot(s.id);
+});
+
+// ---------- natáčení ----------
+let cur = null;
+let wake = null;
+let clockTimer = 0;
+function roomBtn(r, cls) {
+  return `<button class="room ${cls}" data-id="${esc(r.id)}">${esc(r.n)}</button>`;
+}
+function renderRooms() {
+  $("roomsIn").innerHTML = MISTNOSTI.filter((r) => r.s === "in").map((r) => roomBtn(r, "")).join("");
+  $("roomsOut").innerHTML = MISTNOSTI.filter((r) => r.s === "out").map((r) => roomBtn(r, "out")).join("");
+  $("roomsMine").innerHTML = mem.vlastni.map((n) => roomBtn({ id: "vlastni:" + n, n }, "mine")).join("")
+    + `<button class="room add" data-id="+">+ Jiná</button>`;
+  markLast();
+}
+function najdiMistnost(id) {
+  if (id.startsWith("vlastni:")) {
+    const n = id.slice(8);
+    return { id, k: odhadKlice(n), n };
+  }
+  return MISTNOSTI.find((r) => r.id === id);
+}
+// vlastní název („Ložnice 2“, „Koupelna dole“) dostane klíč FD Studia podle začátku, jinak „other“
+function odhadKlice(n) {
+  const f = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const t = f(n);
+  const hit = MISTNOSTI.find((r) => t.startsWith(f(r.n).split(" ")[0]));
+  return hit ? hit.k : "other";
+}
+function markLast() {
+  const zs = cur ? zapisy(cur).filter((z) => z.typ === "mistnost") : [];
+  const last = zs[zs.length - 1];
+  document.querySelectorAll(".room").forEach((b) => b.classList.toggle("lastone", !!last && b.dataset.id === last.rid));
+}
+function renderShoot() {
+  if (!cur) return;
+  const zs = zapisy(cur);
+  $("sZak").textContent = cur.zakazka;
+  $("sCam").textContent = cur.kamera;
+  $("zapCount").textContent = zs.length;
+  $("lastTxt").textContent = zs.length ? "Seznam záznamů – oprava a mazání" : "Zatím nic zapsáno";
+  markLast();
+  if (!toastId) hideToast();
+}
+function tickClock() {
+  $("clock").firstChild.nodeValue = hms(new Date());
+}
+async function zadejWake() {
+  try { if ("wakeLock" in navigator && document.visibilityState === "visible") wake = await navigator.wakeLock.request("screen"); }
+  catch (e) { wake = null; }
+}
+function openShoot(id) {
+  cur = mem.sessions.find((s) => s.id === id) || null;
+  if (!cur) return;
+  $("start").hidden = true;
+  $("shoot").hidden = false;
+  $("shootBar").hidden = false;
+  renderRooms();
+  renderShoot();
+  hideToast();
+  tickClock();
+  clearInterval(clockTimer);
+  clockTimer = setInterval(tickClock, 250);
+  zadejWake();
+  window.scrollTo(0, 0);
+}
+function closeShoot() {
+  cur = null;
+  clearInterval(clockTimer);
+  try { if (wake) wake.release(); } catch (e) { /* nic */ }
+  wake = null;
+  $("shoot").hidden = true;
+  $("shootBar").hidden = true;
+  $("start").hidden = false;
+  hideToast();
+  renderStart();
+}
+document.addEventListener("visibilitychange", () => { if (cur && document.visibilityState === "visible") zadejWake(); });
+$("zpetBtn").addEventListener("click", closeShoot);
+
+function zapis(typ, r) {
+  if (!cur) return;
+  const now = new Date();
+  const zs = zapisy(cur);
+  const last = zs[zs.length - 1];
+  const rid = r ? r.id : "zmetek";
+  if (last && (last.rid || "zmetek") === rid && now.getTime() - last.ms < DEBOUNCE_MS) {
+    showToast("Už zapsáno", null);
+    return;
+  }
+  const z = {
+    id: uid(),
+    cas: isoLocal(now),
+    ms: now.getTime(),
+    off: -now.getTimezoneOffset(),
+    typ,
+    rid,
+    mistnost: r ? r.k : null,
+    nazev: r ? r.n : "Zmetek",
+  };
+  cur.zapisy.push(z);
+  save();
+  renderShoot();
+  try { if (navigator.vibrate) navigator.vibrate(30); } catch (e) { /* nic */ }
+  showToast(`${typ === "zmetek" ? "Poslední záběr = zmetek" : z.nazev + " ✓"} · ${hms(now)}`, z.id);
+}
+function onRoom(e) {
+  const b = e.target.closest(".room");
+  if (!b) return;
+  if (b.dataset.id === "+") {
+    const v = prompt("Název místnosti (např. Ložnice 2, Šatna, Sauna):", "");
+    if (!v || !v.trim()) return;
+    const n = v.trim().slice(0, 30);
+    if (!mem.vlastni.includes(n)) mem.vlastni.push(n);
+    save();
+    renderRooms();
+    zapis("mistnost", najdiMistnost("vlastni:" + n));
+    flash("vlastni:" + n);
+    return;
+  }
+  const r = najdiMistnost(b.dataset.id);
+  if (!r) return;
+  zapis("mistnost", r);
+  flash(r.id);
+}
+function flash(id) {
+  document.querySelectorAll(".room").forEach((b) => {
+    if (b.dataset.id !== id) return;
+    b.classList.add("flash");
+    setTimeout(() => b.classList.remove("flash"), 350);
+  });
+}
+["roomsIn", "roomsOut", "roomsMine"].forEach((id) => $(id).addEventListener("click", onRoom));
+$("zmetekBtn").addEventListener("click", () => zapis("zmetek", null));
+
+// ---------- stavový řádek ve spodní liště: potvrzení zápisu a „Zpět“ (pár sekund po zápisu) ----------
+let toastTimer = 0;
+let toastId = null;
+function showToast(text, id) {
+  $("stavTxt").innerHTML = `<b>${esc(text)}</b>`;
+  $("stavUndo").hidden = !id;
+  toastId = id;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, id ? 6000 : 1500);
+}
+function hideToast() {
+  toastId = null;
+  clearTimeout(toastTimer);
+  $("stavUndo").hidden = true;
+  const zs = cur ? zapisy(cur) : [];
+  const last = zs[zs.length - 1];
+  $("stavTxt").innerHTML = last
+    ? `Naposledy <b>${esc(last.typ === "zmetek" ? "Zmetek" : last.nazev)}</b> v ${hms(new Date(last.ms))} · ${zs.length} ${zs.length === 1 ? "zápis" : zs.length <= 4 ? "zápisy" : "zápisů"}`
+    : "Zatím nic zapsáno";
+}
+function smaz(id) {
+  if (!cur) return;
+  const z = cur.zapisy.find((x) => x.id === id);
+  if (!z) return;
+  // smazaný zápis jen označíme: když už odešel, plugin pozná, že ho má zahodit
+  z.smazano = isoLocal(new Date());
+  save();
+  renderShoot();
+}
+$("stavUndo").addEventListener("click", () => { if (toastId) smaz(toastId); hideToast(); });
+
+// ---------- panel se záznamy ----------
+function openSheet(title, html) {
+  $("sheetTitle").textContent = title;
+  $("sheetBody").innerHTML = html;
+  $("sheet").hidden = false;
+}
+$("sheetClose").addEventListener("click", () => { $("sheet").hidden = true; });
+$("sheet").addEventListener("click", (e) => { if (e.target === $("sheet")) $("sheet").hidden = true; });
+function renderZaznamy() {
+  const zs = zapisy(cur).slice().reverse();
+  openSheet(`Záznamy · ${cur.zakazka} · ${cur.kamera}`, zs.length ? zs.map((z) =>
+    `<div class="zap"><time>${hms(new Date(z.ms))}</time><b class="${z.typ === "zmetek" ? "bad2" : ""}">${esc(z.typ === "zmetek" ? "Zmetek" : z.nazev)}</b><button data-del="${z.id}" aria-label="Smazat">×</button></div>`
+  ).join("") : `<p class="muted">Zatím nic zapsáno.</p>`);
+}
+$("lastBar").addEventListener("click", () => { if (cur) renderZaznamy(); });
+$("sheetBody").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-del]");
+  if (!b) return;
+  smaz(b.dataset.del);
+  renderZaznamy();
+});
+
+// ---------- odeslání ----------
+function exportJson(s) {
+  const now = new Date();
+  return {
+    format: FORMAT,
+    id: s.id,
+    zakazka: s.zakazka,
+    kamera: s.kamera,
+    zalozeno: s.zalozeno,
+    exportovano: isoLocal(now),
+    zarizeni: (navigator.userAgent.match(/\(([^)]+)\)/) || [, ""])[1].slice(0, 80),
+    // smazané zápisy jdou taky (se značkou), ať starší odeslaný soubor nepřebije opravu
+    zapisy: s.zapisy.map((z) => ({ id: z.id, cas: z.cas, ms: z.ms, off: z.off, typ: z.typ, mistnost: z.mistnost, nazev: z.nazev, ...(z.smazano ? { smazano: z.smazano } : {}) })),
+  };
+}
+function fileName(s) {
+  const d = new Date(s.zalozeno);
+  return `FD-mistnosti_${slug(s.zakazka)}_${slug(s.kamera)}_${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${s.id}.json`;
+}
+async function odesli(s) {
+  const text = JSON.stringify(exportJson(s), null, 1);
+  const name = fileName(s);
+  let ok = false;
+  try {
+    const file = new File([text], name, { type: "application/json" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: name });
+      ok = true;
+    }
+  } catch (e) {
+    if (e && e.name === "AbortError") return false;
+  }
+  if (!ok) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    ok = true;
+  }
+  s.odeslano = isoLocal(new Date());
+  s.odeslanoPocet = zapisy(s).length;
+  save();
+  return true;
+}
+$("hotovoBtn").addEventListener("click", async () => {
+  if (!cur) return;
+  const n = zapisy(cur).length;
+  if (n === 0 && !confirm("Zatím není nic zapsáno. Přesto odeslat?")) return;
+  const s = cur;
+  const ok = await odesli(s);
+  if (ok) {
+    openSheet("Odesláno", `<div class="p">
+      <p><b>${esc(s.zakazka)} · ${esc(s.kamera)}</b>: ${n} zápisů.</p>
+      <p>Soubor ulož do iCloud Drive do složky <b>FD Místnosti</b> (v nabídce Sdílet → Uložit do Souborů), nebo ho pošli AirDropem do Macu. Plugin v DaVinci ho tam najde sám.</p>
+      <p class="muted">Když budeš točit dál, zápisy se přidají a stačí odeslat znovu – novější soubor nahradí starší.</p>
+      <button class="btn" id="konecBtn">Hotovo, zpět na začátek</button>
+      <button class="btn ghost" id="dalBtn">Točím dál</button></div>`);
+    $("konecBtn").onclick = () => { $("sheet").hidden = true; closeShoot(); };
+    $("dalBtn").onclick = () => { $("sheet").hidden = true; };
+  }
+});
+
+// ---------- návod ----------
+$("navodBtn").addEventListener("click", () => openSheet("Jak na to", `<ol class="p">
+  <li>Před natáčením zkontroluj, že hodiny v kameře jdou zhruba stejně jako v telefonu (na minuty; malý rozdíl plugin dorovná sám).</li>
+  <li>Vyplň zakázku a vyber kameru. Točí-li dva lidé zároveň, každý má svůj telefon a vybere svou kameru.</li>
+  <li><b>Po každém záběru klepni místnost.</b> Natočil jsi v kuchyni pět záběrů? Stačí klepnout „Kuchyně“ po tom posledním.</li>
+  <li>Nepovedený záběr označ tlačítkem <b>Zmetek</b> hned po něm. Překlep vrátíš tlačítkem Zpět nebo v seznamu záznamů.</li>
+  <li>Na konci klepni <b>Hotovo · odeslat</b> a soubor ulož do iCloud Drive → složka <b>FD Místnosti</b>.</li>
+  <li>V DaVinci: Workspace → Scripts → <b>FD_Mistnosti</b>. Plugin přiřadí místnosti klipům, dá markery na timeline a uloží přiřazení pro FD Studio.</li>
+</ol>`));
+
+// ---------- spuštění ----------
+load();
+kamera = mem.posledniKamera || "";
+renderStart();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>

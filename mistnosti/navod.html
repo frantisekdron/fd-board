@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="cs"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="../icon.png">
+<title>FD Místnosti – návod</title>
+<style>
+:root{--bg:#07090c;--bg2:#0d1116;--line:#1c2530;--fg:#eef3f7;--dim:#8293a3;--acc:#35e0d0;--wait:#ffb547}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--dim);margin:0 0 24px}
+h2{font-size:18px;margin:32px 0 8px;color:var(--acc)}
+ol,ul{padding-left:22px}
+li{margin-bottom:8px}
+code,.k{font:14px ui-monospace,Menlo,monospace;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;word-break:break-all}
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:12px 0}
+.box.w{border-color:#ffb54766}
+a{color:var(--acc)}
+.btn{display:inline-block;padding:11px 16px;border-radius:12px;background:var(--acc);color:#041014;font-weight:700;text-decoration:none;margin:4px 8px 4px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--dim);font-weight:600}
+</style>
+</head>
+<body><div class="wrap">
+<h1>FD Místnosti</h1>
+<p class="sub">Na place po každém záběru klepneš v telefonu místnost. Plugin v DaVinci podle času natočení přiřadí místnosti klipům a uloží přiřazení pro FD Studio.</p>
+<a class="btn" href="./">Otevřít appku</a><a class="btn" href="davinci/FD_Mistnosti.py" download>Stáhnout plugin pro DaVinci</a>
+
+<h2>1. Telefon (jednou)</h2>
+<ol>
+  <li>V Safari otevři <code>frantisekdron.github.io/fd-board/mistnosti/</code>.</li>
+  <li>Sdílet → <b>Přidat na plochu</b>. Pak se appka otevírá jako normální aplikace a funguje i bez signálu.</li>
+  <li>V aplikaci Soubory si v iCloud Drive založ složku <b>FD Místnosti</b>.</li>
+</ol>
+
+<h2>2. Před natáčením</h2>
+<ul>
+  <li><b>Hodiny v kameře</b> (S1II i S5) nastav podle telefonu. Stačí na minutu přesně; malý rozdíl i posun o celou hodinu (letní čas) plugin dorovná sám.</li>
+  <li>Točí-li dva lidé zároveň, každý má svůj telefon a v appce vybere svou kameru.</li>
+</ul>
+
+<h2>3. Na place</h2>
+<ol>
+  <li>Vyplň zakázku (např. <i>Klamovka 2</i>), vyber kameru, <b>Začít natáčet</b>.</li>
+  <li><b>Po každém záběru klepni místnost.</b> Pět záběrů v kuchyni? Stačí klepnout „Kuchyně“ po tom posledním.</li>
+  <li>Nepovedený záběr: hned po něm <b>Zmetek</b>.</li>
+  <li>Překlep: <b>Zpět</b> v potvrzení nahoře, nebo hned klepni správnou místnost (do 20 s, platí ta pozdější). Starší zápisy smažeš v seznamu (klepni na lištu „Naposledy…“).</li>
+  <li>Druhá ložnice, šatna, sauna: <b>+ Jiná</b> (napiš třeba „Ložnice 2“), tlačítko pak zůstane mezi vlastními.</li>
+  <li>Na konci <b>Hotovo · odeslat</b> → Uložit do Souborů → iCloud Drive → <b>FD Místnosti</b>. Nebo AirDrop do Macu (skončí ve Stažených, plugin ho najde i tam).</li>
+</ol>
+<div class="box">Zápisy zůstávají v telefonu, dokud je neodešleš. Když točíš dál, stačí odeslat znovu – plugin vezme obsah všech odeslaných souborů a nic nezdvojí.</div>
+
+<h2>4. DaVinci Resolve – instalace pluginu (jednou)</h2>
+<ol>
+  <li>Stáhni <a href="davinci/FD_Mistnosti.py" download>FD_Mistnosti.py</a>.</li>
+  <li>Ve Finderu Přejít → Přejít na složku… a vlož:<br><code>~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Edit/</code></li>
+  <li>Soubor tam zkopíruj (složku <i>Edit</i> případně založ). Restartuj DaVinci.</li>
+</ol>
+
+<h2>5. DaVinci – přiřazení místností</h2>
+<ol>
+  <li>Otevři projekt zakázky s klipy z karet (originály z kamery – čas natočení plugin čte přímo ze souborů). Otevři timeline, na kterou chceš markery.</li>
+  <li><b>Workspace → Scripts → FD_Mistnosti</b>.</li>
+  <li>Plugin sám najde zápisy a vybere zakázku podle názvu projektu. Klikni <b>Náhled</b>: uvidíš rozdíl hodin každé kamery a ke každému klipu místnost.</li>
+  <li>Sedí-li to, <b>Zapsat do DaVinci</b>.</li>
+</ol>
+<table>
+  <tr><th>Co plugin zapíše</th><th>Kde</th></tr>
+  <tr><td>Klíčové slovo a Scéna = místnost, u zmetku slovo „Zmetek“</td><td>Media Pool → metadata klipu. Tip: Smart Bin „Keywords contains Kuchyně“.</td></tr>
+  <tr><td>Marker na začátku každé místnosti (mátová barva, zmetek červeně)</td><td>Aktuální timeline. Při dalším spuštění se markery pluginu obnoví, tvoje markery zůstanou.</td></tr>
+  <tr><td>Barva klipu podle místnosti, biny „FD Místnosti / …“</td><td>Jen když je zaškrtneš (výchozí vypnuto).</td></tr>
+  <tr><td>Přiřazení pro FD Studio: <code>FD-mistnosti-prirazeni_&lt;zakázka&gt;.json</code> + <code>.csv</code></td><td>Vedle zápisů v iCloud Drive → FD Místnosti. Místnosti jsou v klíčích FD Studia (<code>kitchen</code>, <code>living_room</code>, …).</td></tr>
+</table>
+
+<h2>Když něco nesedí</h2>
+<ul>
+  <li><b>„Sedí málo záběrů na zápisy“</b> – v kameře je nejspíš špatné datum nebo čas. Oprav hodiny pro příště; teď zadej v pluginu posun ručně v sekundách (kamera o hodinu napřed = <code>-3600</code>).</li>
+  <li><b>Klip má „ověřit“</b> – zápis přišel až minuty po záběru (zapomenuté klepnutí). Zkontroluj ho okem.</li>
+  <li><b>Klipy z jiné kamery</b> (dron, GH5) plugin pozná podle modelu v souboru a nechá je být.</li>
+  <li><b>Dvě karty se stejným jménem</b> (obě „LUMIX“): kameru plugin pozná podle modelu v souboru. Jako pojistku kopíruj karty do složek s názvem kamery („S5“, „S1II“).</li>
+  <li><b>Okno pluginu se neotevřelo</b> – plugin poběží bez okna s výchozím nastavením a zprávu najdeš ve Workspace → Console.</li>
+</ul>
+</div></body></html>

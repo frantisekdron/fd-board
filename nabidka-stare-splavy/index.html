@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nabídka · Staré Splavy · FrantišekDron</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0e1310;--bg2:#131a15;--panel:#171f19;--line:#2a352c;--ink:#ece9e1;--muted:#a7b0a3;--muted2:#7f897c;--gold:#c4a86a;--gold-soft:#d8c69a;--green:#6aa978;--red:#cf8f7d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,Segoe UI,Roboto,sans-serif;font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:.01em}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 30px}
+  .eyebrow{font-size:11.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .muted{color:var(--muted)}
+  h2.big{font-size:clamp(28px,4.4vw,46px);margin:12px 0 6px}
+  p{margin:13px 0;color:#cdd3c9;font-size:15px}
+  .lead{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(21px,3vw,28px);line-height:1.4;color:var(--ink);font-weight:400}
+  section{padding:60px 0}
+  .divider{height:1px;background:var(--line);max-width:1080px;margin:0 auto}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+  .grid4>div{background:var(--bg2);padding:22px 20px}
+  .grid4 .v{font-family:'Cormorant Garamond',serif;font-size:25px;color:var(--ink)}
+  .grid4 .l{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .hero{position:relative;height:86vh;min-height:520px;display:flex;align-items:flex-end;overflow:hidden}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.92) brightness(.72)}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,11,.5),rgba(10,14,11,.12) 36%,rgba(10,14,11,.94))}
+  .hero .wrap{position:relative;z-index:2;padding-bottom:54px}
+  .hero h1{font-size:clamp(42px,7.5vw,86px);line-height:1.0;margin:14px 0 12px}
+  .hero .sub{font-size:clamp(15px,2vw,19px);color:var(--gold-soft);max-width:680px}
+  .hero .meta{margin-top:22px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;gap:24px;flex-wrap:wrap}
+  .proc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .proc>div{border:1px solid var(--line);border-radius:6px;padding:20px 18px;background:var(--panel)}
+  .proc.now>div:nth-child(2){border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .proc .st{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .proc h3{font-size:17px;margin:6px 0 5px}
+  .proc p{font-size:12.5px;color:var(--muted);margin:0}
+  .bil{display:flex;flex-direction:column;gap:14px;margin:24px 0}
+  .bil .it{border-left:2px solid var(--gold);padding-left:18px}
+  .bil .cz{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(22px,3.1vw,33px);color:var(--gold-soft);line-height:1.16}
+  .bil .en{font-size:13px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 26px}
+  .check{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 26px;margin-top:8px}
+  .check li{font-size:14px;color:#d3d8cd;padding-left:26px;position:relative}
+  .check li::before{content:"\2713";position:absolute;left:0;color:var(--green);font-weight:700}
+  .clist li::before{content:"\25B8";color:var(--gold);font-weight:400}
+  .faq{margin-top:18px}
+  .faq .q{font-size:14.5px;color:var(--ink);font-weight:500;margin-top:14px}
+  .faq .a{font-size:14px;color:var(--muted);margin-top:3px}
+  .scn{display:flex;flex-direction:column;gap:9px;margin-top:20px}
+  .scn .row{display:grid;grid-template-columns:84px 1fr;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--panel)}
+  .scn .t{background:#1b231c;color:var(--gold);font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 6px;border-right:1px solid var(--line);font-weight:500}
+  .scn .c{padding:12px 16px}
+  .scn .c h4{font-size:15.5px;margin:0 0 3px;font-weight:600;font-family:'Inter'}
+  .scn .c p{margin:0;font-size:13px;color:#bfc6ba}
+  .scn .c .ot{color:var(--gold-soft);font-style:italic;font-size:14px;margin-top:5px;font-family:'Cormorant Garamond',Georgia,serif}
+  .scol{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:860px){.scol{grid-template-columns:1fr}}
+  .tag{display:inline-block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;border:1px solid var(--line);border-radius:20px;padding:4px 12px}
+  .viz{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px}
+  .shot{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .shot img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#0a0d0a}
+  .shot .cap{padding:12px 14px}
+  .shot .cap .k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .shot .cap h4{font-size:15px;margin:5px 0 3px;font-family:'Inter';font-weight:600}
+  .shot .cap p{font-size:12px;color:var(--muted);margin:0}
+  /* POI */
+  .poi{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:8px}
+  .poi .hd{background:#1b231c;padding:9px 16px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;border-bottom:1px solid var(--line)}
+  .poi .row{display:grid;grid-template-columns:1fr;gap:0}
+  .poi .it{padding:11px 16px;border-bottom:1px solid var(--line);font-size:13.5px}
+  .poi .it:last-child{border-bottom:none}
+  .poi .it b{color:#e2e7dc;font-weight:500}
+  .poi .it span{color:var(--muted)}
+  .poicols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  @media(max-width:860px){.poicols{grid-template-columns:1fr}}
+  .funnel{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:22px}
+  .funnel>div{background:var(--bg2);padding:18px 16px}
+  .funnel .s{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .funnel h4{font-size:14.5px;margin:6px 0 4px;font-family:'Inter';font-weight:600}
+  .funnel p{font-size:12px;color:var(--muted);margin:0}
+  .callout{background:linear-gradient(180deg,#1b231c,#141b15);border:1px solid var(--gold);border-radius:8px;padding:22px 26px;margin-top:22px}
+  .callout b{color:var(--gold-soft)}
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:22px}
+  .feat>div{background:var(--bg2);padding:22px 20px}
+  .feat .n{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold)}
+  .feat h4{font-size:16px;margin:7px 0 6px;font-family:'Inter';font-weight:600}
+  .feat p{font-size:13px;color:var(--muted);margin:0}
+  .price{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;align-items:start}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:24px 22px;display:flex;flex-direction:column}
+  .card.hl{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:linear-gradient(180deg,#1b231c,#141b15)}
+  .card .tg{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .card h3{font-size:21px;margin:9px 0 4px}
+  .card .desc{font-size:12.5px;color:var(--muted);min-height:58px}
+  .card .amt{font-family:'Cormorant Garamond',serif;font-size:33px;color:var(--ink);margin:10px 0 2px}
+  .card .amt small{font-size:13px;color:var(--muted2);font-family:'Inter'}
+  .card ul{list-style:none;margin:13px 0 0;border-top:1px solid var(--line);padding-top:13px}
+  .card li{font-size:12.5px;color:#c2c9bd;padding:4px 0 4px 18px;position:relative}
+  .card li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg)}
+  .card li.x{color:var(--muted2)}
+  .card li.x::before{border-color:var(--muted2);opacity:.5}
+  .tl{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:22px}
+  .tl>div{background:var(--bg2);padding:18px 16px}
+  .tl .d{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .tl h4{font-size:14.5px;margin:6px 0 5px;font-family:'Inter';font-weight:600}
+  .tl p{font-size:12px;color:var(--muted);margin:0}
+  a{color:var(--gold-soft)}
+  footer{border-top:1px solid var(--line);padding:48px 0;background:var(--bg2)}
+  .sign{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;align-items:flex-end}
+  .sign .b{font-family:'Cormorant Garamond',serif;font-size:28px}
+  .sign .s{font-size:13px;color:var(--muted);line-height:1.85}
+  .kvr{color:var(--gold)}
+  @media(max-width:860px){.grid2,.grid3,.scol,.viz,.feat,.price,.tl,.proc,.funnel,.check{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}}
+  /* ——— grafický polish ——— */
+  .eyebrow{position:relative;padding-left:30px}
+  .eyebrow::before{content:"";position:absolute;left:0;top:.52em;width:20px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+  h2.big::after{content:"";display:block;width:52px;height:2px;margin:15px 0 2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),rgba(196,168,106,.10))}
+  .lead{letter-spacing:.005em}
+  .hero h1{letter-spacing:-.012em;text-shadow:0 2px 30px rgba(0,0,0,.5)}
+  .hero::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(130% 90% at 50% 6%,transparent 40%,rgba(10,14,11,.32))}
+  .divider{background:linear-gradient(90deg,transparent,var(--line) 18%,var(--line) 82%,transparent);position:relative}
+  .divider::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;background:var(--bg);border:1px solid var(--gold);transform:translate(-50%,-50%) rotate(45deg)}
+  .grid4 .v{letter-spacing:-.01em}
+  .bil .it{background:linear-gradient(90deg,rgba(196,168,106,.055),transparent);border-radius:0 6px 6px 0;padding-top:7px;padding-bottom:7px}
+  .panel,.callout{box-shadow:inset 0 1px 0 rgba(255,255,255,.02)}
+  .card{position:relative;overflow:hidden}
+  .card .amt{font-variant-numeric:tabular-nums}
+  .card.hl{transform:translateY(-7px);box-shadow:0 0 0 1px var(--gold) inset,0 24px 58px -26px rgba(196,168,106,.42)}
+  .card.hl::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-soft))}
+  .card.hl .amt{color:var(--gold-soft)}
+  .shot img{transition:none}
+  .poi .hd,.scn .t,.chan .n{letter-spacing:.02em}
+  /* ——— brand lockup (skutečné logo FrantišekDron) ——— */
+  .lockup{display:inline-flex;align-items:center;gap:11px}
+  .lockup .glyph{width:42px;height:42px;flex:none;color:#fff}
+  .lockup .wstack{display:flex;flex-direction:column;line-height:.84;font-family:'Poppins',system-ui,sans-serif}
+  .lockup .wtop{font-weight:700;font-size:11px;letter-spacing:.17em;color:#fff}
+  .lockup .wbot{font-weight:800;font-size:21.5px;letter-spacing:.02em;color:#8CC63F}
+  .hero .lockup{margin-bottom:20px}
+  footer .lockup{margin-bottom:14px}
+</style>
+</head>
+<body>
+<style>
+  .hero.nofoto{height:auto;min-height:72vh;background:radial-gradient(ellipse at 70% 20%,#24402f 0%,#121a14 55%,#0e1310 100%)}
+  .have{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
+  .have .panel h3{font-size:22px;margin:6px 0 10px}
+  .have ul{list-style:none}.have li{font-size:14px;color:#cdd3c9;margin:0 0 8px}
+  .ok{color:var(--green);font-weight:600}.miss{color:var(--red);font-weight:600}
+  .reasons{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:22px}
+  .reasons>div{background:var(--bg2);padding:18px}
+  .reasons .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--gold-soft);line-height:1}
+  .reasons .t{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+  .pipe>div{border:1px solid var(--line);border-radius:8px;padding:18px;background:var(--panel)}
+  .pipe .s{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .pipe h4{font-size:15px;margin:6px 0;font-family:'Inter';font-weight:600}
+  .pipe p{font-size:12.5px;color:var(--muted);margin:0}
+  .vo{margin-top:12px;display:grid;gap:9px}
+  .vo .l{font-family:'Cormorant Garamond',serif;color:var(--gold-soft);font-size:19px}
+  .ph{background:rgba(207,143,125,.15);border-bottom:1px dashed var(--red);padding:0 3px}
+  @media(max-width:820px){.have,.pipe{grid-template-columns:1fr}.reasons{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<!-- HERO -->
+<div class="hero nofoto">
+  <div class="wrap">
+    <div class="lockup"><svg class="glyph" viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"><line x1="32" y1="32" x2="17" y2="17"/><line x1="32" y1="32" x2="47" y2="17"/><line x1="32" y1="32" x2="17" y2="47"/><line x1="32" y1="32" x2="47" y2="47"/></g><g fill="none" stroke="currentColor" stroke-width="4.5"><circle cx="17" cy="17" r="8.5"/><circle cx="47" cy="17" r="8.5"/><circle cx="17" cy="47" r="8.5"/><circle cx="47" cy="47" r="8.5"/></g><rect x="25.5" y="25.5" width="13" height="13" rx="3.5" fill="currentColor"/></svg><div class="wstack"><span class="wtop">FRANTIŠEK</span><span class="wbot">DRON</span></div></div>
+    <div class="eyebrow">Nabídka prezentace &amp; spuštění reklamy · pro Kubu Krejzu (Gepard / GPRE) · Staré Splavy</div>
+    <h1>5 minut k jezeru.<br>Dvě cesty k prodeji.</h1>
+    <div class="sub">Jak z toho, co už máme, uděláme prezentaci domu ve Starých Splavech, která ukáže lokalitu i to, co se z domu dá udělat. Bez výjezdu na místo a se spuštěním reklamy do týdne.</div>
+    <div class="meta"><span>frantisekdron.cz</span><span>Honza Goldšmíd</span><span>14. 11. 2026</span></div>
+  </div>
+</div>
+
+<!-- CO MÁME -->
+<section><div class="wrap">
+  <div class="eyebrow">Výchozí stav</div>
+  <h2 class="big">Všechno potřebné už máme, na místo jet nemusíme</h2>
+  <p style="max-width:880px">Kubo, poskládali jsme dohromady všechno, co k domu máme. Na skutečně dobrou prezentaci to stačí. Natáčet znovu nemusíme, takže ušetříme výjezd i čas.</p>
+  <div class="have">
+    <div class="panel">
+      <span class="tag">Máme</span>
+      <h3>Podklady v ruce</h3>
+      <ul>
+        <li><span class="ok">✓</span> <strong>Naše dronové záběry z Doks</strong> z 5. 5. 2026: Máchovo jezero, pláže s molem, přístav, Bezděz. Lokalitu tím ukážeme naplno.</li>
+        <li><span class="ok">✓</span> <strong>15 fotek z inzerátu.</strong> Rozhýbeme je a použijeme jako textury pro 3D model.</li>
+        <li><span class="ok">✓</span> <strong>Tvoje podklady z 13. 11.:</strong> řez, půdorys podkroví s plochami, situace s přístavbou a technická zpráva.</li>
+        <li><span class="ok">✓</span> <strong>Změřené vzdálenosti pěšky:</strong> jezero 370 m (asi 5 min), vlak 12 min, pláž Staré Splavy 20 min.</li>
+        <li><span class="ok">✓</span> <strong>Původní projekt počítá s penzionem</strong> (ubytování pro 12 hostů a restaurace pro 23 hostů). To je silná opora pro variantu pronájmu.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="tag">Doplníme nebo potřebujeme</span>
+      <h3>Co ještě chybí</h3>
+      <ul>
+        <li><span class="miss">○</span> <strong>Půdorys přízemí neexistuje.</strong> Dokreslíme ho z řezu a fotek a označíme jako orientační.</li>
+        <li><span class="ok">✓</span> <strong>Tvůj propočet pronájmu:</strong> 4 apartmány 2+kk pro 4 osoby, ceny asi o 20 % pod LakeParkem. Model počítá se 115 obsazenými nocemi na apartmán a asi 1,56 mil. Kč hrubých tržeb ročně.</li>
+        <li><span class="miss">○</span> <strong>Fotka domu z dronu.</strong> Pokud ji majitel má, použijeme ji. Pokud ne, dům „doletíme“ ve 3D.</li>
+        <li><span class="miss">○</span> <strong>Platnost stavebního povolení</strong> (razítko je nejspíš z 90. let). Bez ověření budeme psát jen „dle původního projektu“.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+<div class="divider"></div>
+
+<!-- PROČ -->
+<section><div class="wrap">
+  <div class="eyebrow">Shrnutí rozboru</div>
+  <h2 class="big">Proč se dům zatím neprodal</h2>
+  <p style="max-width:880px">Zájem o dům je: inzerát má přes 12 500 zobrazení. Jenže kupec v něm nevidí lokalitu, nepozná, co se z domu dá udělat, a chybí mu plánek. Proto se nic nepohnulo ani po slevě.</p>
+  <div class="reasons">
+    <div><div class="n">0 / 15</div><div class="t">fotek ukazuje jezero nebo okolí, přestože je 5 minut pěšky</div></div>
+    <div><div class="n">0</div><div class="t">videí, záběrů z dronu a vizualizací</div></div>
+    <div><div class="n">0</div><div class="t">půdorysů. Kupec netuší, co kupuje</div></div>
+    <div><div class="n">2×</div><div class="t">na Sreality se stejným textem, jednou jako dům, jednou jako ubytování</div></div>
+    <div><div class="n">„Nedokončená“</div><div class="t">titulek láká na problém, ne na příležitost</div></div>
+    <div><div class="n">PENB G</div><div class="t">bez vysvětlení, co s tím a za kolik</div></div>
+    <div><div class="n">−1,29 mil.</div><div class="t">sleva bez nového obsahu. Cena sama prodej nepohne.</div></div>
+    <div><div class="n">5 / 15</div><div class="t">fotek ukazuje hrubou stavbu a sklep</div></div>
+  </div>
+  <p class="muted" style="font-size:13px;margin-top:14px">Plný rozbor: <span class="kvr">frantisekdron.github.io/fd-rozbor-splavy-28266</span></p>
+</div></section>
+<div class="divider"></div>
+
+<!-- DVĚ CESTY -->
+<section><div class="wrap">
+  <div class="eyebrow">Komu to prodáváme</div>
+  <h2 class="big">Jeden dům, dva příběhy</h2>
+  <p style="max-width:880px">Lokalitu a dům natočíme jednou. Konec videa, vizualizace i reklamy ale uděláme ve dvou verzích, každou pro jiného kupce. Ze společného materiálu tak vzniknou dvě kampaně.</p>
+  <div class="grid2" style="margin-top:22px">
+    <div class="panel">
+      <span class="tag">Cesta A · Velká rodina</span>
+      <h3 style="font-size:24px;margin:10px 0">Bydlení u jezera za dobré peníze</h3>
+      <ul class="check">
+        <li>Velký dům s pozemkem a zahradou pro hodně lidí</li>
+        <li>Máchovo jezero 5 minut pěšky, vlak 12 minut</li>
+        <li>Bydlet se dá hned: v přízemí 3 pokoje s kuchyní, v podkroví 2 pokoje s kuchyní a terasou</li>
+        <li>Za cenu menšího bytu v Praze</li>
+      </ul>
+      <p class="muted" style="font-size:13px;margin-top:10px"><strong>Vizualizace exteriéru:</strong> rodinný dům s upravenou zahradou, terasou a hracím koutem. Bez restaurace.</p>
+    </div>
+    <div class="panel">
+      <span class="tag">Cesta B · Koupě na pronájem</span>
+      <h3 style="font-size:24px;margin:10px 0">Apartmány, nebo dům pro skupiny</h3>
+      <ul class="check">
+        <li><strong>B1 · Dům pro skupiny:</strong> pronájem celku partám, rodinám a firmám, hlavně v sezóně</li>
+        <li><strong>B2 · Apartmány:</strong> 4 apartmány 2+kk, každý pro 4 osoby (podle tvého propočtu). Dvě jednotky v podkroví už stojí.</li>
+        <li>Původní projekt už počítal s penzionem pro 12 hostů, přístavbou, terasou 45 m² a 6 parkovacími místy</li>
+        <li>Ceny za noc počítáme konzervativně, <strong>asi o 20 % níž než nový Residence LakePark</strong> ve Starých Splavech. Tvůj model: <strong>115 obsazených nocí na apartmán</strong> (asi 31 %), 2–4 tis. Kč za noc, tedy <strong>asi 1,56 mil. Kč hrubých tržeb ročně</strong> za 4 apartmány, z toho asi 60 % v červenci a srpnu</li>
+      </ul>
+      <p class="muted" style="font-size:13px;margin-top:10px"><strong>Vizualizace exteriéru:</strong> 4 vchody do apartmánů, terasa, parkování podle situace. Ve variantě B1 společná zahrada s ohništěm.</p>
+    </div>
+  </div>
+  <p class="muted" style="font-size:12.5px;margin-top:14px">Slova „investor“, „investice“ a „výnos“ v reklamách nepoužíváme, protože Meta takové reklamy přísněji schvaluje a lidi na ně reagují hůř. Píšeme „vlastní apartmány u jezera“ nebo „dům, který si na sebe vydělá v sezóně“. Vizualizace označíme jako ilustrační, podle původního projektu.</p>
+</div></section>
+<div class="divider"></div>
+
+<!-- JAK -->
+<section><div class="wrap">
+  <div class="eyebrow">Postup výroby</div>
+  <h2 class="big">Z výkresů a fotek 3D model, z modelu vizualizace a video</h2>
+  <div class="pipe">
+    <div><div class="s">Krok 1</div><h4>3D model v Blenderu</h4><p>Hmotu domu postavíme z řezu, půdorysu podkroví a situace. Přízemí doladíme podle fotek.</p></div>
+    <div><div class="s">Krok 2</div><h4>Textury z reálných fotek</h4><p>Fasádu, střechu a okna otexturujeme ze skutečných fotek z inzerátu, aby model odpovídal skutečnému domu.</p></div>
+    <div><div class="s">Krok 3</div><h4>Dvě exteriérové vizualizace</h4><p>Rodinný dům se zahradou a apartmány s terasou a parkováním. Interiéry neděláme.</p></div>
+    <div><div class="s">Krok 4</div><h4>Video s voiceoverem</h4><p>Naše záběry z dronu, příroda, 3D dolet na ulici, rozhýbané fotky a na závěr obě varianty.</p></div>
+  </div>
+</div></section>
+<div class="divider"></div>
+
+<!-- SCÉNÁŘ -->
+<section><div class="wrap">
+  <div class="eyebrow">Scénář videa · ~60–75 s · 2 konce</div>
+  <h2 class="big">Nejdřív lokalita, pak dům</h2>
+  <div class="scn" style="margin-top:20px">
+    <div class="row"><div class="t">00–12 s</div><div class="c"><h4>Máchovo jezero z dronu <span class="tag" style="margin-left:6px">máme</span></h4><p>Hladina, pláž s molem, Bezděz v pozadí. Hned na začátku říkáme, kde jsme.</p></div></div>
+    <div class="row"><div class="t">12–22 s</div><div class="c"><h4>3D mapa: dolet z jezera na ulici <span class="tag" style="margin-left:6px">uděláme</span></h4><p>Animovaná trasa 370 m s popisky „5 min k jezeru“, „12 min na vlak“.</p></div></div>
+    <div class="row"><div class="t">22–35 s</div><div class="c"><h4>Dům a pozemek <span class="tag" style="margin-left:6px">3D + fotky</span></h4><p>Kamera obletí otexturovaný model. Plynule přejdeme na rozhýbané fotky zahrady a domu.</p></div></div>
+    <div class="row"><div class="t">35–48 s</div><div class="c"><h4>Uvnitř se dá bydlet už teď <span class="tag" style="margin-left:6px">z fotek</span></h4><p>Hotové místnosti v obou patrech, plánek podkroví s plochami.</p></div></div>
+    <div class="row"><div class="t">48–65 s</div><div class="c"><h4>Konec A nebo B <span class="tag" style="margin-left:6px">vizualizace</span></h4><p>Verze A končí rodinou na zahradě, verze B apartmány a terasou. Obojí zakončíme výzvou k akci a kontaktem na Kubu.</p></div></div>
+  </div>
+  <div class="grid2" style="margin-top:22px">
+    <div class="panel">
+      <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)">Voiceover · verze A (rodina)</div>
+      <div class="vo">
+        <div class="l">„Pět minut pěšky a stojíte na břehu Máchova jezera.“</div>
+        <div class="l">„Velký dům, zahrada a místo pro celou rodinu.“</div>
+        <div class="l">„Bydlet se dá hned. A dál ho můžete přetvořit podle sebe.“</div>
+        <div class="l">„Staré Splavy. Léto, které nekončí v neděli večer.“</div>
+        <div class="l">„Domluvte si prohlídku.“</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)">Voiceover · verze B (pronájem)</div>
+      <div class="vo">
+        <div class="l">„Máchovo jezero. Místo, kam se každé léto vracejí tisíce lidí.“</div>
+        <div class="l">„Čtyři apartmány, každý pro čtyři hosty.“</div>
+        <div class="l">„Nebo celý dům pro velké skupiny.“</div>
+        <div class="l">„S penzionem tu počítal už původní projekt.“</div>
+        <div class="l">„Pošleme vám půdorys a podklady.“</div>
+      </div>
+    </div>
+  </div>
+  <p class="muted" style="font-size:12.5px;margin-top:12px">Voiceover namluví profesionální AI hlas v češtině, tónem klidným a nevtíravým. Hudbu dáme ambientní s letní atmosférou.</p>
+</div></section>
+<div class="divider"></div>
+
+<!-- CENÍK -->
+<section><div class="wrap">
+  <div class="eyebrow">Prezentace · bez DPH · pevné ceny · bez výjezdu</div>
+  <h2 class="big">Tři varianty</h2>
+  <p style="max-width:880px">Všechny varianty stavíme z hotových záběrů a podkladů, žádný natáčecí den ani doprava se nepočítají. Doporučujeme variantu B, protože jako jediná pokrývá obě skupiny kupců.</p>
+  <div class="price">
+    <div class="card">
+      <div class="tg">Varianta A</div>
+      <h3>Lokalita + dům</h3>
+      <div class="desc">Rychlá náprava inzerátu: video, které konečně ukáže jezero.</div>
+      <div class="amt">14 900 <small>Kč</small></div>
+      <ul>
+        <li>Video ~60 s: naše záběry z dronu a rozhýbané fotky</li>
+        <li>Animovaná mapa „5 min k jezeru“</li>
+        <li>Voiceover a hudba, 1 verze</li>
+        <li>1× vertikál 30 s na sítě</li>
+        <li>Čistý plánek podkroví do inzerátu</li>
+        <li>2 kola korektur</li>
+      </ul>
+    </div>
+    <div class="card hl">
+      <div class="tg">Varianta B · doporučeno</div>
+      <h3>Dvě cesty</h3>
+      <div class="desc">3D model z výkresů, vizualizace obou variant a dvě verze videa.</div>
+      <div class="amt">24 900 <small>Kč</small></div>
+      <ul>
+        <li>Vše z varianty A</li>
+        <li>3D model v Blenderu z řezu, půdorysu a situace, otexturovaný z reálných fotek</li>
+        <li>2 exteriérové vizualizace: rodinný dům × apartmány</li>
+        <li>2 verze videa (rodina / pronájem) a 2 vertikály</li>
+        <li>Orientační plánek přízemí</li>
+        <li>Nová titulní fotka a pořadí fotek pro Sreality</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tg">Varianta C</div>
+      <h3>Plná prezentace</h3>
+      <div class="desc">K tomu 3D průlety a hotová prodejní prezentace pro kupce.</div>
+      <div class="amt">34 900 <small>Kč</small></div>
+      <ul>
+        <li>Vše z varianty B</li>
+        <li>3D průlet (videovizualizace) obou variant</li>
+        <li>3. varianta: dům pro skupiny (B1) se společnou zahradou</li>
+        <li>4 vizualizace navíc (večer, zahrada, terasa, pohled z ulice)</li>
+        <li>Prodejní PDF prezentace pro zájemce (lokalita, plánky, varianty)</li>
+        <li>Nový text inzerátu a titulek pro rodinu i pronájem</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="font-size:12.5px;margin-top:14px">Dodání: A do 4, B do 7 a C do 10 pracovních dní od schválení a zálohy. Platba 50 % předem a 50 % při dodání. 3. kolo korektur stojí 1 500 Kč. Vizualizace jsou ilustrační, podle původního projektu, a nenahrazují projektovou dokumentaci.</p>
+</div></section>
+<div class="divider"></div>
+
+<!-- REKLAMA -->
+<section><div class="wrap">
+  <div class="eyebrow">Spuštění reklamy · samostatně</div>
+  <h2 class="big">Kampaň na Facebooku a Instagramu: 4 týdny</h2>
+  <p style="max-width:880px">Žádná velká reklama, jen cílené zobrazení videa a vizualizací správným lidem v okolí a v Praze. Kampaň spustíme do 48 hodin od schválení videa.</p>
+  <div class="grid2" style="margin-top:22px">
+    <div class="panel">
+      <span class="tag">Co uděláme</span>
+      <ul class="check" style="margin-top:12px">
+        <li>Nastavíme kampaň Meta (FB + IG) se 2 publiky: rodiny z Prahy, Liberecka a Boleslavska × lidé, kteří hledají chatu nebo pronájem</li>
+        <li>3 kreativy pro každé publikum: video, vizualizace, plánek</li>
+        <li>Každá reklama končí výzvou k akci: „Domluvit prohlídku“ / „Poslat půdorys“, poptávky jdou přímo tobě</li>
+        <li>Průběžně ji optimalizujeme a slabé kreativy vypínáme</li>
+        <li>Každý týden pošleme krátkou zprávu: zobrazení, přehrání videa, prokliky, poptávky</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="tag">Cena</span>
+      <div class="amt serif" style="font-size:44px;color:var(--ink);margin:14px 0 4px">6 900 <small style="font-size:18px">Kč</small></div>
+      <p class="muted" style="font-size:13px">Nastavení a správa kampaně na 4 týdny, bez DPH.</p>
+      <p style="font-size:14px;margin-top:14px"><strong>Rozpočet na reklamu</strong> platí GPRE přímo Metě. Doporučujeme <strong>8–12 tis. Kč na 4 týdny</strong>, tedy asi 300–400 Kč denně. Rozdělení mezi obě publika upravíme podle výsledků po prvním týdnu.</p>
+      <p class="muted" style="font-size:12.5px;margin-top:12px">Dodáváme materiály, kampaň a reporting. Prodej zaručit neumíme, ale lokalitu a dům uvidí konečně ti správní lidé.</p>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <span class="tag">Zdarma hned teď</span>
+    <ul class="check" style="margin-top:12px">
+      <li>Sloučit oba inzeráty na Sreality do jednoho</li>
+      <li>Změnit titulek z „Nedokončená přestavba…“ třeba na „Velký dům 5 min od Máchova jezera, 2 bytové jednotky“</li>
+      <li>Jako titulní fotku dát naši dronovou fotku jezera (dodáme)</li>
+    </ul>
+  </div>
+</div></section>
+<div class="divider"></div>
+
+<!-- HARMONOGRAM -->
+<section><div class="wrap">
+  <div class="eyebrow">Spěchá, takže rychlý postup (varianta B)</div>
+  <h2 class="big">Do 8 dnů běží reklama</h2>
+  <div class="tl">
+    <div><div class="d">Den 0</div><h4>Schválení</h4><p>Vybereš variantu a pošleš zálohu.</p></div>
+    <div><div class="d">Den 1–3</div><h4>3D model a vizualizace</h4><p>Blender, textury, 2 exteriéry ke kontrole.</p></div>
+    <div><div class="d">Den 3–5</div><h4>Video</h4><p>Obě verze a vertikály k první korektuře.</p></div>
+    <div><div class="d">Den 6–7</div><h4>Finál</h4><p>Úpravy, nový titulek a fotky do inzerátu.</p></div>
+    <div><div class="d">Den 8 →</div><h4>Reklama běží</h4><p>4 týdny kampaně, každý týden zpráva.</p></div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer><div class="wrap">
+  <div class="eyebrow">Další krok</div>
+  <p class="lead" style="margin:12px 0 18px;max-width:780px">Kubo, stačí nám tři věci: varianta, nová cena domu a souhlas majitele s vizualizacemi. Hned potom začínáme. Prodej samozřejmě dál vede Gepard, my dodáme materiály a kampaň.</p>
+  <div class="sign">
+    <div><div class="lockup"><svg class="glyph" viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"><line x1="32" y1="32" x2="17" y2="17"/><line x1="32" y1="32" x2="47" y2="17"/><line x1="32" y1="32" x2="17" y2="47"/><line x1="32" y1="32" x2="47" y2="47"/></g><g fill="none" stroke="currentColor" stroke-width="4.5"><circle cx="17" cy="17" r="8.5"/><circle cx="47" cy="17" r="8.5"/><circle cx="17" cy="47" r="8.5"/><circle cx="47" cy="47" r="8.5"/></g><rect x="25.5" y="25.5" width="13" height="13" rx="3.5" fill="currentColor"/></svg><div class="wstack"><span class="wtop">FRANTIŠEK</span><span class="wbot">DRON</span></div></div><div class="b" style="margin-top:6px">Jan Goldšmíd</div><div class="s">zakladatel &amp; hlavní pilot · <span class="kvr">frantisekdron.cz</span><br>+420 723 707 958 · honza@frantisekdron.cz</div></div>
+    <div class="s" style="text-align:right">Nabídka pro<br><strong style="color:#e7e3d8;font-weight:500">Jakuba Krejzu</strong><br>Absoluta Real s.r.o. · Gepard Reality</div>
+  </div>
+</div></footer>
+
+<button id="dlpdf" onclick="genPDF()">⬇ Stáhnout PDF</button>
+<style>
+#dlpdf{position:fixed;top:18px;right:18px;z-index:99999;background:#c4a86a;color:#0e1310;border:none;padding:12px 20px;border-radius:4px;font:600 13px Inter,system-ui,sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+#dlpdf:disabled{opacity:.65;cursor:wait}
+@media print{#dlpdf{display:none}}
+</style>
+<script>
+function _ld(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('load '+src))};document.head.appendChild(s);});}
+async function genPDF(){
+  var btn=document.getElementById('dlpdf');
+  btn.disabled=true;btn.textContent='Generuji PDF…';
+  try{
+    if(!window.html2canvas) await _ld('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    if(!window.jspdf) await _ld('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    await Promise.all(Array.from(document.images).map(function(img){return img.complete?Promise.resolve():new Promise(function(r){img.onload=img.onerror=r;});}));
+    await new Promise(function(r){setTimeout(r,400);});
+    btn.style.display='none';
+    var canvas=await html2canvas(document.body,{scale:1.4,useCORS:true,backgroundColor:'#0e1310',windowWidth:1080,width:1080,scrollX:0,scrollY:0});
+    btn.style.display='';
+    var jsPDF=window.jspdf.jsPDF;
+    var pdf=new jsPDF('p','mm','a4');
+    var pw=210,iw=canvas.width,ih=canvas.height,ratio=pw/iw,pageH=Math.floor(297/ratio),y=0,page=0;
+    while(y<ih){
+      var sliceH=Math.min(pageH,ih-y);
+      var c2=document.createElement('canvas');c2.width=iw;c2.height=sliceH;
+      var ctx=c2.getContext('2d');ctx.fillStyle='#0e1310';ctx.fillRect(0,0,iw,sliceH);
+      ctx.drawImage(canvas,0,y,iw,sliceH,0,0,iw,sliceH);
+      if(page>0)pdf.addPage();
+      pdf.addImage(c2.toDataURL('image/jpeg',0.86),'JPEG',0,0,pw,sliceH*ratio);
+      y+=sliceH;page++;
+    }
+    pdf.save('FrantisekDron_nabidka_Stare_Splavy.pdf');
+    btn.textContent='⬇ Stáhnout PDF';btn.disabled=false;
+  }catch(e){btn.style.display='';alert('Chyba PDF: '+e.message+'  — zkuste Cmd+P → Uložit jako PDF.');btn.textContent='⬇ Stáhnout PDF';btn.disabled=false;}
+}
+</script>
+
+</body>
+</html>

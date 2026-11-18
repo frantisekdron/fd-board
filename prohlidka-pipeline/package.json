@@ -1,0 +1,9 @@
+{
+  "name": "fd-prohlidka-pipeline",
+  "private": true,
+  "description": "Podklady a fotky pro FD 3D prohlídky: rendery pozic fotek z enginu a panorama výhledu.",
+  "dependencies": {
+    "playwright": "^1.48.0",
+    "three": "0.160.0"
+  }
+}

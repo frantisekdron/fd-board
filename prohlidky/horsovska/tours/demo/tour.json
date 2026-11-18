@@ -68,11 +68,11 @@
   {
    "id": "zz",
    "position": [
-    9.9,
+    7.85,
     0,
-    14.45
+    14.4
    ],
-   "yaw": -146.6,
+   "yaw": -143.55,
    "pitch": -3,
    "roomId": "zimni-zahrada",
    "caption": "Zimní zahrada asi 20 m² s krbem a dřevěným krovem, celoročně využitelná.",
@@ -249,13 +249,13 @@
   {
    "id": "hs-zz",
    "position": [
-    12.5,
+    10.6,
     2.0,
-    16.2
+    15.2
    ],
    "title": "Zimní zahrada",
    "kind": "info",
-   "text": "Dřevěná prosklená přístavba s krbem a podlahovým vytápěním, navazuje na obývací pokoj i terasu."
+   "text": "Dřevěná prosklená přístavba s krbem a podlahovým vytápěním, pod širokou sedlovou střechou, která kryje i terasu u sauny a terasu na východ."
   },
   {
    "id": "hs-vjezd",
@@ -554,30 +554,30 @@
     "level": "1np",
     "polygon": [
      [
-      9.5,
-      19.3
+      7.5,
+      19.0
      ],
      [
-      13.2,
-      19.3
+      11.5,
+      19.0
      ],
      [
-      13.2,
+      11.5,
       14.01
      ],
      [
-      9.5,
+      7.5,
       14.01
      ]
     ],
     "floor": "oak",
-    "areaM2": 19.6,
+    "areaM2": 20.0,
     "dayLight": true,
     "lights": [
      {
-      "x": 12.5,
-      "z": 16.2,
-      "y": 2.6,
+      "x": 9.5,
+      "z": 16.5,
+      "y": 2.55,
       "intensity": 6,
       "distance": 5,
       "fixture": "none"
@@ -587,28 +587,28 @@
    },
    {
     "id": "terasa",
-    "name": "Krytá terasa",
+    "name": "Krytá terasa u sauny",
     "level": "1np",
     "polygon": [
      [
-      5.8,
-      19.2
+      5.75,
+      19.4
      ],
      [
-      9.44,
-      19.2
+      7.44,
+      19.4
      ],
      [
-      9.44,
+      7.44,
       14.01
      ],
      [
-      5.8,
+      5.75,
       14.01
      ]
     ],
     "floor": "paving",
-    "areaM2": 18.9,
+    "areaM2": 9.1,
     "outdoor": true,
     "wall": "white",
     "band": {
@@ -619,28 +619,28 @@
    },
    {
     "id": "proskl-terasa",
-    "name": "Terasa pod skleněnou střechou",
+    "name": "Krytá terasa a terasa pod skleněnou střechou",
     "level": "1np",
     "polygon": [
      [
-      13.26,
-      19.3
+      11.56,
+      19.4
      ],
      [
       16.9,
-      19.3
+      19.4
      ],
      [
       16.9,
       14.01
      ],
      [
-      13.26,
+      11.56,
       14.01
      ]
     ],
     "floor": "terrace",
-    "areaM2": 19.3,
+    "areaM2": 28.8,
     "outdoor": true,
     "wall": "white"
    },
@@ -659,15 +659,15 @@
      ],
      [
       16.9,
-      19.31
+      19.41
      ],
      [
       12.5,
-      19.31
+      19.41
      ]
     ],
     "floor": "terrace",
-    "areaM2": 11.0,
+    "areaM2": 10.6,
     "outdoor": true,
     "wall": "white"
    },
@@ -702,22 +702,30 @@
      ],
      [
       12.5,
-      19.31
+      19.41
      ],
      [
-      9.44,
-      19.31
+      11.56,
+      19.41
      ],
      [
-      9.44,
-      19.21
+      11.56,
+      19.07
      ],
      [
-      5.8,
-      19.21
+      7.44,
+      19.07
      ],
      [
-      5.8,
+      7.44,
+      19.41
+     ],
+     [
+      5.75,
+      19.41
+     ],
+     [
+      5.75,
       14.01
      ],
      [
@@ -1256,8 +1264,8 @@
       "kind": "window"
      },
      {
-      "offset": 4.17,
-      "width": 0.8,
+      "offset": 3.6,
+      "width": 1.4,
       "sill": 0,
       "height": 2.2,
       "kind": "door",
@@ -1268,7 +1276,7 @@
       "glazed": true
      },
      {
-      "offset": 4.92,
+      "offset": 5.1,
       "width": 0.7,
       "sill": 0,
       "height": 2.2,
@@ -1952,104 +1960,104 @@
     "id": "zz-zapad",
     "level": "1np",
     "a": [
-     9.5,
+     7.5,
      14.0
     ],
     "b": [
-     9.5,
-     19.3
+     7.5,
+     19.06
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 4.375,
-      "width": 1.45,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 4.15,
+      "width": 1.4,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      },
      {
-      "offset": 2.775,
-      "width": 1.45,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 2.6,
+      "width": 1.4,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      },
      {
-      "offset": 1.05,
-      "width": 1.7,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 0.975,
+      "width": 1.55,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      }
     ],
-    "height": 2.3
+    "height": 2.65
    },
    {
     "id": "zz-vychod",
     "level": "1np",
     "a": [
-     13.2,
+     11.5,
      14.0
     ],
     "b": [
-     13.2,
-     19.3
+     11.5,
+     19.06
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 4.375,
-      "width": 1.45,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 4.15,
+      "width": 1.4,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      },
      {
-      "offset": 2.775,
-      "width": 1.45,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 2.6,
+      "width": 1.4,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      },
      {
-      "offset": 1.05,
-      "width": 1.7,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 0.975,
+      "width": 1.55,
+      "sill": 0.3,
+      "height": 1.9,
       "kind": "window"
      }
     ],
-    "height": 2.3
+    "height": 2.65
    },
    {
     "id": "zz-jih",
     "level": "1np",
     "a": [
-     9.44,
-     19.3
+     7.44,
+     19.0
     ],
     "b": [
-     13.26,
-     19.3
+     11.56,
+     19.0
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 0.76,
-      "width": 1.1,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 0.63,
+      "width": 0.9,
+      "sill": 0.05,
+      "height": 2.15,
       "kind": "window"
      },
      {
-      "offset": 1.91,
-      "width": 1.0,
+      "offset": 1.58,
+      "width": 0.8,
       "sill": 0,
-      "height": 2.15,
+      "height": 2.2,
       "kind": "door",
       "id": "dv-zz-zahrada",
       "hinge": "a",
@@ -2058,10 +2066,17 @@
       "glazed": true
      },
      {
-      "offset": 3.06,
-      "width": 1.1,
-      "sill": 0.35,
-      "height": 1.8,
+      "offset": 2.59,
+      "width": 0.9,
+      "sill": 0.05,
+      "height": 2.15,
+      "kind": "window"
+     },
+     {
+      "offset": 3.54,
+      "width": 0.8,
+      "sill": 0.05,
+      "height": 2.15,
       "kind": "window"
      }
     ],
@@ -2698,36 +2713,36 @@
      "id": "zz-zapad",
      "line": [
       [
-       11.35,
+       9.5,
        14.02
       ],
       [
-       11.35,
-       19.7
+       9.5,
+       19.4
       ]
      ],
-     "height": 3.37,
-     "pitchDeg": 30,
+     "height": 3.35,
+     "pitchDeg": 20,
      "toward": [
-      9.5,
-      16.0
+      7.5,
+      16.5
      ],
      "polygon": [
       [
-       9.15,
+       5.75,
        14.02
       ],
       [
-       11.35,
+       9.5,
        14.02
       ],
       [
-       11.35,
-       19.7
+       9.5,
+       19.4
       ],
       [
-       9.15,
-       19.7
+       5.75,
+       19.4
       ]
      ]
     },
@@ -2735,73 +2750,36 @@
      "id": "zz-vychod",
      "line": [
       [
-       11.35,
+       9.5,
        14.02
       ],
       [
-       11.35,
-       19.7
+       9.5,
+       19.4
       ]
      ],
-     "height": 3.37,
-     "pitchDeg": 30,
+     "height": 3.35,
+     "pitchDeg": 20,
      "toward": [
-      13.2,
-      16.0
+      11.5,
+      16.5
      ],
      "polygon": [
       [
-       11.35,
+       9.5,
        14.02
       ],
       [
-       13.4,
+       13.25,
        14.02
       ],
       [
-       13.4,
-       19.7
+       13.25,
+       19.4
       ],
       [
-       11.35,
-       19.7
-      ]
-     ]
-    },
-    {
-     "id": "terasa-strecha",
-     "line": [
-      [
-       5.6,
-       14.02
-      ],
-      [
-       9.15,
-       14.02
-      ]
-     ],
-     "height": 2.75,
-     "pitchDeg": 5,
-     "toward": [
-      7.5,
-      17.0
-     ],
-     "polygon": [
-      [
-       5.6,
-       14.02
-      ],
-      [
-       9.15,
-       14.02
-      ],
-      [
-       9.15,
-       19.45
-      ],
-      [
-       5.6,
-       19.45
+       9.5,
+       19.4
       ]
      ]
     },
@@ -2809,7 +2787,7 @@
      "id": "sklo-strecha",
      "line": [
       [
-       13.4,
+       13.25,
        14.02
       ],
       [
@@ -2825,7 +2803,7 @@
      ],
      "polygon": [
       [
-       13.4,
+       13.25,
        14.02
       ],
       [
@@ -2837,7 +2815,7 @@
        19.5
       ],
       [
-       13.4,
+       13.25,
        19.5
       ]
      ]
@@ -2864,8 +2842,8 @@
    {
     "id": "ro-zz-1",
     "at": [
-     9.82,
-     16.6
+     8.3,
+     16.5
     ],
     "width": 0.55,
     "length": 1.18,
@@ -2876,8 +2854,8 @@
    {
     "id": "ro-zz-2",
     "at": [
-     12.88,
-     16.6
+     10.7,
+     16.5
     ],
     "width": 0.55,
     "length": 1.18,
@@ -3610,15 +3588,15 @@
     "id": "zz-podhled",
     "kind": "panel",
     "roomId": "zimni-zahrada",
-    "x": 11.35,
-    "z": 16.68,
+    "x": 9.5,
+    "z": 16.5,
     "facing": "S",
-    "w": 2.62,
-    "d": 5.36,
+    "w": 3.9,
+    "d": 4.96,
     "h": 0.03,
     "y": 2.6,
     "variant": "flat",
-    "color": "#f3efe7",
+    "color": "#d6aa72",
     "decor": true,
     "solid": false
    },
@@ -3626,8 +3604,8 @@
     "id": "zz-stul",
     "kind": "diningTable",
     "roomId": "zimni-zahrada",
-    "x": 11.35,
-    "z": 16.4,
+    "x": 9.5,
+    "z": 16.5,
     "facing": "N",
     "w": 1.6,
     "d": 0.9,
@@ -3637,8 +3615,8 @@
     "id": "zz-zidle-0",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 10.9,
-    "z": 15.75,
+    "x": 9.05,
+    "z": 15.85,
     "facing": "S",
     "w": 0.45,
     "d": 0.5,
@@ -3649,8 +3627,8 @@
     "id": "zz-zidle-1",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 11.8,
-    "z": 15.75,
+    "x": 9.95,
+    "z": 15.85,
     "facing": "S",
     "w": 0.45,
     "d": 0.5,
@@ -3661,8 +3639,8 @@
     "id": "zz-zidle-2",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 10.9,
-    "z": 17.05,
+    "x": 9.05,
+    "z": 17.15,
     "facing": "N",
     "w": 0.45,
     "d": 0.5,
@@ -3673,8 +3651,8 @@
     "id": "zz-zidle-3",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 11.8,
-    "z": 17.05,
+    "x": 9.95,
+    "z": 17.15,
     "facing": "N",
     "w": 0.45,
     "d": 0.5,
@@ -3685,8 +3663,8 @@
     "id": "zz-zidle-4",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 10.3,
-    "z": 16.4,
+    "x": 8.45,
+    "z": 16.5,
     "facing": "E",
     "w": 0.45,
     "d": 0.5,
@@ -3697,8 +3675,8 @@
     "id": "zz-zidle-5",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 12.4,
-    "z": 16.4,
+    "x": 10.55,
+    "z": 16.5,
     "facing": "W",
     "w": 0.45,
     "d": 0.5,
@@ -3709,8 +3687,8 @@
     "id": "zz-krb",
     "kind": "fireplace",
     "roomId": "zimni-zahrada",
-    "x": 12.75,
-    "z": 18.85,
+    "x": 10.95,
+    "z": 18.55,
     "facing": "N",
     "w": 0.85,
     "d": 0.7,
@@ -3721,8 +3699,8 @@
     "id": "zz-kreslo",
     "kind": "armchair",
     "roomId": "zimni-zahrada",
-    "x": 9.95,
-    "z": 18.7,
+    "x": 8.05,
+    "z": 17.9,
     "facing": "E",
     "w": 0.85,
     "d": 0.85,
@@ -3733,8 +3711,8 @@
     "id": "zz-rostlina-1",
     "kind": "plant",
     "roomId": "zimni-zahrada",
-    "x": 12.85,
-    "z": 14.4,
+    "x": 11.1,
+    "z": 14.45,
     "facing": "W",
     "w": 0.5,
     "d": 0.5,
@@ -3744,8 +3722,8 @@
     "id": "zz-rostlina-2",
     "kind": "plant",
     "roomId": "zimni-zahrada",
-    "x": 9.85,
-    "z": 14.4,
+    "x": 7.95,
+    "z": 18.6,
     "facing": "E",
     "w": 0.5,
     "d": 0.5,
@@ -3777,9 +3755,9 @@
     "id": "terasa-lehatko-1",
     "kind": "armchair",
     "roomId": "terasa",
-    "x": 7.0,
-    "z": 17.6,
-    "facing": "N",
+    "x": 6.55,
+    "z": 15.9,
+    "facing": "E",
     "w": 0.8,
     "d": 0.8,
     "variant": "lounge",
@@ -3789,9 +3767,9 @@
     "id": "terasa-lehatko-2",
     "kind": "armchair",
     "roomId": "terasa",
-    "x": 8.3,
-    "z": 17.6,
-    "facing": "N",
+    "x": 6.55,
+    "z": 17.3,
+    "facing": "E",
     "w": 0.8,
     "d": 0.8,
     "variant": "lounge",
@@ -3802,10 +3780,10 @@
     "kind": "gardenShed",
     "roomId": "zahrada",
     "x": 3.8,
-    "z": 16.4,
+    "z": 16.5,
     "facing": "N",
-    "w": 2.1,
-    "d": 3.0,
+    "w": 2.0,
+    "d": 4.2,
     "color": "#c17a3c"
    },
    {
@@ -3828,32 +3806,6 @@
     "w": 1.4,
     "d": 0.45,
     "variant": "cushion"
-   },
-   {
-    "id": "sloup-ter-1",
-    "kind": "panel",
-    "roomId": "terasa",
-    "x": 5.75,
-    "z": 19.25,
-    "facing": "S",
-    "w": 0.12,
-    "d": 0.12,
-    "h": 2.29,
-    "variant": "flat",
-    "color": "#6d4325"
-   },
-   {
-    "id": "sloup-ter-2",
-    "kind": "panel",
-    "roomId": "terasa",
-    "x": 7.6,
-    "z": 19.25,
-    "facing": "S",
-    "w": 0.12,
-    "d": 0.12,
-    "h": 2.29,
-    "variant": "flat",
-    "color": "#6d4325"
    },
    {
     "id": "sloup-sklo-1",
@@ -4751,11 +4703,11 @@
    "thumb": "fotky/mini-03.jpg",
    "roomId": "zimni-zahrada",
    "position": [
-    9.9,
+    7.85,
     1.5,
-    14.45
+    14.4
    ],
-   "yaw": -146.6,
+   "yaw": -143.55,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,
@@ -4787,11 +4739,11 @@
    "thumb": "fotky/mini-04.jpg",
    "roomId": "zimni-zahrada",
    "position": [
-    12.8,
+    11.1,
     1.5,
-    18.95
+    18.75
    ],
-   "yaw": 34.59,
+   "yaw": 36.34,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,

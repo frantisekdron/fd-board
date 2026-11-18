@@ -5,11 +5,11 @@
  "units": "m",
  "spawn": {
   "position": [
-   8.15,
+   9.4,
    0,
-   9.3
+   10.1
   ],
-  "yaw": -122.62,
+  "yaw": -108.74,
   "pitch": -3
  },
  "settings": {
@@ -54,11 +54,11 @@
   {
    "id": "obyvak",
    "position": [
-    8.15,
+    9.4,
     0,
-    9.3
+    10.1
    ],
-   "yaw": -122.62,
+   "yaw": -108.74,
    "pitch": -3,
    "roomId": "obyvak",
    "caption": "Obývací pokoj s kuchyní asi 41 m²: sedačka, televizní stěna a dveře na terasu a do zimní zahrady.",
@@ -68,11 +68,11 @@
   {
    "id": "zz",
    "position": [
-    10.75,
+    9.9,
     0,
     14.45
    ],
-   "yaw": -136.66,
+   "yaw": -146.6,
    "pitch": -3,
    "roomId": "zimni-zahrada",
    "caption": "Zimní zahrada asi 20 m² s krbem a dřevěným krovem, celoročně využitelná.",
@@ -554,24 +554,24 @@
     "level": "1np",
     "polygon": [
      [
-      10.2,
-      18.4
+      9.5,
+      19.3
      ],
      [
-      14.8,
-      18.4
+      13.2,
+      19.3
      ],
      [
-      14.8,
+      13.2,
       14.01
      ],
      [
-      10.2,
+      9.5,
       14.01
      ]
     ],
     "floor": "oak",
-    "areaM2": 20.0,
+    "areaM2": 19.6,
     "dayLight": true,
     "lights": [
      {
@@ -591,24 +591,24 @@
     "level": "1np",
     "polygon": [
      [
-      6.7,
-      18.8
+      5.8,
+      19.2
      ],
      [
-      10.14,
-      18.8
+      9.44,
+      19.2
      ],
      [
-      10.14,
+      9.44,
       14.01
      ],
      [
-      6.7,
+      5.8,
       14.01
      ]
     ],
     "floor": "paving",
-    "areaM2": 16.5,
+    "areaM2": 18.9,
     "outdoor": true,
     "wall": "white",
     "band": {
@@ -618,37 +618,56 @@
     }
    },
    {
+    "id": "proskl-terasa",
+    "name": "Terasa pod skleněnou střechou",
+    "level": "1np",
+    "polygon": [
+     [
+      13.26,
+      19.3
+     ],
+     [
+      16.9,
+      19.3
+     ],
+     [
+      16.9,
+      14.01
+     ],
+     [
+      13.26,
+      14.01
+     ]
+    ],
+    "floor": "terrace",
+    "areaM2": 19.3,
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
     "id": "drevena-terasa",
     "name": "Dřevěná terasa",
     "level": "1np",
     "polygon": [
      [
-      12.6,
-      20.2
+      12.5,
+      21.8
      ],
      [
-      16.6,
-      20.2
+      16.9,
+      21.8
      ],
      [
-      16.6,
-      14.01
+      16.9,
+      19.31
      ],
      [
-      14.86,
-      14.01
-     ],
-     [
-      14.86,
-      18.46
-     ],
-     [
-      12.6,
-      18.46
+      12.5,
+      19.31
      ]
     ],
     "floor": "terrace",
-    "areaM2": 14.0,
+    "areaM2": 11.0,
     "outdoor": true,
     "wall": "white"
    },
@@ -670,35 +689,35 @@
       14.01
      ],
      [
-      16.6,
+      16.91,
       14.01
      ],
      [
-      16.6,
-      20.2
+      16.91,
+      21.8
      ],
      [
-      12.6,
-      20.2
+      12.5,
+      21.8
      ],
      [
-      12.6,
-      18.46
+      12.5,
+      19.31
      ],
      [
-      10.14,
-      18.46
+      9.44,
+      19.31
      ],
      [
-      10.14,
-      18.8
+      9.44,
+      19.21
      ],
      [
-      6.7,
-      18.8
+      5.8,
+      19.21
      ],
      [
-      6.7,
+      5.8,
       14.01
      ],
      [
@@ -707,7 +726,7 @@
      ]
     ],
     "floor": "grass",
-    "areaM2": 260.0,
+    "areaM2": 250.0,
     "outdoor": true,
     "wall": "white"
    },
@@ -1230,14 +1249,14 @@
       "glazed": true
      },
      {
-      "offset": 2.125,
-      "width": 1.05,
+      "offset": 2.025,
+      "width": 0.85,
       "sill": 0,
       "height": 2.2,
       "kind": "window"
      },
      {
-      "offset": 4.3,
+      "offset": 4.17,
       "width": 0.8,
       "sill": 0,
       "height": 2.2,
@@ -1249,10 +1268,17 @@
       "glazed": true
      },
      {
-      "offset": 5.05,
+      "offset": 4.92,
       "width": 0.7,
       "sill": 0,
       "height": 2.2,
+      "kind": "window"
+     },
+     {
+      "offset": 7.05,
+      "width": 1.3,
+      "sill": 0.5,
+      "height": 1.7,
       "kind": "window"
      }
     ]
@@ -1315,15 +1341,8 @@
     "exterior": true,
     "openings": [
      {
-      "offset": 8.4,
-      "width": 1.5,
-      "sill": 0.5,
-      "height": 1.7,
-      "kind": "window"
-     },
-     {
-      "offset": 5.8,
-      "width": 1.9,
+      "offset": 5.95,
+      "width": 2.0,
       "sill": 1.1,
       "height": 1.1,
       "kind": "window"
@@ -1350,13 +1369,13 @@
     ],
     "thickness": 0.25,
     "exterior": true,
-    "openings": [
+    "openings": [],
+    "surfaces": [
      {
-      "offset": 0.93,
-      "width": 1.2,
-      "sill": 0.9,
-      "height": 1.3,
-      "kind": "window"
+      "side": "front",
+      "finish": "woodTile",
+      "u0": 0.0,
+      "u1": 1.68
      }
     ]
    },
@@ -1388,7 +1407,15 @@
     ],
     "thickness": 0.25,
     "exterior": false,
-    "openings": []
+    "openings": [],
+    "surfaces": [
+     {
+      "side": "front",
+      "finish": "woodTile",
+      "u0": 2.82,
+      "u1": 6.04
+     }
+    ]
    },
    {
     "id": "kridlo-jih-1np",
@@ -1925,33 +1952,33 @@
     "id": "zz-zapad",
     "level": "1np",
     "a": [
-     10.2,
+     9.5,
      14.0
     ],
     "b": [
-     10.2,
-     18.4
+     9.5,
+     19.3
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 3.625,
-      "width": 1.25,
+      "offset": 4.375,
+      "width": 1.45,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
      },
      {
-      "offset": 2.2,
-      "width": 1.3,
+      "offset": 2.775,
+      "width": 1.45,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
      },
      {
-      "offset": 0.775,
-      "width": 1.25,
+      "offset": 1.05,
+      "width": 1.7,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
@@ -1963,33 +1990,33 @@
     "id": "zz-vychod",
     "level": "1np",
     "a": [
-     14.8,
+     13.2,
      14.0
     ],
     "b": [
-     14.8,
-     18.4
+     13.2,
+     19.3
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 3.625,
-      "width": 1.25,
+      "offset": 4.375,
+      "width": 1.45,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
      },
      {
-      "offset": 2.2,
-      "width": 1.3,
+      "offset": 2.775,
+      "width": 1.45,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
      },
      {
-      "offset": 0.775,
-      "width": 1.25,
+      "offset": 1.05,
+      "width": 1.7,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
@@ -2001,26 +2028,26 @@
     "id": "zz-jih",
     "level": "1np",
     "a": [
-     10.14,
-     18.4
+     9.44,
+     19.3
     ],
     "b": [
-     14.86,
-     18.4
+     13.26,
+     19.3
     ],
     "thickness": 0.12,
     "exterior": true,
     "openings": [
      {
-      "offset": 0.96,
-      "width": 1.5,
+      "offset": 0.76,
+      "width": 1.1,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
      },
      {
-      "offset": 2.36,
-      "width": 0.9,
+      "offset": 1.91,
+      "width": 1.0,
       "sill": 0,
       "height": 2.15,
       "kind": "door",
@@ -2031,8 +2058,8 @@
       "glazed": true
      },
      {
-      "offset": 3.76,
-      "width": 1.5,
+      "offset": 3.06,
+      "width": 1.1,
       "sill": 0.35,
       "height": 1.8,
       "kind": "window"
@@ -2108,9 +2135,9 @@
      10.98,
      0.44
     ],
-    "h": 1.3,
+    "h": 1.2,
     "style": "fence",
-    "color": "#557a3c"
+    "color": "#4a4c4a"
    },
    {
     "level": "1np",
@@ -2122,9 +2149,9 @@
      21.0,
      0.84
     ],
-    "h": 1.3,
+    "h": 1.2,
     "style": "fence",
-    "color": "#557a3c"
+    "color": "#4a4c4a"
    },
    {
     "level": "1np",
@@ -2136,9 +2163,9 @@
      22.14,
      4.22
     ],
-    "h": 2.0,
+    "h": 1.4,
     "style": "fence",
-    "color": "#40633a"
+    "color": "#4a4c4a"
    },
    {
     "level": "1np",
@@ -2150,9 +2177,9 @@
      20.15,
      28.13
     ],
-    "h": 2.0,
+    "h": 1.4,
     "style": "fence",
-    "color": "#557a3c"
+    "color": "#4a4c4a"
    },
    {
     "level": "1np",
@@ -2671,36 +2698,36 @@
      "id": "zz-zapad",
      "line": [
       [
-       12.5,
+       11.35,
        14.02
       ],
       [
-       12.5,
-       18.8
+       11.35,
+       19.7
       ]
      ],
-     "height": 3.48,
+     "height": 3.37,
      "pitchDeg": 30,
      "toward": [
-      10.2,
+      9.5,
       16.0
      ],
      "polygon": [
       [
-       9.8,
+       9.15,
        14.02
       ],
       [
-       12.5,
+       11.35,
        14.02
       ],
       [
-       12.5,
-       18.8
+       11.35,
+       19.7
       ],
       [
-       9.8,
-       18.8
+       9.15,
+       19.7
       ]
      ]
     },
@@ -2708,36 +2735,110 @@
      "id": "zz-vychod",
      "line": [
       [
-       12.5,
+       11.35,
        14.02
       ],
       [
-       12.5,
-       18.8
+       11.35,
+       19.7
       ]
      ],
-     "height": 3.48,
+     "height": 3.37,
      "pitchDeg": 30,
      "toward": [
-      14.8,
+      13.2,
       16.0
      ],
      "polygon": [
       [
-       12.5,
+       11.35,
        14.02
       ],
       [
-       15.2,
+       13.4,
        14.02
       ],
       [
-       15.2,
-       18.8
+       13.4,
+       19.7
       ],
       [
-       12.5,
-       18.8
+       11.35,
+       19.7
+      ]
+     ]
+    },
+    {
+     "id": "terasa-strecha",
+     "line": [
+      [
+       5.6,
+       14.02
+      ],
+      [
+       9.15,
+       14.02
+      ]
+     ],
+     "height": 2.75,
+     "pitchDeg": 5,
+     "toward": [
+      7.5,
+      17.0
+     ],
+     "polygon": [
+      [
+       5.6,
+       14.02
+      ],
+      [
+       9.15,
+       14.02
+      ],
+      [
+       9.15,
+       19.45
+      ],
+      [
+       5.6,
+       19.45
+      ]
+     ]
+    },
+    {
+     "id": "sklo-strecha",
+     "line": [
+      [
+       13.4,
+       14.02
+      ],
+      [
+       17.1,
+       14.02
+      ]
+     ],
+     "height": 2.75,
+     "pitchDeg": 5,
+     "toward": [
+      15.0,
+      17.0
+     ],
+     "polygon": [
+      [
+       13.4,
+       14.02
+      ],
+      [
+       17.1,
+       14.02
+      ],
+      [
+       17.1,
+       19.5
+      ],
+      [
+       13.4,
+       19.5
       ]
      ]
     }
@@ -2763,88 +2864,132 @@
    {
     "id": "ro-zz-1",
     "at": [
-     13.6,
-     15.3
+     9.82,
+     16.6
     ],
-    "width": 1.0,
-    "length": 1.6,
-    "plane": "zz-vychod",
+    "width": 0.55,
+    "length": 1.18,
+    "plane": "zz-zapad",
     "level": "1np",
     "frameColor": "#6d4325"
    },
    {
     "id": "ro-zz-2",
     "at": [
-     13.6,
-     17.3
+     12.88,
+     16.6
     ],
-    "width": 1.0,
-    "length": 1.6,
+    "width": 0.55,
+    "length": 1.18,
     "plane": "zz-vychod",
     "level": "1np",
     "frameColor": "#6d4325"
+   },
+   {
+    "id": "sklo-1",
+    "at": [
+     15.25,
+     15.0
+    ],
+    "width": 3.0,
+    "length": 1.6,
+    "plane": "sklo-strecha",
+    "level": "1np",
+    "frameColor": "#3a3d40"
+   },
+   {
+    "id": "sklo-2",
+    "at": [
+     15.25,
+     16.75
+    ],
+    "width": 3.0,
+    "length": 1.6,
+    "plane": "sklo-strecha",
+    "level": "1np",
+    "frameColor": "#3a3d40"
+   },
+   {
+    "id": "sklo-3",
+    "at": [
+     15.25,
+     18.5
+    ],
+    "width": 3.0,
+    "length": 1.5,
+    "plane": "sklo-strecha",
+    "level": "1np",
+    "frameColor": "#3a3d40"
    }
   ],
   "furniture": [
    {
-    "id": "kuchyn-linka",
+    "id": "kuchyn-zapad",
     "kind": "kitchenRun",
     "roomId": "obyvak",
-    "x": 7.57,
-    "z": 10.05,
+    "x": 7.56,
+    "z": 9.34,
     "facing": "E",
-    "w": 2.3,
+    "w": 2.98,
     "d": 0.62,
     "color": "#8d9297",
     "topColor": "#f3f2ee",
     "parts": [
      "sink",
-     "hob",
-     "oven",
      "backsplash"
     ],
     "handleColor": "#c9c9c9"
    },
    {
-    "id": "kuchyn-ostruvek",
-    "kind": "island",
+    "id": "kuchyn-sever",
+    "kind": "kitchenRun",
     "roomId": "obyvak",
-    "x": 8.95,
-    "z": 9.22,
+    "x": 8.88,
+    "z": 8.16,
     "facing": "S",
-    "w": 2.1,
-    "d": 0.65,
+    "w": 2.02,
+    "d": 0.62,
     "color": "#8d9297",
-    "topColor": "#f3f2ee"
+    "topColor": "#f3f2ee",
+    "parts": [
+     "hob",
+     "hood",
+     "uppers",
+     "backsplash"
+    ],
+    "handleColor": "#c9c9c9"
    },
    {
     "id": "kuchyn-vysoka",
     "kind": "kitchenRun",
     "roomId": "obyvak",
-    "x": 7.57,
-    "z": 8.3,
-    "facing": "E",
+    "x": 10.3,
+    "z": 8.16,
+    "facing": "S",
     "w": 0.8,
     "d": 0.62,
     "variant": "tall",
-    "color": "#8d9297"
+    "color": "#8d9297",
+    "parts": [
+     "oven"
+    ]
    },
    {
     "id": "lednice",
     "kind": "fridge",
     "roomId": "obyvak",
-    "x": 8.25,
-    "z": 8.2,
+    "x": 10.98,
+    "z": 8.16,
     "facing": "S",
-    "w": 0.7,
-    "d": 0.68
+    "w": 0.6,
+    "d": 0.62
    },
    {
     "id": "jidelni-stul",
     "kind": "diningTable",
     "roomId": "obyvak",
-    "x": 9.2,
-    "z": 11.0,
+    "x": 8.75,
+    "z": 12.0,
     "facing": "S",
     "w": 1.2,
     "d": 1.2,
@@ -2855,8 +3000,8 @@
     "id": "zidle-0",
     "kind": "chair",
     "roomId": "obyvak",
-    "x": 8.35,
-    "z": 11.0,
+    "x": 7.9,
+    "z": 12.0,
     "facing": "E",
     "w": 0.45,
     "d": 0.5,
@@ -2866,8 +3011,8 @@
     "id": "zidle-1",
     "kind": "chair",
     "roomId": "obyvak",
-    "x": 10.05,
-    "z": 11.0,
+    "x": 9.6,
+    "z": 12.0,
     "facing": "W",
     "w": 0.45,
     "d": 0.5,
@@ -2877,8 +3022,8 @@
     "id": "zidle-2",
     "kind": "chair",
     "roomId": "obyvak",
-    "x": 9.2,
-    "z": 11.85,
+    "x": 8.75,
+    "z": 12.85,
     "facing": "N",
     "w": 0.45,
     "d": 0.5,
@@ -2888,8 +3033,8 @@
     "id": "zidle-3",
     "kind": "chair",
     "roomId": "obyvak",
-    "x": 9.2,
-    "z": 10.15,
+    "x": 8.75,
+    "z": 11.15,
     "facing": "S",
     "w": 0.45,
     "d": 0.5,
@@ -2970,8 +3115,8 @@
     "id": "rostlina-obyvak",
     "kind": "plant",
     "roomId": "obyvak",
-    "x": 14.6,
-    "z": 13.4,
+    "x": 14.7,
+    "z": 9.25,
     "facing": "W",
     "w": 0.5,
     "d": 0.5,
@@ -3462,11 +3607,27 @@
     "d": 0.3
    },
    {
+    "id": "zz-podhled",
+    "kind": "panel",
+    "roomId": "zimni-zahrada",
+    "x": 11.35,
+    "z": 16.68,
+    "facing": "S",
+    "w": 2.62,
+    "d": 5.36,
+    "h": 0.03,
+    "y": 2.6,
+    "variant": "flat",
+    "color": "#f3efe7",
+    "decor": true,
+    "solid": false
+   },
+   {
     "id": "zz-stul",
     "kind": "diningTable",
     "roomId": "zimni-zahrada",
-    "x": 12.6,
-    "z": 16.1,
+    "x": 11.35,
+    "z": 16.4,
     "facing": "N",
     "w": 1.6,
     "d": 0.9,
@@ -3476,8 +3637,8 @@
     "id": "zz-zidle-0",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 12.15,
-    "z": 15.45,
+    "x": 10.9,
+    "z": 15.75,
     "facing": "S",
     "w": 0.45,
     "d": 0.5,
@@ -3488,8 +3649,8 @@
     "id": "zz-zidle-1",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 13.05,
-    "z": 15.45,
+    "x": 11.8,
+    "z": 15.75,
     "facing": "S",
     "w": 0.45,
     "d": 0.5,
@@ -3500,8 +3661,8 @@
     "id": "zz-zidle-2",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 12.15,
-    "z": 16.75,
+    "x": 10.9,
+    "z": 17.05,
     "facing": "N",
     "w": 0.45,
     "d": 0.5,
@@ -3512,8 +3673,8 @@
     "id": "zz-zidle-3",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 13.05,
-    "z": 16.75,
+    "x": 11.8,
+    "z": 17.05,
     "facing": "N",
     "w": 0.45,
     "d": 0.5,
@@ -3524,8 +3685,8 @@
     "id": "zz-zidle-4",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 11.55,
-    "z": 16.1,
+    "x": 10.3,
+    "z": 16.4,
     "facing": "E",
     "w": 0.45,
     "d": 0.5,
@@ -3536,8 +3697,8 @@
     "id": "zz-zidle-5",
     "kind": "chair",
     "roomId": "zimni-zahrada",
-    "x": 13.65,
-    "z": 16.1,
+    "x": 12.4,
+    "z": 16.4,
     "facing": "W",
     "w": 0.45,
     "d": 0.5,
@@ -3548,20 +3709,21 @@
     "id": "zz-krb",
     "kind": "fireplace",
     "roomId": "zimni-zahrada",
-    "x": 10.75,
-    "z": 17.9,
+    "x": 12.75,
+    "z": 18.85,
     "facing": "N",
-    "w": 0.95,
-    "d": 0.75,
-    "variant": "fire"
+    "w": 0.85,
+    "d": 0.7,
+    "variant": "fire",
+    "flue": false
    },
    {
     "id": "zz-kreslo",
     "kind": "armchair",
     "roomId": "zimni-zahrada",
-    "x": 14.2,
-    "z": 17.7,
-    "facing": "W",
+    "x": 9.95,
+    "z": 18.7,
+    "facing": "E",
     "w": 0.85,
     "d": 0.85,
     "variant": "lounge",
@@ -3571,7 +3733,7 @@
     "id": "zz-rostlina-1",
     "kind": "plant",
     "roomId": "zimni-zahrada",
-    "x": 14.45,
+    "x": 12.85,
     "z": 14.4,
     "facing": "W",
     "w": 0.5,
@@ -3582,7 +3744,7 @@
     "id": "zz-rostlina-2",
     "kind": "plant",
     "roomId": "zimni-zahrada",
-    "x": 10.5,
+    "x": 9.85,
     "z": 14.4,
     "facing": "E",
     "w": 0.5,
@@ -3590,21 +3752,33 @@
     "variant": "pot"
    },
    {
-    "id": "pergola-terasa",
-    "kind": "pergola",
-    "roomId": "terasa",
-    "x": 8.42,
-    "z": 16.4,
-    "facing": "S",
-    "w": 3.44,
-    "d": 4.75
+    "id": "terasa-sklo-stul",
+    "kind": "diningTable",
+    "roomId": "proskl-terasa",
+    "x": 15.1,
+    "z": 16.6,
+    "facing": "N",
+    "w": 1.6,
+    "d": 0.9,
+    "color": "#8a6a4f"
+   },
+   {
+    "id": "terasa-sklo-lavice",
+    "kind": "bench",
+    "roomId": "proskl-terasa",
+    "x": 15.1,
+    "z": 17.5,
+    "facing": "N",
+    "w": 1.6,
+    "d": 0.45,
+    "variant": "cushion"
    },
    {
     "id": "terasa-lehatko-1",
     "kind": "armchair",
     "roomId": "terasa",
-    "x": 7.6,
-    "z": 17.4,
+    "x": 7.0,
+    "z": 17.6,
     "facing": "N",
     "w": 0.8,
     "d": 0.8,
@@ -3615,8 +3789,8 @@
     "id": "terasa-lehatko-2",
     "kind": "armchair",
     "roomId": "terasa",
-    "x": 8.8,
-    "z": 17.4,
+    "x": 8.3,
+    "z": 17.6,
     "facing": "N",
     "w": 0.8,
     "d": 0.8,
@@ -3654,8 +3828,849 @@
     "w": 1.4,
     "d": 0.45,
     "variant": "cushion"
+   },
+   {
+    "id": "sloup-ter-1",
+    "kind": "panel",
+    "roomId": "terasa",
+    "x": 5.75,
+    "z": 19.25,
+    "facing": "S",
+    "w": 0.12,
+    "d": 0.12,
+    "h": 2.29,
+    "variant": "flat",
+    "color": "#6d4325"
+   },
+   {
+    "id": "sloup-ter-2",
+    "kind": "panel",
+    "roomId": "terasa",
+    "x": 7.6,
+    "z": 19.25,
+    "facing": "S",
+    "w": 0.12,
+    "d": 0.12,
+    "h": 2.29,
+    "variant": "flat",
+    "color": "#6d4325"
+   },
+   {
+    "id": "sloup-sklo-1",
+    "kind": "panel",
+    "roomId": "proskl-terasa",
+    "x": 16.8,
+    "z": 19.2,
+    "facing": "S",
+    "w": 0.12,
+    "d": 0.12,
+    "h": 2.3,
+    "variant": "flat",
+    "color": "#3a3d40"
+   },
+   {
+    "id": "sloup-sklo-2",
+    "kind": "panel",
+    "roomId": "proskl-terasa",
+    "x": 16.8,
+    "z": 14.15,
+    "facing": "S",
+    "w": 0.12,
+    "d": 0.12,
+    "h": 2.74,
+    "variant": "flat",
+    "color": "#3a3d40"
    }
-  ]
+  ],
+  "furnishing": {
+   "items": [
+    {
+     "id": "strom-01",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 7.2,
+     "z": 1.6,
+     "facing": "S",
+     "turn": -43,
+     "w": 1.9,
+     "d": 1.9,
+     "h": 1.9,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-02",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 8.8,
+     "z": 1.5,
+     "facing": "S",
+     "turn": 4,
+     "w": 2.8,
+     "d": 2.8,
+     "h": 3.6,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-03",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 10.4,
+     "z": 1.4,
+     "facing": "S",
+     "turn": 51,
+     "w": 2.0,
+     "d": 2.0,
+     "h": 2.1,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-04",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 12.0,
+     "z": 1.5,
+     "facing": "S",
+     "turn": -82,
+     "w": 3.2,
+     "d": 3.2,
+     "h": 4.6,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-05",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 13.8,
+     "z": 1.5,
+     "facing": "S",
+     "turn": -35,
+     "w": 2.2,
+     "d": 2.2,
+     "h": 2.2,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#4f7a37",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-06",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 15.6,
+     "z": 1.6,
+     "facing": "S",
+     "turn": 12,
+     "w": 3.0,
+     "d": 3.0,
+     "h": 4.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-07",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 17.5,
+     "z": 1.7,
+     "facing": "S",
+     "turn": 59,
+     "w": 1.8,
+     "d": 1.8,
+     "h": 5.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/jehlicnan-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-08",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 19.1,
+     "z": 1.8,
+     "facing": "S",
+     "turn": -74,
+     "w": 2.0,
+     "d": 2.0,
+     "h": 6.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/jehlicnan-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-09",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 20.5,
+     "z": 3.1,
+     "facing": "S",
+     "turn": -27,
+     "w": 1.9,
+     "d": 1.9,
+     "h": 6.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/jehlicnan-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-10",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 21.0,
+     "z": 5.0,
+     "facing": "S",
+     "turn": 20,
+     "w": 1.8,
+     "d": 1.8,
+     "h": 5.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/jehlicnan-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#4f7a37",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-11",
+     "kind": "model",
+     "roomId": "vjezd",
+     "x": 1.5,
+     "z": 3.0,
+     "facing": "S",
+     "turn": 67,
+     "w": 1.5,
+     "d": 1.5,
+     "h": 1.8,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-12",
+     "kind": "model",
+     "roomId": "vjezd",
+     "x": 1.4,
+     "z": 6.5,
+     "facing": "S",
+     "turn": -66,
+     "w": 1.4,
+     "d": 1.4,
+     "h": 1.6,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-13",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 20.7,
+     "z": 7.2,
+     "facing": "S",
+     "turn": -19,
+     "w": 3.4,
+     "d": 3.4,
+     "h": 5.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-14",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 20.7,
+     "z": 9.6,
+     "facing": "S",
+     "turn": 28,
+     "w": 2.3,
+     "d": 2.3,
+     "h": 2.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-15",
+     "kind": "model",
+     "roomId": "predzahradka",
+     "x": 20.6,
+     "z": 12.2,
+     "facing": "S",
+     "turn": 75,
+     "w": 3.6,
+     "d": 3.6,
+     "h": 6.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#4f7a37",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-16",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 20.4,
+     "z": 15.2,
+     "facing": "S",
+     "turn": -58,
+     "w": 2.4,
+     "d": 2.4,
+     "h": 2.6,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-17",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 20.2,
+     "z": 17.8,
+     "facing": "S",
+     "turn": -11,
+     "w": 3.4,
+     "d": 3.4,
+     "h": 5.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-18",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 20.0,
+     "z": 21.0,
+     "facing": "S",
+     "turn": 36,
+     "w": 4.0,
+     "d": 4.0,
+     "h": 6.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-19",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 19.8,
+     "z": 23.9,
+     "facing": "S",
+     "turn": 83,
+     "w": 2.6,
+     "d": 2.6,
+     "h": 2.8,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-20",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 19.3,
+     "z": 26.4,
+     "facing": "S",
+     "turn": -50,
+     "w": 3.6,
+     "d": 3.6,
+     "h": 5.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#4f7a37",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-21",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 16.6,
+     "z": 26.7,
+     "facing": "S",
+     "turn": -3,
+     "w": 4.2,
+     "d": 4.2,
+     "h": 6.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-22",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 13.4,
+     "z": 26.6,
+     "facing": "S",
+     "turn": 44,
+     "w": 4.8,
+     "d": 4.8,
+     "h": 7.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-23",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 10.0,
+     "z": 26.8,
+     "facing": "S",
+     "turn": -89,
+     "w": 4.2,
+     "d": 4.2,
+     "h": 6.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-24",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 7.3,
+     "z": 26.8,
+     "facing": "S",
+     "turn": -42,
+     "w": 2.6,
+     "d": 2.6,
+     "h": 2.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-25",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 4.6,
+     "z": 26.4,
+     "facing": "S",
+     "turn": 5,
+     "w": 4.6,
+     "d": 4.6,
+     "h": 6.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#4f7a37",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-26",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 2.0,
+     "z": 26.9,
+     "facing": "S",
+     "turn": 52,
+     "w": 1.8,
+     "d": 1.8,
+     "h": 5.0,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/jehlicnan-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#5c8a3f",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-27",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 18.0,
+     "z": 22.0,
+     "facing": "S",
+     "turn": -81,
+     "w": 2.2,
+     "d": 2.2,
+     "h": 2.2,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#456d33",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-28",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 1.4,
+     "z": 20.5,
+     "facing": "S",
+     "turn": -34,
+     "w": 1.8,
+     "d": 1.8,
+     "h": 2.2,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/ker-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#6a8f45",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    },
+    {
+     "id": "strom-29",
+     "kind": "model",
+     "roomId": "zahrada",
+     "x": 1.6,
+     "z": 23.6,
+     "facing": "S",
+     "turn": 13,
+     "w": 3.0,
+     "d": 3.0,
+     "h": 4.5,
+     "solid": false,
+     "decor": true,
+     "model": {
+      "url": "zarizeni/modely/listnaty-glb.webm",
+      "fit": "stretch",
+      "credit": "FD low-poly",
+      "tint": [
+       {
+        "match": "listi",
+        "color": "#3f6530",
+        "mode": "replace",
+        "roughness": 0.95
+       }
+      ]
+     }
+    }
+   ],
+   "label": "Zeleň na zahradě",
+   "note": "Stromy a keře podle ortofota ČÚZK, tvary jsou ilustrační"
+  }
  },
  "photos": [
   {
@@ -3664,11 +4679,11 @@
    "thumb": "fotky/mini-01.jpg",
    "roomId": "obyvak",
    "position": [
-    8.15,
+    9.4,
     1.5,
-    9.3
+    10.1
    ],
-   "yaw": -122.62,
+   "yaw": -108.74,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,
@@ -3700,16 +4715,16 @@
    "thumb": "fotky/mini-02.jpg",
    "roomId": "obyvak",
    "position": [
-    14.3,
+    12.4,
     1.5,
-    13.15
+    12.7
    ],
-   "yaw": 57.67,
+   "yaw": 56.31,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,
    "title": "Kuchyň s jídelnou",
-   "caption": "Kuchyň s ostrůvkem a kulatým jídelním stolem pro čtyři. (AI vizualizace podle 3D modelu)",
+   "caption": "Kuchyňská linka do L pod oknem a podél zdi k pracovně, kulatý jídelní stůl pro čtyři. (AI vizualizace podle 3D modelu)",
    "doors": {
     "open": [
      "dv-terasa",
@@ -3736,11 +4751,11 @@
    "thumb": "fotky/mini-03.jpg",
    "roomId": "zimni-zahrada",
    "position": [
-    10.75,
+    9.9,
     1.5,
     14.45
    ],
-   "yaw": -136.66,
+   "yaw": -146.6,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,
@@ -3772,11 +4787,11 @@
    "thumb": "fotky/mini-04.jpg",
    "roomId": "zimni-zahrada",
    "position": [
-    14.3,
+    12.8,
     1.5,
-    18.0
+    18.95
    ],
-   "yaw": 46.64,
+   "yaw": 34.59,
    "pitch": -3,
    "hfov": 90,
    "aspect": 1.5,
@@ -4657,7 +5672,7 @@
   "hero": {
    "photo": "foto-03"
   },
-  "source": "3D model podle stavební dokumentace (půdorysy 1.NP a 2.NP) a katastru ČÚZK. Fotky místností jsou AI vizualizace podle 3D modelu.",
+  "source": "3D model podle stavební dokumentace (půdorysy 1.NP a 2.NP), katastru ČÚZK a inzerátu REFA č. 1649. Fotky místností jsou AI vizualizace podle 3D modelu.",
   "gallery": [
    {
     "url": "galerie/pozemek-koty.jpg",
@@ -4737,7 +5752,7 @@
   },
   "intro": {
    "subtitle": "Rodinný dům · Praha 5 – Řeporyje · 166 m² + zimní zahrada",
-   "text": "3D model domu podle stavební dokumentace a katastru. Fotky v místnostech jsou AI vizualizace."
+   "text": "3D model domu podle stavební dokumentace, katastru a fotek z inzerátu. Fotky v místnostech jsou AI vizualizace."
   },
   "outro": {
    "title": "Děkujeme za prohlídku",

@@ -101,3 +101,11 @@ npx playwright install chromium
 | `render_pozice.js` | rendery z enginu na pozicích fotek (podklad pro AI) |
 | `ai_prompty.py` | zadání AI fotek pro každou pozici |
 | `vloz_fotky.py` | vložení hotových AI fotek do prohlídky |
+| `stromy_glb.py` | low-poly stromy a keře (.glb) pro zeleň podél plotů podle ortofota |
+
+## Na co si dát pozor v enginu (ověřeno na Horšovské)
+
+- Modely `.glb` (stromy) engine načítá jen z `apartment.furnishing.items`, ne z `furniture`. Vrstvu zapne `?zarizeni=1` nebo localStorage v `index.html`.
+- Strop místnosti nemůže být výš než `wallHeight` podlaží a podlaží nesmí zasahovat do dalšího podlaží. Klenutý strop přístavby nad touto výškou nechá díru: zakryje ji rovný podhled (`panel` s `variant: "flat"`, malé `h`, `y` těsně pod stropem).
+- Ve kterou stranu zdi jde povrch (`surfaces.side`): `front` = pravá strana ve směru a→b.
+- Schody: vstupní hrana prvního stupně nesmí být u zdi, hloubka stupně aspoň 0,25 m.

@@ -1,0 +1,4752 @@
+{
+ "version": 1,
+ "title": "Rodinný dům se zimní zahradou – Praha 5 – Řeporyje",
+ "source": "demo",
+ "units": "m",
+ "spawn": {
+  "position": [
+   8.15,
+   0,
+   9.3
+  ],
+  "yaw": -122.62,
+  "pitch": -3
+ },
+ "settings": {
+  "eyeHeight": 1.65,
+  "walkSpeed": 1.4,
+  "runMultiplier": 2.2
+ },
+ "floorPlan": {
+  "rooms": [],
+  "levels": [
+   {
+    "id": "1np",
+    "image": {
+     "url": "pudorys-1np.jpg"
+    },
+    "imageTransform": {
+     "position": [
+      12.761,
+      8.865
+     ],
+     "rotationDeg": 180,
+     "scale": 0.014224137931034483
+    }
+   },
+   {
+    "id": "2np",
+    "image": {
+     "url": "pudorys-2np.jpg"
+    },
+    "imageTransform": {
+     "position": [
+      13.138,
+      9.142
+     ],
+     "rotationDeg": 180,
+     "scale": 0.0132
+    }
+   }
+  ]
+ },
+ "waypoints": [
+  {
+   "id": "obyvak",
+   "position": [
+    8.15,
+    0,
+    9.3
+   ],
+   "yaw": -122.62,
+   "pitch": -3,
+   "roomId": "obyvak",
+   "caption": "Obývací pokoj s kuchyní asi 41 m²: sedačka, televizní stěna a dveře na terasu a do zimní zahrady.",
+   "dwellS": 5,
+   "photoId": "foto-01"
+  },
+  {
+   "id": "zz",
+   "position": [
+    10.75,
+    0,
+    14.45
+   ],
+   "yaw": -136.66,
+   "pitch": -3,
+   "roomId": "zimni-zahrada",
+   "caption": "Zimní zahrada asi 20 m² s krbem a dřevěným krovem, celoročně využitelná.",
+   "dwellS": 5,
+   "photoId": "foto-03"
+  },
+  {
+   "id": "pracovna",
+   "position": [
+    10.95,
+    0,
+    7.4
+   ],
+   "yaw": 51.13,
+   "pitch": -3,
+   "roomId": "pracovna",
+   "caption": "Pracovna asi 13 m² v přízemí, vhodná i jako pokoj pro hosty.",
+   "dwellS": 5,
+   "photoId": "foto-05"
+  },
+  {
+   "id": "zadveri",
+   "position": [
+    12.45,
+    0,
+    4.7
+   ],
+   "yaw": -177.8,
+   "pitch": -3,
+   "roomId": "zadveri",
+   "caption": "Zádveří se šatní skříní, vlevo pracovna, rovně obývací pokoj a schodiště.",
+   "dwellS": 5,
+   "photoId": "foto-07"
+  },
+  {
+   "id": "koupelna1",
+   "position": [
+    13.75,
+    0,
+    6.35
+   ],
+   "yaw": -30.53,
+   "pitch": -3,
+   "roomId": "koupelna-1np",
+   "caption": "Koupelna se sprchovým koutem a WC.",
+   "dwellS": 5,
+   "photoId": "foto-09"
+  },
+  {
+   "id": "garaz",
+   "position": [
+    15.6,
+    0,
+    6.6
+   ],
+   "yaw": -157.22,
+   "pitch": -3,
+   "roomId": "garaz",
+   "caption": "Garáž asi 16 m² s technickým zázemím.",
+   "dwellS": 5,
+   "photoId": "foto-11"
+  },
+  {
+   "id": "hala",
+   "position": [
+    11.6,
+    2.88,
+    7.15
+   ],
+   "yaw": -130.67,
+   "pitch": -3,
+   "roomId": "hala",
+   "caption": "Hala se schodištěm, odtud se vstupuje do čtyř ložnic, koupelny a WC.",
+   "dwellS": 5,
+   "photoId": "foto-13"
+  },
+  {
+   "id": "loznice-jv",
+   "position": [
+    12.3,
+    2.88,
+    10.45
+   ],
+   "yaw": -140.09,
+   "pitch": -3,
+   "roomId": "loznice-jv",
+   "caption": "Ložnice asi 13 m² s oknem do zahrady.",
+   "dwellS": 5,
+   "photoId": "foto-15"
+  },
+  {
+   "id": "loznice-jz",
+   "position": [
+    10.25,
+    2.88,
+    9.4
+   ],
+   "yaw": 145.11,
+   "pitch": -3,
+   "roomId": "loznice-jz",
+   "caption": "Největší ložnice asi 18 m² s oknem do zahrady.",
+   "dwellS": 5,
+   "photoId": "foto-17"
+  },
+  {
+   "id": "loznice-sz",
+   "position": [
+    10.05,
+    2.88,
+    8.7
+   ],
+   "yaw": 31.49,
+   "pitch": -3,
+   "roomId": "loznice-sz",
+   "caption": "Ložnice asi 16 m² s oknem do ulice.",
+   "dwellS": 5,
+   "photoId": "foto-19"
+  },
+  {
+   "id": "loznice-kr",
+   "position": [
+    15.5,
+    2.88,
+    11.5
+   ],
+   "yaw": -25.6,
+   "pitch": -3,
+   "roomId": "loznice-kridlo",
+   "caption": "Ložnice asi 14,5 m² se střešním oknem a oknem k Maxovské.",
+   "dwellS": 5,
+   "photoId": "foto-21"
+  },
+  {
+   "id": "koupelna2",
+   "position": [
+    12.2,
+    2.88,
+    6.6
+   ],
+   "yaw": -50.83,
+   "pitch": -3,
+   "roomId": "koupelna-2np",
+   "caption": "Koupelna v podkroví s vanou pod šikminou.",
+   "dwellS": 5,
+   "photoId": "foto-23"
+  },
+  {
+   "id": "wc",
+   "position": [
+    11.22,
+    2.88,
+    6.7
+   ],
+   "yaw": -0.0,
+   "pitch": -3,
+   "roomId": "wc-2np",
+   "caption": "Samostatné WC s umyvadlem.",
+   "dwellS": 5,
+   "photoId": "foto-25"
+  }
+ ],
+ "hotspots": [
+  {
+   "id": "hs-cisla",
+   "position": [
+    10.2,
+    1.6,
+    11.4
+   ],
+   "title": "Dům v číslech",
+   "kind": "info",
+   "text": "Rodinný dům z roku 2010, rekonstrukce 2019–2021. Užitná plocha 166 m² + zimní zahrada asi 20 m², pozemek 558 m² podle katastru (inzerát uvádí 638 m²), garáž a 3 stání."
+  },
+  {
+   "id": "hs-zz",
+   "position": [
+    12.5,
+    2.0,
+    16.2
+   ],
+   "title": "Zimní zahrada",
+   "kind": "info",
+   "text": "Dřevěná prosklená přístavba s krbem a podlahovým vytápěním, navazuje na obývací pokoj i terasu."
+  },
+  {
+   "id": "hs-vjezd",
+   "position": [
+    4.0,
+    1.6,
+    6.0
+   ],
+   "title": "Vjezd a parkování",
+   "kind": "info",
+   "text": "Zpevněný pruh podél západní strany domu, šířka 6,0 m mezi domem a hranicí, 3 stání + garáž."
+  },
+  {
+   "id": "hs-zahrada",
+   "position": [
+    11.0,
+    1.6,
+    23.5
+   ],
+   "title": "Zahrada",
+   "kind": "info",
+   "text": "Zahrada za domem je 14,3 m hluboká a 19,8 m široká, s automatickou závlahou, saunou a pergolou s grilem."
+  },
+  {
+   "id": "hs-strecha",
+   "position": [
+    11.1,
+    4.779999999999999,
+    9.0
+   ],
+   "title": "Podkroví",
+   "kind": "info",
+   "text": "Čtyři ložnice, koupelna s vanou a samostatné WC. Sklon střechy a výška nadezdívky jsou v modelu odhad podle půdorysů."
+  }
+ ],
+ "apartment": {
+  "kind": "house",
+  "wallHeight": 2.63,
+  "railingHeight": 1,
+  "levels": [
+   {
+    "id": "1np",
+    "name": "Přízemí",
+    "short": "1. NP",
+    "elevation": 0,
+    "wallHeight": 2.63
+   },
+   {
+    "id": "2np",
+    "name": "Podkroví",
+    "short": "2. NP",
+    "elevation": 2.88,
+    "wallHeight": 6,
+    "slab": 0.25
+   }
+  ],
+  "rooms": [
+   {
+    "id": "obyvak",
+    "name": "Obývací pokoj s kuchyní",
+    "level": "1np",
+    "polygon": [
+     [
+      7.25,
+      13.75
+     ],
+     [
+      15.0,
+      13.75
+     ],
+     [
+      15.0,
+      8.85
+     ],
+     [
+      11.3,
+      8.85
+     ],
+     [
+      11.3,
+      7.85
+     ],
+     [
+      7.25,
+      7.85
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 41.0,
+    "lightId": "sw-obyvak",
+    "lights": [
+     {
+      "x": 9.2,
+      "z": 11.0,
+      "y": 2.45,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     },
+     {
+      "x": 12.8,
+      "z": 11.8,
+      "y": 2.45,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "wall": "white"
+   },
+   {
+    "id": "zadveri",
+    "name": "Zádveří",
+    "level": "1np",
+    "polygon": [
+     [
+      11.45,
+      8.75
+     ],
+     [
+      12.85,
+      8.75
+     ],
+     [
+      12.85,
+      6.55
+     ],
+     [
+      13.45,
+      6.55
+     ],
+     [
+      13.45,
+      4.3
+     ],
+     [
+      11.45,
+      4.3
+     ]
+    ],
+    "floor": "tiles",
+    "areaM2": 7.5,
+    "lightId": "sw-zadveri",
+    "lights": [
+     {
+      "x": 12.4,
+      "z": 6.0,
+      "y": 2.45,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "wall": "white"
+   },
+   {
+    "id": "schodiste-1np",
+    "name": "Schodiště",
+    "level": "1np",
+    "polygon": [
+     [
+      12.85,
+      8.75
+     ],
+     [
+      15.0,
+      8.75
+     ],
+     [
+      15.0,
+      6.65
+     ],
+     [
+      12.85,
+      6.65
+     ]
+    ],
+    "floor": "oakGreige",
+    "dayLight": true,
+    "wall": "white"
+   },
+   {
+    "id": "koupelna-1np",
+    "name": "Koupelna",
+    "level": "1np",
+    "polygon": [
+     [
+      13.55,
+      6.55
+     ],
+     [
+      15.0,
+      6.55
+     ],
+     [
+      15.0,
+      4.3
+     ],
+     [
+      13.55,
+      4.3
+     ]
+    ],
+    "floor": "tiles",
+    "areaM2": 3.3,
+    "wall": "tileWhite",
+    "lightId": "sw-koupelna-1np",
+    "lights": [
+     {
+      "x": 14.3,
+      "z": 5.4,
+      "y": 2.45,
+      "intensity": 6,
+      "distance": 3,
+      "fixture": "ceiling"
+     }
+    ]
+   },
+   {
+    "id": "pracovna",
+    "name": "Pracovna",
+    "level": "1np",
+    "polygon": [
+     [
+      7.25,
+      7.75
+     ],
+     [
+      11.3,
+      7.75
+     ],
+     [
+      11.3,
+      4.3
+     ],
+     [
+      7.25,
+      4.3
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 13.2,
+    "lightId": "sw-pracovna",
+    "lights": [
+     {
+      "x": 9.3,
+      "z": 6.0,
+      "y": 2.45,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "wall": "white"
+   },
+   {
+    "id": "garaz",
+    "name": "Garáž",
+    "level": "1np",
+    "polygon": [
+     [
+      15.25,
+      11.82
+     ],
+     [
+      17.97,
+      11.82
+     ],
+     [
+      17.97,
+      6.28
+     ],
+     [
+      15.25,
+      6.28
+     ]
+    ],
+    "floor": "stone",
+    "areaM2": 16.2,
+    "lightId": "sw-garaz",
+    "lights": [
+     {
+      "x": 16.6,
+      "z": 9.05,
+      "y": 2.45,
+      "intensity": 6,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "wall": "white"
+   },
+   {
+    "id": "zimni-zahrada",
+    "name": "Zimní zahrada",
+    "level": "1np",
+    "polygon": [
+     [
+      10.2,
+      18.4
+     ],
+     [
+      14.8,
+      18.4
+     ],
+     [
+      14.8,
+      14.01
+     ],
+     [
+      10.2,
+      14.01
+     ]
+    ],
+    "floor": "oak",
+    "areaM2": 20.0,
+    "dayLight": true,
+    "lights": [
+     {
+      "x": 12.5,
+      "z": 16.2,
+      "y": 2.6,
+      "intensity": 6,
+      "distance": 5,
+      "fixture": "none"
+     }
+    ],
+    "wall": "sand"
+   },
+   {
+    "id": "terasa",
+    "name": "Krytá terasa",
+    "level": "1np",
+    "polygon": [
+     [
+      6.7,
+      18.8
+     ],
+     [
+      10.14,
+      18.8
+     ],
+     [
+      10.14,
+      14.01
+     ],
+     [
+      6.7,
+      14.01
+     ]
+    ],
+    "floor": "paving",
+    "areaM2": 16.5,
+    "outdoor": true,
+    "wall": "white",
+    "band": {
+     "finish": "exterior",
+     "y0": 0,
+     "y1": 2.63
+    }
+   },
+   {
+    "id": "drevena-terasa",
+    "name": "Dřevěná terasa",
+    "level": "1np",
+    "polygon": [
+     [
+      12.6,
+      20.2
+     ],
+     [
+      16.6,
+      20.2
+     ],
+     [
+      16.6,
+      14.01
+     ],
+     [
+      14.86,
+      14.01
+     ],
+     [
+      14.86,
+      18.46
+     ],
+     [
+      12.6,
+      18.46
+     ]
+    ],
+    "floor": "terrace",
+    "areaM2": 14.0,
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "zahrada",
+    "name": "Zahrada",
+    "level": "1np",
+    "polygon": [
+     [
+      0.8,
+      28.39
+     ],
+     [
+      20.15,
+      28.13
+     ],
+     [
+      21.33,
+      14.01
+     ],
+     [
+      16.6,
+      14.01
+     ],
+     [
+      16.6,
+      20.2
+     ],
+     [
+      12.6,
+      20.2
+     ],
+     [
+      12.6,
+      18.46
+     ],
+     [
+      10.14,
+      18.46
+     ],
+     [
+      10.14,
+      18.8
+     ],
+     [
+      6.7,
+      18.8
+     ],
+     [
+      6.7,
+      14.01
+     ],
+     [
+      0.94,
+      14.01
+     ]
+    ],
+    "floor": "grass",
+    "areaM2": 260.0,
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "vjezd",
+    "name": "Vjezd a parkování",
+    "level": "1np",
+    "polygon": [
+     [
+      0.94,
+      14.01
+     ],
+     [
+      7.0,
+      14.01
+     ],
+     [
+      7.0,
+      0.72
+     ],
+     [
+      1.06,
+      1.13
+     ]
+    ],
+    "floor": "paving",
+    "areaM2": 78.0,
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "predzahradka",
+    "name": "Předzahrádka a okolí domu",
+    "level": "1np",
+    "polygon": [
+     [
+      7.0,
+      4.05
+     ],
+     [
+      15.25,
+      4.05
+     ],
+     [
+      15.25,
+      6.03
+     ],
+     [
+      18.22,
+      6.03
+     ],
+     [
+      18.22,
+      12.07
+     ],
+     [
+      15.25,
+      12.07
+     ],
+     [
+      15.25,
+      14.01
+     ],
+     [
+      21.33,
+      14.01
+     ],
+     [
+      22.14,
+      4.22
+     ],
+     [
+      21.0,
+      0.84
+     ],
+     [
+      10.98,
+      0.44
+     ],
+     [
+      7.0,
+      0.72
+     ]
+    ],
+    "floor": "grass",
+    "areaM2": 95.0,
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "ulice-horsovska",
+    "name": "Ulice Horšovská",
+    "level": "1np",
+    "polygon": [
+     [
+      -5.0,
+      1.5
+     ],
+     [
+      1.06,
+      1.13
+     ],
+     [
+      10.98,
+      0.44
+     ],
+     [
+      21.0,
+      0.84
+     ],
+     [
+      31.0,
+      1.0
+     ],
+     [
+      31.0,
+      -7.0
+     ],
+     [
+      -5.0,
+      -7.0
+     ]
+    ],
+    "floor": "slabs",
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "ulice-maxovska",
+    "name": "Ulice Maxovská",
+    "level": "1np",
+    "polygon": [
+     [
+      21.0,
+      0.84
+     ],
+     [
+      31.0,
+      1.0
+     ],
+     [
+      31.0,
+      32.0
+     ],
+     [
+      20.15,
+      32.0
+     ],
+     [
+      20.15,
+      28.13
+     ],
+     [
+      21.33,
+      14.01
+     ],
+     [
+      22.14,
+      4.22
+     ]
+    ],
+    "floor": "slabs",
+    "outdoor": true,
+    "wall": "white"
+   },
+   {
+    "id": "loznice-jv",
+    "name": "Ložnice (jih–východ)",
+    "level": "2np",
+    "polygon": [
+     [
+      11.25,
+      13.75
+     ],
+     [
+      15.0,
+      13.75
+     ],
+     [
+      15.0,
+      10.2
+     ],
+     [
+      11.25,
+      10.2
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 13.3,
+    "lightId": "sw-loznice-jv",
+    "lights": [
+     {
+      "x": 13.1,
+      "z": 12.0,
+      "y": 2.4,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "floorAngle": 90,
+    "wall": "white",
+    "ceilingHeight": 2.5
+   },
+   {
+    "id": "loznice-jz",
+    "name": "Ložnice (jih–západ)",
+    "level": "2np",
+    "polygon": [
+     [
+      7.25,
+      13.75
+     ],
+     [
+      11.15,
+      13.75
+     ],
+     [
+      11.15,
+      9.15
+     ],
+     [
+      7.25,
+      9.15
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 17.9,
+    "lightId": "sw-loznice-jz",
+    "lights": [
+     {
+      "x": 9.2,
+      "z": 11.5,
+      "y": 2.4,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "floorAngle": 90,
+    "wall": "white",
+    "ceilingHeight": 2.5
+   },
+   {
+    "id": "loznice-sz",
+    "name": "Ložnice (sever–západ)",
+    "level": "2np",
+    "polygon": [
+     [
+      7.25,
+      9.05
+     ],
+     [
+      11.15,
+      9.05
+     ],
+     [
+      11.15,
+      6.95
+     ],
+     [
+      10.46,
+      6.95
+     ],
+     [
+      10.46,
+      4.3
+     ],
+     [
+      7.25,
+      4.3
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 15.8,
+    "lightId": "sw-loznice-sz",
+    "lights": [
+     {
+      "x": 9.0,
+      "z": 6.8,
+      "y": 2.4,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "floorAngle": 90,
+    "wall": "white",
+    "ceilingHeight": 2.5
+   },
+   {
+    "id": "hala",
+    "name": "Hala",
+    "level": "2np",
+    "polygon": [
+     [
+      11.25,
+      10.1
+     ],
+     [
+      15.0,
+      10.1
+     ],
+     [
+      15.0,
+      9.6
+     ],
+     [
+      14.1,
+      9.6
+     ],
+     [
+      14.1,
+      7.8
+     ],
+     [
+      13.4,
+      7.8
+     ],
+     [
+      13.4,
+      6.95
+     ],
+     [
+      11.25,
+      6.95
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 8.4,
+    "lightId": "sw-hala",
+    "lights": [
+     {
+      "x": 12.3,
+      "z": 8.4,
+      "y": 2.4,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "floorAngle": 90,
+    "wall": "white",
+    "ceilingHeight": 2.5
+   },
+   {
+    "id": "schodiste-2np",
+    "name": "Schodiště",
+    "level": "2np",
+    "polygon": [
+     [
+      14.1,
+      9.6
+     ],
+     [
+      15.0,
+      9.6
+     ],
+     [
+      15.0,
+      6.95
+     ],
+     [
+      13.4,
+      6.95
+     ],
+     [
+      13.4,
+      7.8
+     ],
+     [
+      14.1,
+      7.8
+     ]
+    ],
+    "floor": "oakGreige",
+    "dayLight": true,
+    "wall": "white",
+    "ceilingHeight": 2.5
+   },
+   {
+    "id": "koupelna-2np",
+    "name": "Koupelna s vanou",
+    "level": "2np",
+    "polygon": [
+     [
+      11.98,
+      6.85
+     ],
+     [
+      15.0,
+      6.85
+     ],
+     [
+      15.0,
+      4.3
+     ],
+     [
+      11.98,
+      4.3
+     ]
+    ],
+    "floor": "tiles",
+    "areaM2": 6.1,
+    "wall": "tileWhite",
+    "ceilingHeight": 2.5,
+    "lightId": "sw-koupelna-2np",
+    "lights": [
+     {
+      "x": 13.5,
+      "z": 5.6,
+      "y": 2.4,
+      "intensity": 6,
+      "distance": 3.5,
+      "fixture": "ceiling"
+     }
+    ]
+   },
+   {
+    "id": "wc-2np",
+    "name": "WC",
+    "level": "2np",
+    "polygon": [
+     [
+      10.56,
+      6.85
+     ],
+     [
+      11.88,
+      6.85
+     ],
+     [
+      11.88,
+      4.3
+     ],
+     [
+      10.56,
+      4.3
+     ]
+    ],
+    "floor": "tiles",
+    "areaM2": 2.8,
+    "wall": "tileWhite",
+    "ceilingHeight": 2.5,
+    "lights": [
+     {
+      "x": 11.2,
+      "z": 5.6,
+      "y": 2.4,
+      "intensity": 4,
+      "distance": 2.5,
+      "fixture": "ceiling"
+     }
+    ]
+   },
+   {
+    "id": "loznice-kridlo",
+    "name": "Ložnice nad garáží",
+    "level": "2np",
+    "polygon": [
+     [
+      15.25,
+      11.82
+     ],
+     [
+      17.97,
+      11.82
+     ],
+     [
+      17.97,
+      6.28
+     ],
+     [
+      15.25,
+      6.28
+     ]
+    ],
+    "floor": "oakGreige",
+    "areaM2": 14.5,
+    "lightId": "sw-loznice-kridlo",
+    "lights": [
+     {
+      "x": 16.6,
+      "z": 9.05,
+      "y": 2.4,
+      "intensity": 8,
+      "distance": 5,
+      "fixture": "ceiling"
+     }
+    ],
+    "floorAngle": 0,
+    "wall": "white"
+   }
+  ],
+  "walls": [
+   {
+    "id": "jih-1np",
+    "level": "1np",
+    "a": [
+     7.0,
+     13.875
+    ],
+    "b": [
+     15.25,
+     13.875
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 1.125,
+      "width": 0.95,
+      "sill": 0,
+      "height": 2.2,
+      "kind": "door",
+      "id": "dv-terasa",
+      "hinge": "b",
+      "swing": -1,
+      "open": true,
+      "glazed": true
+     },
+     {
+      "offset": 2.125,
+      "width": 1.05,
+      "sill": 0,
+      "height": 2.2,
+      "kind": "window"
+     },
+     {
+      "offset": 4.3,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.2,
+      "kind": "door",
+      "id": "dv-zimni-zahrada",
+      "hinge": "a",
+      "swing": -1,
+      "open": true,
+      "glazed": true
+     },
+     {
+      "offset": 5.05,
+      "width": 0.7,
+      "sill": 0,
+      "height": 2.2,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "sever-1np",
+    "level": "1np",
+    "a": [
+     7.0,
+     4.175
+    ],
+    "b": [
+     15.25,
+     4.175
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 5.45,
+      "width": 1.0,
+      "sill": 0,
+      "height": 2.1,
+      "kind": "door",
+      "id": "dv-vstup",
+      "hinge": "a",
+      "swing": 1,
+      "open": false,
+      "label": "Vstupní dveře",
+      "leafColor": "#5a3a22"
+     },
+     {
+      "offset": 7.35,
+      "width": 0.6,
+      "sill": 1.5,
+      "height": 0.6,
+      "kind": "window"
+     },
+     {
+      "offset": 2.25,
+      "width": 2.0,
+      "sill": 0.9,
+      "height": 1.3,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "zapad-1np",
+    "level": "1np",
+    "a": [
+     7.125,
+     4.05
+    ],
+    "b": [
+     7.125,
+     14.0
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 8.4,
+      "width": 1.5,
+      "sill": 0.5,
+      "height": 1.7,
+      "kind": "window"
+     },
+     {
+      "offset": 5.8,
+      "width": 1.9,
+      "sill": 1.1,
+      "height": 1.1,
+      "kind": "window"
+     },
+     {
+      "offset": 2.0,
+      "width": 1.5,
+      "sill": 0.9,
+      "height": 1.3,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "vychod-jih-1np",
+    "level": "1np",
+    "a": [
+     15.125,
+     12.07
+    ],
+    "b": [
+     15.125,
+     14.0
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 0.93,
+      "width": 1.2,
+      "sill": 0.9,
+      "height": 1.3,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "vychod-sever-1np",
+    "level": "1np",
+    "a": [
+     15.125,
+     4.05
+    ],
+    "b": [
+     15.125,
+     6.03
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "garaz-dum-1np",
+    "level": "1np",
+    "a": [
+     15.125,
+     6.03
+    ],
+    "b": [
+     15.125,
+     12.07
+    ],
+    "thickness": 0.25,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "kridlo-jih-1np",
+    "level": "1np",
+    "a": [
+     15.25,
+     11.945
+    ],
+    "b": [
+     18.22,
+     11.945
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 1.65,
+      "width": 1.0,
+      "sill": 1.4,
+      "height": 0.55,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "kridlo-sever-1np",
+    "level": "1np",
+    "a": [
+     15.25,
+     6.155
+    ],
+    "b": [
+     18.22,
+     6.155
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 1.5,
+      "width": 2.3,
+      "sill": 0,
+      "height": 2.1,
+      "kind": "door",
+      "id": "dv-garaz",
+      "label": "Vrata garáže",
+      "hinge": "a",
+      "swing": 1,
+      "open": false,
+      "leafColor": "#f2f2ee"
+     }
+    ]
+   },
+   {
+    "id": "kridlo-vychod-1np",
+    "level": "1np",
+    "a": [
+     18.095,
+     6.03
+    ],
+    "b": [
+     18.095,
+     12.07
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "obyvak-zadveri",
+    "level": "1np",
+    "a": [
+     11.3,
+     8.8
+    ],
+    "b": [
+     14.1,
+     8.8
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 1.1,
+      "width": 1.5,
+      "sill": 0,
+      "height": 2.2,
+      "kind": "passage",
+      "frame": false
+     }
+    ]
+   },
+   {
+    "id": "zadveri-pracovna",
+    "level": "1np",
+    "a": [
+     11.375,
+     4.3
+    ],
+    "b": [
+     11.375,
+     8.75
+    ],
+    "thickness": 0.15,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 2.85,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-pracovna",
+      "hinge": "a",
+      "swing": -1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "obyvak-pracovna",
+    "level": "1np",
+    "a": [
+     7.25,
+     7.8
+    ],
+    "b": [
+     11.3,
+     7.8
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "schody-koupelna",
+    "level": "1np",
+    "a": [
+     13.45,
+     6.6
+    ],
+    "b": [
+     15.0,
+     6.6
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "zadveri-koupelna",
+    "level": "1np",
+    "a": [
+     13.5,
+     4.3
+    ],
+    "b": [
+     13.5,
+     6.55
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 1.35,
+      "width": 0.7,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-koupelna-1np",
+      "hinge": "b",
+      "swing": 1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "jih-2np",
+    "level": "2np",
+    "a": [
+     7.0,
+     13.875
+    ],
+    "b": [
+     15.25,
+     13.875
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 6.15,
+      "width": 1.5,
+      "sill": 0.9,
+      "height": 1.2,
+      "kind": "window"
+     },
+     {
+      "offset": 2.4,
+      "width": 2.0,
+      "sill": 0.9,
+      "height": 1.2,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "sever-2np",
+    "level": "2np",
+    "a": [
+     7.0,
+     4.175
+    ],
+    "b": [
+     15.25,
+     4.175
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 6.3,
+      "width": 1.2,
+      "sill": 1.1,
+      "height": 1.0,
+      "kind": "window"
+     },
+     {
+      "offset": 2.15,
+      "width": 1.5,
+      "sill": 0.9,
+      "height": 1.2,
+      "kind": "window"
+     },
+     {
+      "offset": 4.2,
+      "width": 0.6,
+      "sill": 1.5,
+      "height": 0.6,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "zapad-2np",
+    "level": "2np",
+    "a": [
+     7.125,
+     4.05
+    ],
+    "b": [
+     7.125,
+     14.0
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "vychod-jih-2np",
+    "level": "2np",
+    "a": [
+     15.125,
+     12.07
+    ],
+    "b": [
+     15.125,
+     14.0
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "vychod-sever-2np",
+    "level": "2np",
+    "a": [
+     15.125,
+     4.05
+    ],
+    "b": [
+     15.125,
+     6.03
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "kridlo-dum-2np",
+    "level": "2np",
+    "a": [
+     15.125,
+     6.03
+    ],
+    "b": [
+     15.125,
+     12.07
+    ],
+    "thickness": 0.25,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 3.65,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-loznice-kridlo",
+      "hinge": "a",
+      "swing": 1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "kridlo-jih-2np",
+    "level": "2np",
+    "a": [
+     15.25,
+     11.945
+    ],
+    "b": [
+     18.22,
+     11.945
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "kridlo-sever-2np",
+    "level": "2np",
+    "a": [
+     15.25,
+     6.155
+    ],
+    "b": [
+     18.22,
+     6.155
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": []
+   },
+   {
+    "id": "kridlo-vychod-2np",
+    "level": "2np",
+    "a": [
+     18.095,
+     6.03
+    ],
+    "b": [
+     18.095,
+     12.07
+    ],
+    "thickness": 0.25,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 3.02,
+      "width": 1.2,
+      "sill": 0.9,
+      "height": 1.2,
+      "kind": "window"
+     }
+    ]
+   },
+   {
+    "id": "loznice-jv-hala",
+    "level": "2np",
+    "a": [
+     11.25,
+     10.15
+    ],
+    "b": [
+     15.0,
+     10.15
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 1.0,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-loznice-jv",
+      "hinge": "a",
+      "swing": 1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "loznice-jz-hala",
+    "level": "2np",
+    "a": [
+     11.2,
+     9.15
+    ],
+    "b": [
+     11.2,
+     13.75
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 0.45,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-loznice-jz",
+      "hinge": "b",
+      "swing": 1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "loznice-jz-sz",
+    "level": "2np",
+    "a": [
+     7.25,
+     9.1
+    ],
+    "b": [
+     11.15,
+     9.1
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "hala-loznice-sz",
+    "level": "2np",
+    "a": [
+     11.2,
+     6.95
+    ],
+    "b": [
+     11.2,
+     9.05
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 1.05,
+      "width": 0.8,
+      "sill": 0,
+      "height": 2.02,
+      "kind": "door",
+      "id": "dv-loznice-sz",
+      "hinge": "a",
+      "swing": 1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "hala-koupelny",
+    "level": "2np",
+    "a": [
+     10.45,
+     6.9
+    ],
+    "b": [
+     15.0,
+     6.9
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": [
+     {
+      "offset": 0.9,
+      "width": 0.6,
+      "sill": 0,
+      "height": 2.0,
+      "kind": "door",
+      "id": "dv-wc-2np",
+      "hinge": "a",
+      "swing": -1,
+      "open": true
+     },
+     {
+      "offset": 2.25,
+      "width": 0.7,
+      "sill": 0,
+      "height": 2.0,
+      "kind": "door",
+      "id": "dv-koupelna-2np",
+      "hinge": "b",
+      "swing": -1,
+      "open": true
+     }
+    ]
+   },
+   {
+    "id": "wc-koupelna",
+    "level": "2np",
+    "a": [
+     11.93,
+     4.3
+    ],
+    "b": [
+     11.93,
+     6.85
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "loznice-sz-wc",
+    "level": "2np",
+    "a": [
+     10.51,
+     4.3
+    ],
+    "b": [
+     10.51,
+     6.85
+    ],
+    "thickness": 0.1,
+    "exterior": false,
+    "openings": []
+   },
+   {
+    "id": "zz-zapad",
+    "level": "1np",
+    "a": [
+     10.2,
+     14.0
+    ],
+    "b": [
+     10.2,
+     18.4
+    ],
+    "thickness": 0.12,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 3.625,
+      "width": 1.25,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     },
+     {
+      "offset": 2.2,
+      "width": 1.3,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     },
+     {
+      "offset": 0.775,
+      "width": 1.25,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     }
+    ],
+    "height": 2.3
+   },
+   {
+    "id": "zz-vychod",
+    "level": "1np",
+    "a": [
+     14.8,
+     14.0
+    ],
+    "b": [
+     14.8,
+     18.4
+    ],
+    "thickness": 0.12,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 3.625,
+      "width": 1.25,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     },
+     {
+      "offset": 2.2,
+      "width": 1.3,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     },
+     {
+      "offset": 0.775,
+      "width": 1.25,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     }
+    ],
+    "height": 2.3
+   },
+   {
+    "id": "zz-jih",
+    "level": "1np",
+    "a": [
+     10.14,
+     18.4
+    ],
+    "b": [
+     14.86,
+     18.4
+    ],
+    "thickness": 0.12,
+    "exterior": true,
+    "openings": [
+     {
+      "offset": 0.96,
+      "width": 1.5,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     },
+     {
+      "offset": 2.36,
+      "width": 0.9,
+      "sill": 0,
+      "height": 2.15,
+      "kind": "door",
+      "id": "dv-zz-zahrada",
+      "hinge": "a",
+      "swing": -1,
+      "open": true,
+      "glazed": true
+     },
+     {
+      "offset": 3.76,
+      "width": 1.5,
+      "sill": 0.35,
+      "height": 1.8,
+      "kind": "window"
+     }
+    ],
+    "height": 3.6
+   }
+  ],
+  "railings": [
+   {
+    "level": "2np",
+    "a": [
+     14.1,
+     9.6
+    ],
+    "b": [
+     14.1,
+     7.8
+    ],
+    "h": 1,
+    "style": "bars",
+    "color": "#f2f2f0"
+   },
+   {
+    "level": "2np",
+    "a": [
+     13.4,
+     7.8
+    ],
+    "b": [
+     14.1,
+     7.8
+    ],
+    "h": 1,
+    "style": "bars",
+    "color": "#f2f2f0"
+   },
+   {
+    "level": "2np",
+    "a": [
+     13.4,
+     7.8
+    ],
+    "b": [
+     13.4,
+     6.95
+    ],
+    "h": 1,
+    "style": "bars",
+    "color": "#f2f2f0"
+   },
+   {
+    "level": "1np",
+    "a": [
+     0.8,
+     28.39
+    ],
+    "b": [
+     1.06,
+     1.13
+    ],
+    "h": 1.5,
+    "style": "fence",
+    "color": "#4a4c4a"
+   },
+   {
+    "level": "1np",
+    "a": [
+     5.66,
+     0.81
+    ],
+    "b": [
+     10.98,
+     0.44
+    ],
+    "h": 1.3,
+    "style": "fence",
+    "color": "#557a3c"
+   },
+   {
+    "level": "1np",
+    "a": [
+     10.98,
+     0.44
+    ],
+    "b": [
+     21.0,
+     0.84
+    ],
+    "h": 1.3,
+    "style": "fence",
+    "color": "#557a3c"
+   },
+   {
+    "level": "1np",
+    "a": [
+     21.0,
+     0.84
+    ],
+    "b": [
+     22.14,
+     4.22
+    ],
+    "h": 2.0,
+    "style": "fence",
+    "color": "#40633a"
+   },
+   {
+    "level": "1np",
+    "a": [
+     22.14,
+     4.22
+    ],
+    "b": [
+     20.15,
+     28.13
+    ],
+    "h": 2.0,
+    "style": "fence",
+    "color": "#557a3c"
+   },
+   {
+    "level": "1np",
+    "a": [
+     20.15,
+     28.13
+    ],
+    "b": [
+     0.8,
+     28.39
+    ],
+    "h": 1.6,
+    "style": "fence",
+    "color": "#4a4c4a"
+   }
+  ],
+  "stairs": [
+   {
+    "id": "schodiste",
+    "from": "1np",
+    "to": "2np",
+    "roomFrom": "schodiste-1np",
+    "roomTo": "schodiste-2np",
+    "treads": [
+     [
+      [
+       12.85,
+       7.8
+      ],
+      [
+       13.1,
+       7.8
+      ],
+      [
+       13.1,
+       6.95
+      ],
+      [
+       12.85,
+       6.95
+      ]
+     ],
+     [
+      [
+       13.1,
+       7.8
+      ],
+      [
+       13.35,
+       7.8
+      ],
+      [
+       13.35,
+       6.95
+      ],
+      [
+       13.1,
+       6.95
+      ]
+     ],
+     [
+      [
+       13.35,
+       7.8
+      ],
+      [
+       13.6,
+       7.8
+      ],
+      [
+       13.6,
+       6.95
+      ],
+      [
+       13.35,
+       6.95
+      ]
+     ],
+     [
+      [
+       13.6,
+       7.8
+      ],
+      [
+       13.85,
+       7.8
+      ],
+      [
+       13.85,
+       6.95
+      ],
+      [
+       13.6,
+       6.95
+      ]
+     ],
+     [
+      [
+       13.85,
+       7.8
+      ],
+      [
+       14.1,
+       7.8
+      ],
+      [
+       14.1,
+       6.95
+      ],
+      [
+       13.85,
+       6.95
+      ]
+     ],
+     [
+      [
+       14.1,
+       7.8
+      ],
+      [
+       15.0,
+       7.8
+      ],
+      [
+       15.0,
+       6.95
+      ],
+      [
+       14.1,
+       6.95
+      ]
+     ],
+     [
+      [
+       14.1,
+       7.8
+      ],
+      [
+       15.0,
+       7.8
+      ],
+      [
+       15.0,
+       8.0
+      ],
+      [
+       14.1,
+       8.0
+      ]
+     ],
+     [
+      [
+       14.1,
+       8.0
+      ],
+      [
+       15.0,
+       8.0
+      ],
+      [
+       15.0,
+       8.2
+      ],
+      [
+       14.1,
+       8.2
+      ]
+     ],
+     [
+      [
+       14.1,
+       8.2
+      ],
+      [
+       15.0,
+       8.2
+      ],
+      [
+       15.0,
+       8.4
+      ],
+      [
+       14.1,
+       8.4
+      ]
+     ],
+     [
+      [
+       14.1,
+       8.4
+      ],
+      [
+       15.0,
+       8.4
+      ],
+      [
+       15.0,
+       8.6
+      ],
+      [
+       14.1,
+       8.6
+      ]
+     ],
+     [
+      [
+       14.1,
+       8.6
+      ],
+      [
+       15.0,
+       8.6
+      ],
+      [
+       15.0,
+       8.8
+      ],
+      [
+       14.1,
+       8.8
+      ]
+     ],
+     [
+      [
+       14.1,
+       8.8
+      ],
+      [
+       15.0,
+       8.8
+      ],
+      [
+       15.0,
+       9.0
+      ],
+      [
+       14.1,
+       9.0
+      ]
+     ],
+     [
+      [
+       14.1,
+       9.0
+      ],
+      [
+       15.0,
+       9.0
+      ],
+      [
+       15.0,
+       9.2
+      ],
+      [
+       14.1,
+       9.2
+      ]
+     ],
+     [
+      [
+       14.1,
+       9.2
+      ],
+      [
+       15.0,
+       9.2
+      ],
+      [
+       15.0,
+       9.4
+      ],
+      [
+       14.1,
+       9.4
+      ]
+     ],
+     [
+      [
+       14.1,
+       9.4
+      ],
+      [
+       15.0,
+       9.4
+      ],
+      [
+       15.0,
+       9.6
+      ],
+      [
+       14.1,
+       9.6
+      ]
+     ]
+    ],
+    "risers": 16,
+    "opening": [
+     [
+      14.1,
+      9.6
+     ],
+     [
+      15.0,
+      9.6
+     ],
+     [
+      15.0,
+      6.95
+     ],
+     [
+      13.4,
+      6.95
+     ],
+     [
+      13.4,
+      7.8
+     ],
+     [
+      14.1,
+      7.8
+     ]
+    ],
+    "finish": "oakGreige",
+    "riserColor": "#8a6a4f",
+    "closedRisers": true,
+    "solidBelow": 6
+   }
+  ],
+  "northDeg": -15.3,
+  "surroundings": "none",
+  "streetSide": "N",
+  "screens": [
+   {
+    "id": "tv-obyvak",
+    "roomId": "obyvak",
+    "x": 14.97,
+    "z": 11.8,
+    "facing": "W",
+    "y": 0.95,
+    "size": 65,
+    "title": "Fotky a informace o domě",
+    "program": "mix",
+    "slideSeconds": 6
+   }
+  ],
+  "doorStyle": {
+   "leafColor": "#e9e4da",
+   "frameColor": "#e9e4da",
+   "finish": "paint",
+   "flush": true
+  },
+  "exteriorFrameColor": "#6d4325",
+  "roof": {
+   "planes": [
+    {
+     "id": "hlavni-zapad",
+     "line": [
+      [
+       11.125,
+       14.5
+      ],
+      [
+       11.125,
+       3.55
+      ]
+     ],
+     "height": 7.541,
+     "pitchDeg": 40,
+     "toward": [
+      7.0,
+      9.0
+     ],
+     "polygon": [
+      [
+       6.5,
+       14.5
+      ],
+      [
+       11.125,
+       14.5
+      ],
+      [
+       11.125,
+       3.55
+      ],
+      [
+       6.5,
+       3.55
+      ]
+     ]
+    },
+    {
+     "id": "hlavni-vychod",
+     "line": [
+      [
+       11.125,
+       14.5
+      ],
+      [
+       11.125,
+       3.55
+      ]
+     ],
+     "height": 7.541,
+     "pitchDeg": 40,
+     "toward": [
+      15.25,
+      9.0
+     ],
+     "polygon": [
+      [
+       11.125,
+       14.5
+      ],
+      [
+       15.75,
+       14.5
+      ],
+      [
+       15.75,
+       12.57
+      ],
+      [
+       12.23,
+       9.05
+      ],
+      [
+       15.75,
+       5.53
+      ],
+      [
+       15.75,
+       3.55
+      ],
+      [
+       11.125,
+       3.55
+      ]
+     ]
+    },
+    {
+     "id": "kridlo-jih",
+     "line": [
+      [
+       12.23,
+       9.05
+      ],
+      [
+       18.72,
+       9.05
+      ]
+     ],
+     "height": 6.614,
+     "pitchDeg": 40,
+     "toward": [
+      16.0,
+      12.07
+     ],
+     "polygon": [
+      [
+       12.23,
+       9.05
+      ],
+      [
+       15.75,
+       12.57
+      ],
+      [
+       18.72,
+       12.57
+      ],
+      [
+       18.72,
+       9.05
+      ]
+     ]
+    },
+    {
+     "id": "kridlo-sever",
+     "line": [
+      [
+       12.23,
+       9.05
+      ],
+      [
+       18.72,
+       9.05
+      ]
+     ],
+     "height": 6.614,
+     "pitchDeg": 40,
+     "toward": [
+      16.0,
+      6.03
+     ],
+     "polygon": [
+      [
+       12.23,
+       9.05
+      ],
+      [
+       18.72,
+       9.05
+      ],
+      [
+       18.72,
+       5.53
+      ],
+      [
+       15.75,
+       5.53
+      ]
+     ]
+    },
+    {
+     "id": "zz-zapad",
+     "line": [
+      [
+       12.5,
+       14.02
+      ],
+      [
+       12.5,
+       18.8
+      ]
+     ],
+     "height": 3.48,
+     "pitchDeg": 30,
+     "toward": [
+      10.2,
+      16.0
+     ],
+     "polygon": [
+      [
+       9.8,
+       14.02
+      ],
+      [
+       12.5,
+       14.02
+      ],
+      [
+       12.5,
+       18.8
+      ],
+      [
+       9.8,
+       18.8
+      ]
+     ]
+    },
+    {
+     "id": "zz-vychod",
+     "line": [
+      [
+       12.5,
+       14.02
+      ],
+      [
+       12.5,
+       18.8
+      ]
+     ],
+     "height": 3.48,
+     "pitchDeg": 30,
+     "toward": [
+      14.8,
+      16.0
+     ],
+     "polygon": [
+      [
+       12.5,
+       14.02
+      ],
+      [
+       15.2,
+       14.02
+      ],
+      [
+       15.2,
+       18.8
+      ],
+      [
+       12.5,
+       18.8
+      ]
+     ]
+    }
+   ],
+   "thickness": 0.3,
+   "color": "#6b4536",
+   "overhang": 0,
+   "headroom": 1.6
+  },
+  "roofWindows": [
+   {
+    "id": "ro-kridlo",
+    "at": [
+     16.55,
+     7.7
+    ],
+    "width": 0.55,
+    "length": 0.78,
+    "plane": "kridlo-sever",
+    "level": "2np",
+    "frameColor": "#ffffff"
+   },
+   {
+    "id": "ro-zz-1",
+    "at": [
+     13.6,
+     15.3
+    ],
+    "width": 1.0,
+    "length": 1.6,
+    "plane": "zz-vychod",
+    "level": "1np",
+    "frameColor": "#6d4325"
+   },
+   {
+    "id": "ro-zz-2",
+    "at": [
+     13.6,
+     17.3
+    ],
+    "width": 1.0,
+    "length": 1.6,
+    "plane": "zz-vychod",
+    "level": "1np",
+    "frameColor": "#6d4325"
+   }
+  ],
+  "furniture": [
+   {
+    "id": "kuchyn-linka",
+    "kind": "kitchenRun",
+    "roomId": "obyvak",
+    "x": 7.57,
+    "z": 10.05,
+    "facing": "E",
+    "w": 2.3,
+    "d": 0.62,
+    "color": "#8d9297",
+    "topColor": "#f3f2ee",
+    "parts": [
+     "sink",
+     "hob",
+     "oven",
+     "backsplash"
+    ],
+    "handleColor": "#c9c9c9"
+   },
+   {
+    "id": "kuchyn-ostruvek",
+    "kind": "island",
+    "roomId": "obyvak",
+    "x": 8.95,
+    "z": 9.22,
+    "facing": "S",
+    "w": 2.1,
+    "d": 0.65,
+    "color": "#8d9297",
+    "topColor": "#f3f2ee"
+   },
+   {
+    "id": "kuchyn-vysoka",
+    "kind": "kitchenRun",
+    "roomId": "obyvak",
+    "x": 7.57,
+    "z": 8.3,
+    "facing": "E",
+    "w": 0.8,
+    "d": 0.62,
+    "variant": "tall",
+    "color": "#8d9297"
+   },
+   {
+    "id": "lednice",
+    "kind": "fridge",
+    "roomId": "obyvak",
+    "x": 8.25,
+    "z": 8.2,
+    "facing": "S",
+    "w": 0.7,
+    "d": 0.68
+   },
+   {
+    "id": "jidelni-stul",
+    "kind": "diningTable",
+    "roomId": "obyvak",
+    "x": 9.2,
+    "z": 11.0,
+    "facing": "S",
+    "w": 1.2,
+    "d": 1.2,
+    "variant": "round",
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "zidle-0",
+    "kind": "chair",
+    "roomId": "obyvak",
+    "x": 8.35,
+    "z": 11.0,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.5,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "zidle-1",
+    "kind": "chair",
+    "roomId": "obyvak",
+    "x": 10.05,
+    "z": 11.0,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.5,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "zidle-2",
+    "kind": "chair",
+    "roomId": "obyvak",
+    "x": 9.2,
+    "z": 11.85,
+    "facing": "N",
+    "w": 0.45,
+    "d": 0.5,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "zidle-3",
+    "kind": "chair",
+    "roomId": "obyvak",
+    "x": 9.2,
+    "z": 10.15,
+    "facing": "S",
+    "w": 0.45,
+    "d": 0.5,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "lustr-jidelna",
+    "kind": "pendant",
+    "roomId": "obyvak",
+    "x": 9.2,
+    "z": 11.0,
+    "facing": "S",
+    "w": 0.5,
+    "d": 0.5,
+    "variant": "paper"
+   },
+   {
+    "id": "sedacka",
+    "kind": "sofa",
+    "roomId": "obyvak",
+    "x": 12.45,
+    "z": 11.8,
+    "facing": "E",
+    "w": 2.8,
+    "d": 0.95,
+    "color": "#6f8396"
+   },
+   {
+    "id": "kreslo",
+    "kind": "armchair",
+    "roomId": "obyvak",
+    "x": 13.4,
+    "z": 9.8,
+    "facing": "S",
+    "w": 0.85,
+    "d": 0.85,
+    "color": "#6f8396"
+   },
+   {
+    "id": "tv-stena",
+    "kind": "panel",
+    "roomId": "obyvak",
+    "x": 14.78,
+    "z": 11.8,
+    "facing": "W",
+    "w": 2.0,
+    "d": 0.42,
+    "h": 0.45,
+    "y": 0.0,
+    "variant": "flat",
+    "color": "#b98d5f",
+    "solid": true
+   },
+   {
+    "id": "konf-stolek",
+    "kind": "coffeeTable",
+    "roomId": "obyvak",
+    "x": 13.6,
+    "z": 11.7,
+    "facing": "W",
+    "w": 0.9,
+    "d": 0.9,
+    "variant": "oval",
+    "color": "#b98d5f"
+   },
+   {
+    "id": "koberec",
+    "kind": "rug",
+    "roomId": "obyvak",
+    "x": 13.4,
+    "z": 11.8,
+    "facing": "E",
+    "w": 2.4,
+    "d": 3.0,
+    "color": "#d8d2c6"
+   },
+   {
+    "id": "rostlina-obyvak",
+    "kind": "plant",
+    "roomId": "obyvak",
+    "x": 14.6,
+    "z": 13.4,
+    "facing": "W",
+    "w": 0.5,
+    "d": 0.5,
+    "variant": "tall"
+   },
+   {
+    "id": "lampa",
+    "kind": "floorLamp",
+    "roomId": "obyvak",
+    "x": 12.2,
+    "z": 13.4,
+    "facing": "N",
+    "w": 0.4,
+    "d": 0.4
+   },
+   {
+    "id": "zaves-terasa",
+    "kind": "curtain",
+    "roomId": "obyvak",
+    "x": 8.65,
+    "z": 13.67,
+    "facing": "N",
+    "w": 2.4,
+    "d": 0.12,
+    "color": "#cdbfa8"
+   },
+   {
+    "id": "psaci-stul",
+    "kind": "desk",
+    "roomId": "pracovna",
+    "x": 7.6,
+    "z": 5.95,
+    "facing": "E",
+    "w": 1.6,
+    "d": 0.7,
+    "color": "#b98d5f"
+   },
+   {
+    "id": "kancl-zidle",
+    "kind": "deskChair",
+    "roomId": "pracovna",
+    "x": 8.3,
+    "z": 5.95,
+    "facing": "W",
+    "w": 0.6,
+    "d": 0.6
+   },
+   {
+    "id": "knihovna",
+    "kind": "bookshelf",
+    "roomId": "pracovna",
+    "x": 9.5,
+    "z": 7.57,
+    "facing": "N",
+    "w": 1.8,
+    "d": 0.35,
+    "color": "#b98d5f"
+   },
+   {
+    "id": "pohovka-pracovna",
+    "kind": "sofa",
+    "roomId": "pracovna",
+    "x": 10.5,
+    "z": 4.75,
+    "facing": "S",
+    "w": 1.6,
+    "d": 0.85,
+    "color": "#9aa3a8"
+   },
+   {
+    "id": "koberec-pracovna",
+    "kind": "rug",
+    "roomId": "pracovna",
+    "x": 9.4,
+    "z": 6.0,
+    "facing": "N",
+    "w": 2.0,
+    "d": 1.6,
+    "color": "#c9c2b4"
+   },
+   {
+    "id": "satni-skrin",
+    "kind": "wardrobe",
+    "roomId": "zadveri",
+    "x": 11.75,
+    "z": 5.85,
+    "facing": "E",
+    "w": 1.1,
+    "d": 0.6,
+    "color": "#b98d5f"
+   },
+   {
+    "id": "botnik",
+    "kind": "shoeCabinet",
+    "roomId": "zadveri",
+    "x": 13.25,
+    "z": 4.75,
+    "facing": "W",
+    "w": 0.8,
+    "d": 0.35,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "zrcadlo-zadveri",
+    "kind": "mirror",
+    "roomId": "zadveri",
+    "x": 13.42,
+    "z": 4.75,
+    "facing": "W",
+    "w": 0.6,
+    "d": 0.03,
+    "y": 1.2,
+    "h": 0.9
+   },
+   {
+    "id": "sprcha-1np",
+    "kind": "showerEnclosure",
+    "roomId": "koupelna-1np",
+    "x": 14.55,
+    "z": 4.75,
+    "facing": "W",
+    "w": 0.9,
+    "d": 0.9,
+    "variant": "corner-r"
+   },
+   {
+    "id": "wc-1np",
+    "kind": "toilet",
+    "roomId": "koupelna-1np",
+    "x": 14.0,
+    "z": 6.25,
+    "facing": "N",
+    "w": 0.38,
+    "d": 0.55,
+    "variant": "wallhung"
+   },
+   {
+    "id": "umyvadlo-1np",
+    "kind": "vanity",
+    "roomId": "koupelna-1np",
+    "x": 14.75,
+    "z": 5.8,
+    "facing": "W",
+    "w": 0.6,
+    "d": 0.45
+   },
+   {
+    "id": "zrcadlo-1np",
+    "kind": "mirror",
+    "roomId": "koupelna-1np",
+    "x": 14.98,
+    "z": 5.8,
+    "facing": "W",
+    "w": 0.6,
+    "d": 0.03,
+    "y": 1.1,
+    "h": 0.8
+   },
+   {
+    "id": "topeni-1np",
+    "kind": "towelRadiator",
+    "roomId": "koupelna-1np",
+    "x": 13.58,
+    "z": 4.8,
+    "facing": "E",
+    "w": 0.5,
+    "d": 0.08
+   },
+   {
+    "id": "kotel",
+    "kind": "boiler",
+    "roomId": "garaz",
+    "x": 17.75,
+    "z": 11.4,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "bojler",
+    "kind": "waterTank",
+    "roomId": "garaz",
+    "x": 17.75,
+    "z": 10.7,
+    "facing": "W",
+    "w": 0.6,
+    "d": 0.6
+   },
+   {
+    "id": "regal-garaz",
+    "kind": "shelf",
+    "roomId": "garaz",
+    "x": 17.75,
+    "z": 8.6,
+    "facing": "W",
+    "w": 2.0,
+    "d": 0.45
+   },
+   {
+    "id": "postel-jv",
+    "kind": "bed",
+    "roomId": "loznice-jv",
+    "x": 14.0,
+    "z": 12.0,
+    "facing": "W",
+    "w": 1.6,
+    "d": 2.05,
+    "variant": "upholstered",
+    "color": "#d8d2c6"
+   },
+   {
+    "id": "noc-jv-1",
+    "kind": "nightstand",
+    "roomId": "loznice-jv",
+    "x": 14.65,
+    "z": 13.15,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "noc-jv-2",
+    "kind": "nightstand",
+    "roomId": "loznice-jv",
+    "x": 14.65,
+    "z": 10.85,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "skrin-jv",
+    "kind": "wardrobe",
+    "roomId": "loznice-jv",
+    "x": 11.55,
+    "z": 12.0,
+    "facing": "E",
+    "w": 2.0,
+    "d": 0.6,
+    "variant": "mirror"
+   },
+   {
+    "id": "komoda-jv",
+    "kind": "dresser",
+    "roomId": "loznice-jv",
+    "x": 12.6,
+    "z": 13.53,
+    "facing": "N",
+    "w": 1.0,
+    "d": 0.45,
+    "color": "#9a6b3c"
+   },
+   {
+    "id": "postel-jz",
+    "kind": "bed",
+    "roomId": "loznice-jz",
+    "x": 8.28,
+    "z": 11.5,
+    "facing": "E",
+    "w": 1.8,
+    "d": 2.05,
+    "variant": "upholstered",
+    "color": "#e2dccf"
+   },
+   {
+    "id": "noc-jz-1",
+    "kind": "nightstand",
+    "roomId": "loznice-jz",
+    "x": 7.48,
+    "z": 12.7,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "noc-jz-2",
+    "kind": "nightstand",
+    "roomId": "loznice-jz",
+    "x": 7.48,
+    "z": 10.3,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "skrin-jz",
+    "kind": "wardrobe",
+    "roomId": "loznice-jz",
+    "x": 10.85,
+    "z": 12.3,
+    "facing": "W",
+    "w": 1.6,
+    "d": 0.6,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "komoda-jz",
+    "kind": "dresser",
+    "roomId": "loznice-jz",
+    "x": 10.0,
+    "z": 13.53,
+    "facing": "N",
+    "w": 1.1,
+    "d": 0.45,
+    "color": "#9a6b3c"
+   },
+   {
+    "id": "koberec-jz",
+    "kind": "rug",
+    "roomId": "loznice-jz",
+    "x": 9.0,
+    "z": 11.5,
+    "facing": "E",
+    "w": 2.4,
+    "d": 2.6,
+    "color": "#cfc6b6"
+   },
+   {
+    "id": "postel-sz",
+    "kind": "bed",
+    "roomId": "loznice-sz",
+    "x": 8.28,
+    "z": 6.9,
+    "facing": "E",
+    "w": 1.6,
+    "d": 2.05,
+    "variant": "upholstered",
+    "color": "#c9d0d6"
+   },
+   {
+    "id": "noc-sz-1",
+    "kind": "nightstand",
+    "roomId": "loznice-sz",
+    "x": 7.48,
+    "z": 8.0,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "skrin-sz",
+    "kind": "wardrobe",
+    "roomId": "loznice-sz",
+    "x": 10.16,
+    "z": 5.5,
+    "facing": "W",
+    "w": 1.8,
+    "d": 0.6,
+    "variant": "mirror"
+   },
+   {
+    "id": "stul-sz",
+    "kind": "desk",
+    "roomId": "loznice-sz",
+    "x": 9.2,
+    "z": 4.55,
+    "facing": "S",
+    "w": 1.2,
+    "d": 0.6,
+    "color": "#f2f1ee"
+   },
+   {
+    "id": "postel-kridlo",
+    "kind": "bed",
+    "roomId": "loznice-kridlo",
+    "x": 16.95,
+    "z": 9.05,
+    "facing": "W",
+    "w": 1.6,
+    "d": 2.05,
+    "variant": "upholstered",
+    "color": "#d8d2c6"
+   },
+   {
+    "id": "noc-kr-1",
+    "kind": "nightstand",
+    "roomId": "loznice-kridlo",
+    "x": 17.72,
+    "z": 10.2,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "noc-kr-2",
+    "kind": "nightstand",
+    "roomId": "loznice-kridlo",
+    "x": 17.72,
+    "z": 7.9,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.4
+   },
+   {
+    "id": "komoda-kr",
+    "kind": "dresser",
+    "roomId": "loznice-kridlo",
+    "x": 15.5,
+    "z": 7.4,
+    "facing": "E",
+    "w": 1.0,
+    "d": 0.45,
+    "color": "#9a6b3c"
+   },
+   {
+    "id": "rostlina-hala",
+    "kind": "plant",
+    "roomId": "hala",
+    "x": 11.55,
+    "z": 7.25,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.45,
+    "variant": "pot"
+   },
+   {
+    "id": "vana-2np",
+    "kind": "bathtub",
+    "roomId": "koupelna-2np",
+    "x": 14.6,
+    "z": 5.9,
+    "facing": "W",
+    "w": 1.7,
+    "d": 0.75
+   },
+   {
+    "id": "wc-2np-misa",
+    "kind": "toilet",
+    "roomId": "koupelna-2np",
+    "x": 12.3,
+    "z": 4.55,
+    "facing": "S",
+    "w": 0.38,
+    "d": 0.55,
+    "variant": "wallhung"
+   },
+   {
+    "id": "umyvadlo-2np",
+    "kind": "vanity",
+    "roomId": "koupelna-2np",
+    "x": 13.4,
+    "z": 4.53,
+    "facing": "S",
+    "w": 0.9,
+    "d": 0.45
+   },
+   {
+    "id": "zrcadlo-2np",
+    "kind": "mirror",
+    "roomId": "koupelna-2np",
+    "x": 13.4,
+    "z": 4.32,
+    "facing": "S",
+    "w": 0.8,
+    "d": 0.03,
+    "y": 1.15,
+    "h": 0.7
+   },
+   {
+    "id": "topeni-2np",
+    "kind": "towelRadiator",
+    "roomId": "koupelna-2np",
+    "x": 12.02,
+    "z": 5.6,
+    "facing": "E",
+    "w": 0.5,
+    "d": 0.08
+   },
+   {
+    "id": "wc-samostatne",
+    "kind": "toilet",
+    "roomId": "wc-2np",
+    "x": 11.22,
+    "z": 4.55,
+    "facing": "S",
+    "w": 0.38,
+    "d": 0.55,
+    "variant": "wallhung"
+   },
+   {
+    "id": "umyvadlo-wc",
+    "kind": "basin",
+    "roomId": "wc-2np",
+    "x": 10.62,
+    "z": 5.8,
+    "facing": "E",
+    "w": 0.4,
+    "d": 0.3
+   },
+   {
+    "id": "zz-stul",
+    "kind": "diningTable",
+    "roomId": "zimni-zahrada",
+    "x": 12.6,
+    "z": 16.1,
+    "facing": "N",
+    "w": 1.6,
+    "d": 0.9,
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-0",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 12.15,
+    "z": 15.45,
+    "facing": "S",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-1",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 13.05,
+    "z": 15.45,
+    "facing": "S",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-2",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 12.15,
+    "z": 16.75,
+    "facing": "N",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-3",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 13.05,
+    "z": 16.75,
+    "facing": "N",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-4",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 11.55,
+    "z": 16.1,
+    "facing": "E",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-zidle-5",
+    "kind": "chair",
+    "roomId": "zimni-zahrada",
+    "x": 13.65,
+    "z": 16.1,
+    "facing": "W",
+    "w": 0.45,
+    "d": 0.5,
+    "variant": "wood",
+    "color": "#a4743f"
+   },
+   {
+    "id": "zz-krb",
+    "kind": "fireplace",
+    "roomId": "zimni-zahrada",
+    "x": 10.75,
+    "z": 17.9,
+    "facing": "N",
+    "w": 0.95,
+    "d": 0.75,
+    "variant": "fire"
+   },
+   {
+    "id": "zz-kreslo",
+    "kind": "armchair",
+    "roomId": "zimni-zahrada",
+    "x": 14.2,
+    "z": 17.7,
+    "facing": "W",
+    "w": 0.85,
+    "d": 0.85,
+    "variant": "lounge",
+    "color": "#cfc4ae"
+   },
+   {
+    "id": "zz-rostlina-1",
+    "kind": "plant",
+    "roomId": "zimni-zahrada",
+    "x": 14.45,
+    "z": 14.4,
+    "facing": "W",
+    "w": 0.5,
+    "d": 0.5,
+    "variant": "tall"
+   },
+   {
+    "id": "zz-rostlina-2",
+    "kind": "plant",
+    "roomId": "zimni-zahrada",
+    "x": 10.5,
+    "z": 14.4,
+    "facing": "E",
+    "w": 0.5,
+    "d": 0.5,
+    "variant": "pot"
+   },
+   {
+    "id": "pergola-terasa",
+    "kind": "pergola",
+    "roomId": "terasa",
+    "x": 8.42,
+    "z": 16.4,
+    "facing": "S",
+    "w": 3.44,
+    "d": 4.75
+   },
+   {
+    "id": "terasa-lehatko-1",
+    "kind": "armchair",
+    "roomId": "terasa",
+    "x": 7.6,
+    "z": 17.4,
+    "facing": "N",
+    "w": 0.8,
+    "d": 0.8,
+    "variant": "lounge",
+    "color": "#d8d2c6"
+   },
+   {
+    "id": "terasa-lehatko-2",
+    "kind": "armchair",
+    "roomId": "terasa",
+    "x": 8.8,
+    "z": 17.4,
+    "facing": "N",
+    "w": 0.8,
+    "d": 0.8,
+    "variant": "lounge",
+    "color": "#d8d2c6"
+   },
+   {
+    "id": "sauna",
+    "kind": "gardenShed",
+    "roomId": "zahrada",
+    "x": 3.8,
+    "z": 16.4,
+    "facing": "N",
+    "w": 2.1,
+    "d": 3.0,
+    "color": "#c17a3c"
+   },
+   {
+    "id": "pergola-gril",
+    "kind": "pergola",
+    "roomId": "zahrada",
+    "x": 3.0,
+    "z": 22.3,
+    "facing": "E",
+    "w": 2.6,
+    "d": 2.6
+   },
+   {
+    "id": "lavice-gril",
+    "kind": "bench",
+    "roomId": "zahrada",
+    "x": 3.6,
+    "z": 23.2,
+    "facing": "N",
+    "w": 1.4,
+    "d": 0.45,
+    "variant": "cushion"
+   }
+  ]
+ },
+ "photos": [
+  {
+   "id": "foto-01",
+   "url": "fotky/foto-01.jpg",
+   "thumb": "fotky/mini-01.jpg",
+   "roomId": "obyvak",
+   "position": [
+    8.15,
+    1.5,
+    9.3
+   ],
+   "yaw": -122.62,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Obývací pokoj",
+   "caption": "Obývací pokoj s kuchyní asi 41 m²: sedačka, televizní stěna a dveře na terasu a do zimní zahrady. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-02",
+   "url": "fotky/foto-02.jpg",
+   "thumb": "fotky/mini-02.jpg",
+   "roomId": "obyvak",
+   "position": [
+    14.3,
+    1.5,
+    13.15
+   ],
+   "yaw": 57.67,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Kuchyň s jídelnou",
+   "caption": "Kuchyň s ostrůvkem a kulatým jídelním stolem pro čtyři. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-03",
+   "url": "fotky/foto-03.jpg",
+   "thumb": "fotky/mini-03.jpg",
+   "roomId": "zimni-zahrada",
+   "position": [
+    10.75,
+    1.5,
+    14.45
+   ],
+   "yaw": -136.66,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Zimní zahrada",
+   "caption": "Zimní zahrada asi 20 m² s krbem a dřevěným krovem, celoročně využitelná. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-04",
+   "url": "fotky/foto-04.jpg",
+   "thumb": "fotky/mini-04.jpg",
+   "roomId": "zimni-zahrada",
+   "position": [
+    14.3,
+    1.5,
+    18.0
+   ],
+   "yaw": 46.64,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Zimní zahrada – pohled k domu",
+   "caption": "Prosklené stěny do zahrady, vstup do obývacího pokoje. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-05",
+   "url": "fotky/foto-05.jpg",
+   "thumb": "fotky/mini-05.jpg",
+   "roomId": "pracovna",
+   "position": [
+    10.95,
+    1.5,
+    7.4
+   ],
+   "yaw": 51.13,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Pracovna",
+   "caption": "Pracovna asi 13 m² v přízemí, vhodná i jako pokoj pro hosty. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-06",
+   "url": "fotky/foto-06.jpg",
+   "thumb": "fotky/mini-06.jpg",
+   "roomId": "pracovna",
+   "position": [
+    7.7,
+    1.5,
+    4.65
+   ],
+   "yaw": -130.67,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Pracovna – druhý pohled",
+   "caption": "Pohovka a knihovna, okno do ulice. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-07",
+   "url": "fotky/foto-07.jpg",
+   "thumb": "fotky/mini-07.jpg",
+   "roomId": "zadveri",
+   "position": [
+    12.45,
+    1.5,
+    4.7
+   ],
+   "yaw": -177.8,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Zádveří",
+   "caption": "Zádveří se šatní skříní, vlevo pracovna, rovně obývací pokoj a schodiště. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-08",
+   "url": "fotky/foto-08.jpg",
+   "thumb": "fotky/mini-08.jpg",
+   "roomId": "zadveri",
+   "position": [
+    12.3,
+    1.5,
+    8.3
+   ],
+   "yaw": -2.15,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Zádveří – vstup",
+   "caption": "Pohled ke vstupním dveřím. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-09",
+   "url": "fotky/foto-09.jpg",
+   "thumb": "fotky/mini-09.jpg",
+   "roomId": "koupelna-1np",
+   "position": [
+    13.75,
+    1.5,
+    6.35
+   ],
+   "yaw": -30.53,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Koupelna v přízemí",
+   "caption": "Koupelna se sprchovým koutem a WC. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-10",
+   "url": "fotky/foto-10.jpg",
+   "thumb": "fotky/mini-10.jpg",
+   "roomId": "koupelna-1np",
+   "position": [
+    14.75,
+    1.5,
+    4.5
+   ],
+   "yaw": 152.24,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Koupelna v přízemí – druhý pohled",
+   "caption": "Umyvadlo a závěsné WC. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-11",
+   "url": "fotky/foto-11.jpg",
+   "thumb": "fotky/mini-11.jpg",
+   "roomId": "garaz",
+   "position": [
+    15.6,
+    1.5,
+    6.6
+   ],
+   "yaw": -157.22,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Garáž",
+   "caption": "Garáž asi 16 m² s technickým zázemím. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-12",
+   "url": "fotky/foto-12.jpg",
+   "thumb": "fotky/mini-12.jpg",
+   "roomId": "garaz",
+   "position": [
+    15.6,
+    1.5,
+    11.5
+   ],
+   "yaw": -23.75,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Garáž – vrata",
+   "caption": "Pohled k vratům garáže. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-13",
+   "url": "fotky/foto-13.jpg",
+   "thumb": "fotky/mini-13.jpg",
+   "roomId": "hala",
+   "position": [
+    11.6,
+    4.38,
+    7.15
+   ],
+   "yaw": -130.67,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Hala v podkroví",
+   "caption": "Hala se schodištěm, odtud se vstupuje do čtyř ložnic, koupelny a WC. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-14",
+   "url": "fotky/foto-14.jpg",
+   "thumb": "fotky/mini-14.jpg",
+   "roomId": "hala",
+   "position": [
+    14.6,
+    4.38,
+    9.85
+   ],
+   "yaw": 48.54,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Hala – druhý pohled",
+   "caption": "Pohled od schodiště k ložnicím. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-15",
+   "url": "fotky/foto-15.jpg",
+   "thumb": "fotky/mini-15.jpg",
+   "roomId": "loznice-jv",
+   "position": [
+    12.3,
+    4.38,
+    10.45
+   ],
+   "yaw": -140.09,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice jih–východ",
+   "caption": "Ložnice asi 13 m² s oknem do zahrady. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-16",
+   "url": "fotky/foto-16.jpg",
+   "thumb": "fotky/mini-16.jpg",
+   "roomId": "loznice-jv",
+   "position": [
+    13.3,
+    4.38,
+    13.4
+   ],
+   "yaw": 30.38,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice jih–východ – druhý pohled",
+   "caption": "Šatní skříň se zrcadlem. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-17",
+   "url": "fotky/foto-17.jpg",
+   "thumb": "fotky/mini-17.jpg",
+   "roomId": "loznice-jz",
+   "position": [
+    10.25,
+    4.38,
+    9.4
+   ],
+   "yaw": 145.11,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice jih–západ",
+   "caption": "Největší ložnice asi 18 m² s oknem do zahrady. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-18",
+   "url": "fotky/foto-18.jpg",
+   "thumb": "fotky/mini-18.jpg",
+   "roomId": "loznice-jz",
+   "position": [
+    9.6,
+    4.38,
+    13.35
+   ],
+   "yaw": -0.0,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice jih–západ – druhý pohled",
+   "caption": "Pohled ke dveřím do haly. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-19",
+   "url": "fotky/foto-19.jpg",
+   "thumb": "fotky/mini-19.jpg",
+   "roomId": "loznice-sz",
+   "position": [
+    10.05,
+    4.38,
+    8.7
+   ],
+   "yaw": 31.49,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice sever–západ",
+   "caption": "Ložnice asi 16 m² s oknem do ulice. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-20",
+   "url": "fotky/foto-20.jpg",
+   "thumb": "fotky/mini-20.jpg",
+   "roomId": "loznice-sz",
+   "position": [
+    9.0,
+    4.38,
+    4.65
+   ],
+   "yaw": -169.09,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice sever–západ – druhý pohled",
+   "caption": "Šatní skříň a vstup z haly. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-21",
+   "url": "fotky/foto-21.jpg",
+   "thumb": "fotky/mini-21.jpg",
+   "roomId": "loznice-kridlo",
+   "position": [
+    15.5,
+    4.38,
+    11.5
+   ],
+   "yaw": -25.6,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice nad garáží",
+   "caption": "Ložnice asi 14,5 m² se střešním oknem a oknem k Maxovské. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-22",
+   "url": "fotky/foto-22.jpg",
+   "thumb": "fotky/mini-22.jpg",
+   "roomId": "loznice-kridlo",
+   "position": [
+    17.6,
+    4.38,
+    6.6
+   ],
+   "yaw": 157.38,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Ložnice nad garáží – druhý pohled",
+   "caption": "Vstup z podesty schodiště. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-23",
+   "url": "fotky/foto-23.jpg",
+   "thumb": "fotky/mini-23.jpg",
+   "roomId": "koupelna-2np",
+   "position": [
+    12.2,
+    4.38,
+    6.6
+   ],
+   "yaw": -50.83,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Koupelna s vanou",
+   "caption": "Koupelna v podkroví s vanou pod šikminou. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-24",
+   "url": "fotky/foto-24.jpg",
+   "thumb": "fotky/mini-24.jpg",
+   "roomId": "koupelna-2np",
+   "position": [
+    14.75,
+    4.38,
+    4.5
+   ],
+   "yaw": 129.7,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "Koupelna s vanou – druhý pohled",
+   "caption": "Umyvadlo a WC u štítové stěny. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-25",
+   "url": "fotky/foto-25.jpg",
+   "thumb": "fotky/mini-25.jpg",
+   "roomId": "wc-2np",
+   "position": [
+    11.22,
+    4.38,
+    6.7
+   ],
+   "yaw": -0.0,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "WC v podkroví",
+   "caption": "Samostatné WC s umyvadlem. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  },
+  {
+   "id": "foto-26",
+   "url": "fotky/foto-26.jpg",
+   "thumb": "fotky/mini-26.jpg",
+   "roomId": "wc-2np",
+   "position": [
+    11.6,
+    4.38,
+    4.45
+   ],
+   "yaw": 159.3,
+   "pitch": -3,
+   "hfov": 90,
+   "aspect": 1.5,
+   "title": "WC – druhý pohled",
+   "caption": "Pohled ke dveřím do haly. (AI vizualizace podle 3D modelu)",
+   "doors": {
+    "open": [
+     "dv-terasa",
+     "dv-zimni-zahrada",
+     "dv-pracovna",
+     "dv-koupelna-1np",
+     "dv-loznice-kridlo",
+     "dv-loznice-jv",
+     "dv-loznice-jz",
+     "dv-loznice-sz",
+     "dv-wc-2np",
+     "dv-koupelna-2np",
+     "dv-zz-zahrada"
+    ],
+    "closed": [
+     "dv-vstup",
+     "dv-garaz"
+    ]
+   }
+  }
+ ],
+ "backdrop": {
+  "url": "vyhled/vyhled.json"
+ },
+ "listing": {
+  "headline": "Rodinný dům se zimní zahradou, Praha 5 – Řeporyje",
+  "facts": [
+   {
+    "label": "Dispozice",
+    "value": "6+kk (obývák s kuchyní, pracovna, 4 ložnice)"
+   },
+   {
+    "label": "Užitná plocha",
+    "value": "166 m²"
+   },
+   {
+    "label": "Zimní zahrada",
+    "value": "asi 20 m², s krbem"
+   },
+   {
+    "label": "Pozemek",
+    "value": "558 m² (katastr), 638 m² (inzerát)"
+   },
+   {
+    "label": "Zastavěná plocha",
+    "value": "101 m²"
+   },
+   {
+    "label": "Podlaží",
+    "value": "2 (přízemí + podkroví)"
+   },
+   {
+    "label": "Stavba",
+    "value": "Zděná, dokončena 2010"
+   },
+   {
+    "label": "Rekonstrukce",
+    "value": "2019–2021"
+   },
+   {
+    "label": "Vytápění",
+    "value": "elektrický kotel, solární panely"
+   },
+   {
+    "label": "Parkování",
+    "value": "garáž + 3 stání"
+   },
+   {
+    "label": "Energetická třída",
+    "value": "C – úsporná"
+   }
+  ],
+  "areaM2": 166,
+  "highlights": [
+   "Zimní zahrada s krbem",
+   "Rohový pozemek se zahradou 14 m do hloubky",
+   "Sauna a pergola s grilem",
+   "Garáž a 3 stání na pozemku"
+  ],
+  "description": "Dvoupodlažní rodinný dům z roku 2010 po rekonstrukci v letech 2019–2021 na rohovém pozemku ulic Horšovská a Maxovská v Řeporyjích. V přízemí je obývací pokoj s kuchyní a jídelnou, pracovna, koupelna se sprchou, zádveří a garáž; na obývák navazuje zimní zahrada s krbem a krytá terasa. V podkroví jsou čtyři ložnice, koupelna s vanou a samostatné WC. Na zahradě je sauna, pergola s grilem a automatická závlaha.",
+  "hero": {
+   "photo": "foto-03"
+  },
+  "source": "3D model podle stavební dokumentace (půdorysy 1.NP a 2.NP) a katastru ČÚZK. Fotky místností jsou AI vizualizace podle 3D modelu.",
+  "gallery": [
+   {
+    "url": "galerie/pozemek-koty.jpg",
+    "thumb": "galerie/mini-pozemek-koty.jpg",
+    "title": "Pozemek s kótami (katastr + ortofoto)",
+    "kind": "aerial"
+   },
+   {
+    "url": "galerie/katastr-ortofoto.jpg",
+    "thumb": "galerie/mini-katastr-ortofoto.jpg",
+    "title": "Hranice parcel a budovy z katastru na ortofotu ČÚZK",
+    "kind": "aerial"
+   }
+  ],
+  "location": {
+   "label": "Praha 5 – Řeporyje, Horšovská 1051/17",
+   "map": {
+    "url": "lokalita/mapa.jpg",
+    "credit": "© ČÚZK, Základní topografická mapa ZTM10",
+    "pin": [
+     0.5,
+     0.5
+    ]
+   },
+   "nearby": [
+    {
+     "category": "MHD",
+     "name": "Vlaková zastávka Praha-Řeporyje",
+     "distanceM": 650,
+     "walkMin": 8
+    },
+    {
+     "category": "MHD",
+     "name": "Metro B Luka (autem asi 5 minut)"
+    },
+    {
+     "category": "Školy a školky",
+     "name": "ZŠ a MŠ Praha 5 – Řeporyje",
+     "distanceM": 700,
+     "walkMin": 9
+    },
+    {
+     "category": "Obchody a služby",
+     "name": "Obchody a kavárny v centru Řeporyjí",
+     "distanceM": 900,
+     "walkMin": 11
+    }
+   ],
+   "source": "Vzdálenosti jsou orientační, změřené v mapě ČÚZK ZTM10 (pěšky po ulicích odhadem)."
+  }
+ },
+ "branding": {
+  "name": "FrantišekDron",
+  "logo": {
+   "onLight": "branding/logo.png",
+   "onDark": "branding/logo.png"
+  },
+  "colors": {
+   "primary": "#ff5a5f",
+   "accent": "#f5b73d",
+   "panel": "#0a0e12",
+   "text": "#f4f2ea"
+  },
+  "font": {
+   "family": "Inter"
+  },
+  "radius": 10,
+  "agent": {
+   "name": "Jan Goldšmíd",
+   "role": "FrantišekDron – 3D prohlídky a video",
+   "email": "honza@frantisekdron.cz",
+   "web": "https://www.frantisekdron.cz"
+  },
+  "cta": {
+   "label": "Napsat e-mail",
+   "href": "mailto:honza@frantisekdron.cz"
+  },
+  "intro": {
+   "subtitle": "Rodinný dům · Praha 5 – Řeporyje · 166 m² + zimní zahrada",
+   "text": "3D model domu podle stavební dokumentace a katastru. Fotky v místnostech jsou AI vizualizace."
+  },
+  "outro": {
+   "title": "Děkujeme za prohlídku",
+   "text": "3D prohlídku připravilo studio FrantišekDron."
+  },
+  "favicon": "branding/logo.png",
+  "pageTitle": "Dům Horšovská 17 · 3D prohlídka · FrantišekDron",
+  "description": "Interaktivní 3D prohlídka rodinného domu v Praze 5 – Řeporyjích: procházka domem a zahradou, fotky v prostoru a půdorys.",
+  "ogImage": "branding/og.jpg",
+  "shortName": "FD"
+ }
+}

@@ -1,0 +1,6 @@
+{
+ "version": 1,
+ "note": "Výhled z oken: válec = panorama sousedních domů podle obrysů budov z katastru ČÚZK (RÚIAN), renderováno z oka 2,5 m ve středu domu na válec R 45 m (64 výsečí); zem = ortofoto ČÚZK přepočtené do souřadnic domu, 100 × 100 m.",
+ "cylinder": {"url": "vyhled-valec.jpg", "center": [12.6, 9.0], "radius": 45.0, "bottom": -0.1, "top": 25.0, "sectors": [[0.0, 360.0]]},
+ "ground": {"url": "vyhled-zem.jpg", "rect": [-37.4, -41.0, 100.0, 100.0], "y": -0.08}
+}
